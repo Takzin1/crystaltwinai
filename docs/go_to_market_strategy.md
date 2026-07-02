@@ -82,7 +82,7 @@ OSS公開後のCrystalTwin-AIを、toB企業・大学・研究室・教育機関
 >
 > まずは「どんな用途を想定しているか」を一言添えて、GitHub Issues または下記までお気軽にご連絡ください。オンラインでのデモ・ヒアリング(30分・無料)から始められます。
 >
-> 📧 Contact: `<メールアドレス>` / GitHub Issues / `<フォームURL>`
+> 📧 Contact: e2470308@ipc.fukushima-u.ac.jp / GitHub Issues / [Linktree](https://linktr.ee/TakahitoYumita_NeuMann)
 
 ### README用(English)
 
