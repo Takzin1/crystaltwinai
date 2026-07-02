@@ -155,7 +155,7 @@ CrystalTwin-AIはOSSとして公開しています。以下のようなご要望
 
 企業研修、大学授業、研究室演習、業界別PoC、デジタルツイン教育教材としてのカスタマイズをご希望の場合は、[Issues](../../issues) または下記までお問い合わせください。
 
-📧 **Contact**: `<your-email@example.com>` / GitHub Issues / `<your-LinkedIn-or-form-URL>`
+📧 **Contact**: `<e2470308@ipc.fukushima-u.ac.jp>` / GitHub Issues / `<https://www.linkedin.com/in/takahito-yumita-91b1bb2b4/>`
 
 ## License
 
