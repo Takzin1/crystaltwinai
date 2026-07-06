@@ -1,5 +1,9 @@
 # CrystalTwin-AI
 
+🔗 **Live Demo**: https://crystaltwinai.vercel.app
+
+![CrystalTwin-AI demo](docs/assets/demo.gif)
+
 **AI支援プロセス制御を学ぶ、教育・研究用デジタルツインシミュレータ**
 *Educational Digital Twin Simulator for AI-assisted Process Control*
 
