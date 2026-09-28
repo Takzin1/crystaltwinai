@@ -1,0 +1,8 @@
+schema_version: 1
+status: PLACEHOLDER
+
+policy:
+  uncertain_properties_must_not_be_presented_as_exact: true
+  uncertainty_source_required: true
+
+properties: {}

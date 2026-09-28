@@ -1,0 +1,111 @@
+schema_version: 1
+generated_from: "2026-09-28 CrystalTwinAI deep research report"
+policy:
+  primary_sources_required_for_numeric_parameters: true
+  secondary_sources_may_guide_search_only: true
+  proprietary_process_inference_forbidden: true
+
+sources:
+  - source_id: acs_omega_2026_latent_transfer
+    priority: P0
+    title: "Transfer of Optimized Crystal-Growth Environments via a Latent Space"
+    publisher_or_venue: "ACS Omega"
+    year: 2026
+    source_type: paper
+    evidence_status: PRIMARY_SOURCE_METADATA_TO_VERIFY
+    implementation_role:
+      - furnace_transfer_benchmark
+      - surrogate_target_definition
+      - latent_representation_reference
+      - multiobjective_optimization_reference
+    extracted_facts:
+      - "Reported pipeline combines CFD surrogate, VAE latent representation, and NSGA-II."
+      - "Targets include temperature/velocity fields and interfacial flux-related outputs."
+      - "Used as an external reference only; not treated as a shared benchmark dataset."
+
+  - source_id: tssg_explainable_ml_2021
+    priority: P0
+    title: "Explainable machine learning for the analysis of transport phenomena in TSSG of SiC"
+    year: 2021
+    source_type: paper
+    evidence_status: PRIMARY_SOURCE_METADATA_TO_VERIFY
+    implementation_role:
+      - flow_physics_reference
+      - xai_reference
+      - marangoni_reference
+      - rotation_and_magnetic_control_reference
+
+  - source_id: ujihara_publication_list_2021
+    priority: P0
+    title: "Ujihara Lab public publication list and linked 2021 works"
+    year: 2021
+    source_type: official_lab_page
+    evidence_status: URL_TO_VERIFY
+    implementation_role:
+      - literature_index
+      - adaptive_control_reference
+      - geometry_optimization_reference
+
+  - source_id: nagoya_2025_sic_announcement
+    priority: P0
+    title: "Nagoya University official announcement on 6/8-inch SiC results"
+    year: 2025
+    source_type: official_university_announcement
+    evidence_status: URL_TO_VERIFY
+    implementation_role:
+      - industrial_validation_context
+      - consortium_mapping
+
+  - source_id: uj_crystal_official
+    priority: P0
+    title: "UJ-Crystal official public technology information"
+    source_type: company_official
+    evidence_status: URL_TO_VERIFY
+    implementation_role:
+      - commercialization_context
+      - simulation_ai_positioning
+
+  - source_id: aixtal_process_informatics
+    priority: P0
+    title: "Aixtal Process Informatics public materials"
+    source_type: company_official
+    evidence_status: URL_TO_VERIFY
+    implementation_role:
+      - digital_twin_positioning
+      - process_optimization_context
+
+  - source_id: nedo_8inch_sic
+    priority: P0
+    title: "NEDO public program materials on next-generation 8-inch SiC wafer development"
+    source_type: official_program
+    evidence_status: URL_TO_VERIFY
+    implementation_role:
+      - consortium_mapping
+      - public_project_scope
+
+  - source_id: cfd_high_speed_prediction_2018
+    priority: P1
+    title: "High-speed prediction of computational fluid dynamics simulation in crystal growth"
+    year: 2018
+    source_type: paper
+    evidence_status: PRIMARY_SOURCE_METADATA_TO_VERIFY
+    implementation_role:
+      - surrogate_baseline
+
+  - source_id: adaptive_process_control_2021
+    priority: P1
+    title: "Adaptive process control for crystal growth using machine learning for high-speed prediction"
+    year: 2021
+    source_type: paper
+    evidence_status: PRIMARY_SOURCE_METADATA_TO_VERIFY
+    implementation_role:
+      - closed_loop_control_reference
+
+  - source_id: geometry_optimization_2021
+    priority: P1
+    title: "Geometrical design of a crystal growth system guided by a machine learning algorithm"
+    year: 2021
+    source_type: paper
+    evidence_status: PRIMARY_SOURCE_METADATA_TO_VERIFY
+    implementation_role:
+      - geometry_optimization_reference

@@ -1,0 +1,124 @@
+schema_version: 1
+spec_id: sic_tssg_v0
+status: PROVISIONAL_UNTIL_PRIMARY_SOURCES_VERIFIED
+
+scope:
+  process: TSSG_SiC
+  purpose:
+    - synthetic_dataset_generation
+    - surrogate_training
+    - benchmark
+    - virtual_hil
+  explicitly_out_of_scope:
+    - real_equipment_control
+    - reconstruction_of_proprietary_furnace_conditions
+    - production_process_validation
+
+evidence_classes:
+  FACT: directly supported by public primary source
+  DERIVED: reproducible calculation from public inputs
+  PROPOSAL: CrystalTwinAI engineering choice
+  UNKNOWN: unresolved pending source verification
+
+physics:
+  equations:
+    incompressible_continuity:
+      enabled: true
+      evidence_class: FACT
+    momentum:
+      enabled: true
+      terms:
+        viscous: true
+        buoyancy_boussinesq: true
+        electromagnetic_force: OPTIONAL
+      evidence_class: FACT
+    energy:
+      enabled: true
+      terms:
+        conduction: true
+        advection: true
+        electromagnetic_heating: OPTIONAL
+      evidence_class: FACT
+    carbon_transport:
+      enabled: true
+      evidence_class: FACT
+    free_surface_marangoni:
+      enabled: OPTIONAL
+      evidence_class: FACT
+    rotating_boundaries:
+      seed_rotation: OPTIONAL
+      crucible_rotation: OPTIONAL
+      evidence_class: FACT
+    static_magnetic_field:
+      enabled: OPTIONAL
+      evidence_class: FACT
+
+geometry:
+  fidelity_levels:
+    - id: axisymmetric_2d
+      role: bulk_doe
+      evidence_class: PROPOSAL
+    - id: sector_3d
+      role: selected_high_value_cases
+      evidence_class: PROPOSAL
+    - id: full_3d
+      role: asymmetry_and_gold_benchmark
+      evidence_class: PROPOSAL
+
+controls:
+  seed_diameter_mm:
+    allowed_values: [150, 200]
+    evidence_class: DERIVED
+    note: "Maps to public 6/8-inch development context; exact geometry remains source-specific."
+  control_temperature:
+    value: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+  seed_rotation_rpm:
+    range: [0, 30]
+    evidence_class: PROPOSAL
+    note: "Initial synthetic DOE only; replace with source-validated range."
+  crucible_rotation_rpm:
+    range: [-10, 10]
+    evidence_class: PROPOSAL
+  rf_power_normalized:
+    range: [0.8, 1.2]
+    evidence_class: PROPOSAL
+  coil_vertical_position_offset_mm:
+    range: [-20, 20]
+    evidence_class: PROPOSAL
+  seed_melt_gap_normalized:
+    range: [0.8, 1.2]
+    evidence_class: PROPOSAL
+  static_magnetic_field_t:
+    range: [0.0, 0.2]
+    evidence_class: PROPOSAL
+  initial_carbon_state:
+    representation: normalized_supersaturation
+    evidence_class: PROPOSAL
+  furnace_geometry:
+    allowed_values: [A, B, C]
+    evidence_class: PROPOSAL
+    role: OOD_transfer_benchmark
+
+outputs:
+  fields:
+    - T
+    - Ux
+    - Uy
+    - Uz
+    - C
+  surface_fields:
+    - Jc
+    - q
+  normalized_artifacts:
+    - metadata.json
+    - fields.zarr
+    - sensors.parquet
+    - metrics.json
+
+split_policy:
+  random_snapshot_split_forbidden: true
+  train: furnace_A
+  validation: unseen_conditions_furnace_A
+  test_id: held_out_parameter_regions
+  test_ood: [furnace_B, furnace_C]

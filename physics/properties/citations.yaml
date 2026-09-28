@@ -1,0 +1,11 @@
+schema_version: 1
+policy:
+  every_numeric_property_requires:
+    - primary_source_id
+    - locator
+    - unit
+    - valid_temperature_range
+    - valid_composition_range
+  inferred_values_forbidden: true
+
+citations: []

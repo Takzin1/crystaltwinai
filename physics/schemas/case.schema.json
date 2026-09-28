@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crystaltwin.ai/schemas/case.schema.json",
+  "title": "CrystalTwin SiC synthetic case metadata",
+  "type": "object",
+  "required": ["case_id", "spec_id", "geometry", "controls", "provenance"],
+  "properties": {
+    "case_id": { "type": "string", "minLength": 1 },
+    "spec_id": { "const": "sic_tssg_v0" },
+    "geometry": {
+      "type": "object",
+      "required": ["fidelity", "furnace_id"],
+      "properties": {
+        "fidelity": { "enum": ["axisymmetric_2d", "sector_3d", "full_3d"] },
+        "furnace_id": { "enum": ["A", "B", "C"] }
+      },
+      "additionalProperties": true
+    },
+    "controls": { "type": "object" },
+    "provenance": {
+      "type": "object",
+      "required": ["git_sha", "property_file_sha", "solver"],
+      "properties": {
+        "git_sha": { "type": "string", "minLength": 7 },
+        "property_file_sha": { "type": "string", "minLength": 7 },
+        "solver": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crystaltwin.ai/schemas/sensor.schema.json",
+  "title": "CrystalTwin synthetic sensor observation",
+  "type": "object",
+  "required": ["timestamp", "observations"],
+  "properties": {
+    "timestamp": { "type": "number" },
+    "observations": {
+      "type": "object",
+      "properties": {
+        "surface_temp": { "type": ["number", "null"] },
+        "thermal_frame_id": { "type": ["string", "null"] },
+        "rgb_frame_id": { "type": ["string", "null"] },
+        "seed_rpm": { "type": ["number", "null"] },
+        "crucible_rpm": { "type": ["number", "null"] },
+        "rf_power": { "type": ["number", "null"] },
+        "growth_rate": { "type": ["number", "null"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
