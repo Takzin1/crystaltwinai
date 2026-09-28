@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crystaltwin.ai/schemas/runtime-evidence.schema.json",
+  "title": "CrystalTwin runtime evidence",
+  "type": "object",
+  "required": [
+    "requestId",
+    "runtimeId",
+    "status",
+    "startedAtMs",
+    "endedAtMs",
+    "latencyMs"
+  ],
+  "properties": {
+    "requestId": { "type": "string", "minLength": 1 },
+    "runtimeId": { "type": "string", "minLength": 1 },
+    "model": { "type": "string" },
+    "providerRequestId": { "type": "string" },
+    "status": { "enum": ["ok", "timeout", "error"] },
+    "startedAtMs": { "type": "number" },
+    "endedAtMs": { "type": "number" },
+    "latencyMs": { "type": "number", "minimum": 0 },
+    "rawText": { "type": "string" },
+    "usage": {
+      "type": "object",
+      "properties": {
+        "inputTokens": { "type": "number", "minimum": 0 },
+        "outputTokens": { "type": "number", "minimum": 0 },
+        "totalTokens": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "error": { "type": "string" }
+  },
+  "additionalProperties": false
+}
