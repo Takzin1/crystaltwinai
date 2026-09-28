@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crystaltwin.ai/schemas/synthetic-case.schema.json",
+  "title": "CrystalTwin-SiC-Synth design point",
+  "type": "object",
+  "required": [
+    "case_id",
+    "design_index",
+    "spec_id",
+    "dataset_id",
+    "split",
+    "furnace_id",
+    "physical_validity",
+    "controls_normalized"
+  ],
+  "properties": {
+    "case_id": { "type": "string", "minLength": 1 },
+    "design_index": { "type": "integer", "minimum": 0 },
+    "spec_id": { "const": "sic_tssg_v0" },
+    "dataset_id": { "const": "crystaltwin_sic_synth_v0" },
+    "split": { "enum": ["train", "validation", "test_id", "test_ood"] },
+    "furnace_id": { "enum": ["A", "B", "C"] },
+    "physical_validity": { "const": "DESIGN_ONLY_NO_SOLVER_OUTPUT" },
+    "controls_normalized": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "number" }
+    }
+  },
+  "additionalProperties": false
+}
