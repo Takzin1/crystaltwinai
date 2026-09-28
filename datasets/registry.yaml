@@ -1,0 +1,77 @@
+schema_version: 1
+policy:
+  unknown_license_blocks_training: true
+  unknown_license_blocks_redistribution: true
+  require_checksum_before_use: true
+
+datasets:
+  - dataset_id: opencrystaldata
+    name: OpenCrystalData
+    source_url: null
+    doi: null
+    license_spdx: UNKNOWN
+    commercial_use: false
+    training_allowed: false
+    redistribution_allowed: false
+    sic_specific: false
+    role:
+      - perception_validation
+      - anomaly_detection
+    status: VERIFY_DATASET_SPECIFIC_LICENSE
+
+  - dataset_id: microfluidic_crystal_growth
+    name: Experimental and Measurement Data on Crystal Growth in a Microfluidic Chip
+    source_url: null
+    doi: null
+    license_spdx: UNKNOWN
+    commercial_use: false
+    training_allowed: false
+    redistribution_allowed: false
+    sic_specific: false
+    role:
+      - perception_validation
+      - real_world_validation
+    status: VERIFY_RIGHTS_BEFORE_USE
+
+  - dataset_id: crystallisation_kinetics
+    name: Crystallisation Kinetics Dataset
+    source_url: null
+    doi: null
+    license_spdx: UNKNOWN
+    commercial_use: false
+    training_allowed: false
+    redistribution_allowed: false
+    sic_specific: false
+    role:
+      - kinetics_reference
+    status: VERIFY_ACCESS_AND_RIGHTS
+
+  - dataset_id: flux_cvt_single_crystal_growth_db
+    name: Structured database of single-crystal growth methods (Flux/CVT)
+    source_url: null
+    doi: null
+    license_spdx: CC-BY-4.0
+    commercial_use: true
+    training_allowed: true
+    redistribution_allowed: true
+    attribution_required: true
+    sic_specific: mixed
+    role:
+      - rag
+      - knowledge_layer
+    status: METADATA_URL_AND_CHECKSUM_PENDING
+
+  - dataset_id: crystaltwin_sic_synth_v0
+    name: CrystalTwin-SiC-Synth v0
+    source_url: null
+    doi: null
+    license_spdx: CC-BY-4.0
+    commercial_use: true
+    training_allowed: true
+    redistribution_allowed: true
+    sic_specific: true
+    role:
+      - training
+      - validation
+      - benchmark
+    status: PROPOSED_NOT_GENERATED

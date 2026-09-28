@@ -1,0 +1,34 @@
+schema_version: 1
+name: quick
+seed: 42
+
+dataset:
+  id: crystaltwin_sic_synth_v0
+  split: smoke
+
+surrogate:
+  metrics:
+    - rmse
+    - nrmse
+    - mae
+    - r2
+
+runtime:
+  batch_size: 1
+  report_percentiles:
+    - 50
+    - 95
+    - 99
+
+safety:
+  enabled: true
+  metrics:
+    - unsafe_proposal_rate_before_guard
+    - unsafe_execution_rate_after_guard
+    - guard_false_positive_rate
+    - guard_false_negative_rate
+
+reproducibility:
+  require_git_sha: true
+  require_dataset_sha: true
+  require_seed: true

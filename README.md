@@ -34,14 +34,14 @@ CrystalTwin-AIは、結晶成長・溶液プロセス制御を題材にした**�
 ## セットアップ
 
 ```bash
-git clone https://github.com/<your-org>/crystaltwin-ai.git
+git clone https://github.com/Takzin1/crystaltwinai.git
 cd crystaltwin-ai
 npm install
 npm run dev
 # → http://localhost:3000
 ```
 
-要件: Node.js 18.17以上。外部APIキーは不要です(初期版は完全ローカル動作)。
+要件: Node.js 20.9以上。外部APIキーは不要です(初期版は完全ローカル動作)。
 
 本番ビルド:
 
@@ -137,6 +137,19 @@ AIとデジタルツインで無駄な作業や理解コストを減らし、**�
 10. Empowering operators with a human-in-the-loop/on-the-loop simulation-based digital twin — HITL教育設計の中核
 
 補助資料を含む全文献リストと使い分けは [docs/references.md](docs/references.md) を参照。
+
+## Hackathon development baseline
+
+The immutable pre-hackathon reference is commit `c4734be2d887b29b07fb20a70f84a2a3c6005c79` and branch `baseline/pre-hackathon-c4734be`.
+
+Hackathon-era development is isolated on `hackathon/physical-ai` and feature branches so the significant-update history remains auditable. Research provenance, dataset licensing, physics-property provenance, and benchmark contracts are documented before model tuning.
+
+See:
+
+- [Hackathon P0 architecture](docs/architecture/hackathon-p0.md)
+- [Research basis](docs/research/README.md)
+- [Dataset registry](datasets/registry.yaml)
+- [Benchmark contract](benchmarks/contract.md)
 
 ## 今後の拡張方針
 
