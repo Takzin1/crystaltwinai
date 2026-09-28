@@ -1,0 +1,24 @@
+{
+  "nonphysical_test_fixture": true,
+  "warning": "Schema/validator test only. Values are synthetic and not scientific data.",
+  "records": [
+    {
+      "property_id": "melt_density",
+      "value": 1.0,
+      "unit": "test-unit",
+      "status": "VERIFIED_PRIMARY_SOURCE",
+      "primary_source_id": "TEST_FIXTURE_ONLY",
+      "locator": "fixture:1",
+      "doi": null,
+      "url": null,
+      "valid_temperature_range": {
+        "min": 0.0,
+        "max": 1.0,
+        "unit": "test-unit"
+      },
+      "valid_composition_range": null,
+      "uncertainty": null,
+      "notes": "Not a real physical value."
+    }
+  ]
+}

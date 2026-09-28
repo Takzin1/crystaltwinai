@@ -1,0 +1,53 @@
+schema_version: 1
+spec_id: sic_tssg_boundary_conditions_v0
+status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+
+policy:
+  guessed_numeric_boundary_values_forbidden: true
+  every_numeric_boundary_value_requires_primary_source: true
+
+boundaries:
+  symmetry_axis:
+    type: symmetry
+    status: STRUCTURAL_ONLY
+
+  crucible_wall:
+    thermal:
+      type: UNKNOWN
+      value: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    velocity:
+      type: moving_wall_optional
+      value: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+
+  melt_free_surface:
+    thermal:
+      type: UNKNOWN
+      value: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    marangoni:
+      enabled: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+
+  seed_interface:
+    thermal:
+      type: UNKNOWN
+      value: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    carbon_flux:
+      type: UNKNOWN
+      value: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    rotation:
+      type: moving_wall_optional
+      value: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+
+  electromagnetic:
+    rf_heating:
+      enabled: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    static_magnetic_field:
+      enabled: null
+      status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
