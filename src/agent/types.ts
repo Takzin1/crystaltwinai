@@ -49,7 +49,9 @@ export type SafetyReasonCode =
   | "NONFINITE_VALUE"
   | "INVALID_CONFIDENCE"
   | "CLAMPED_DELTA"
-  | "CLAMPED_STATE_BOUND";
+  | "CLAMPED_STATE_BOUND"
+  | "RUNTIME_ERROR"
+  | "RUNTIME_TIMEOUT";
 
 export interface SafetyVerdict {
   allowed: boolean;
