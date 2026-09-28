@@ -1,0 +1,81 @@
+schema_version: 1
+system: SiC_TSSG
+status: INCOMPLETE_PRIMARY_SOURCE_VERIFICATION_REQUIRED
+
+properties:
+  melt_density:
+    symbol: rho
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  dynamic_viscosity:
+    symbol: mu
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  heat_capacity:
+    symbol: cp
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  thermal_conductivity:
+    symbol: k
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  thermal_expansion:
+    symbol: beta_T
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  carbon_diffusivity:
+    symbol: D_C
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  surface_tension:
+    symbol: gamma
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  surface_tension_temperature_coefficient:
+    symbol: dgamma_dT
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  carbon_solubility:
+    symbol: C_eq
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  electrical_conductivity:
+    symbol: sigma_e
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
+
+  solid_sic_density:
+    symbol: rho_SiC
+    value: null
+    unit: null
+    status: BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED
+    citation: null
