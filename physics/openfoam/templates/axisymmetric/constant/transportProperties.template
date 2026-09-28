@@ -1,0 +1,20 @@
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      transportProperties;
+}
+
+// Values below are inserted only after the property gate approves the manifest.
+// The current generator is a structural scaffold, not a validated SiC solver.
+
+rho             {{RHO}};
+mu              {{MU}};
+Cp              {{CP}};
+k               {{K}};
+betaT           {{BETA_T}};
+DC              {{DC}};
+gamma           {{GAMMA}};
+dGammaDT        {{DGAMMA_DT}};
+sigmaE          {{SIGMA_E}};
+rhoSiC          {{RHO_SIC}};
