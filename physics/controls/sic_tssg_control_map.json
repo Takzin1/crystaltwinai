@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "control_map_id": "sic_tssg_control_map_v0",
+  "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+  "controls": {
+    "control_temperature_offset_norm": {
+      "physical_name": "control_temperature",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    },
+    "seed_rotation_norm": {
+      "physical_name": "seed_rotation",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    },
+    "crucible_rotation_norm": {
+      "physical_name": "crucible_rotation",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    },
+    "rf_power_norm": {
+      "physical_name": "rf_power",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    },
+    "coil_position_norm": {
+      "physical_name": "coil_vertical_position",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    },
+    "seed_melt_gap_norm": {
+      "physical_name": "seed_melt_gap",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    },
+    "magnetic_field_norm": {
+      "physical_name": "static_magnetic_field",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    },
+    "carbon_supersaturation_norm": {
+      "physical_name": "initial_carbon_supersaturation",
+      "min": null,
+      "max": null,
+      "unit": null,
+      "status": "BLOCKED_UNTIL_PRIMARY_SOURCE_VERIFIED",
+      "primary_source_id": null,
+      "locator": null
+    }
+  }
+}
