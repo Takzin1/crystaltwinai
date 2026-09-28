@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crystaltwin.ai/schemas/fields.schema.json",
+  "title": "CrystalTwin normalized field inventory",
+  "type": "object",
+  "required": ["temperature", "velocity", "carbon_concentration"],
+  "properties": {
+    "temperature": { "const": "T" },
+    "velocity": {
+      "type": "array",
+      "prefixItems": [
+        { "const": "Ux" },
+        { "const": "Uy" },
+        { "const": "Uz" }
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "carbon_concentration": { "const": "C" },
+    "interface_carbon_flux": { "const": "Jc" },
+    "heat_flux": { "const": "q" }
+  },
+  "additionalProperties": false
+}
