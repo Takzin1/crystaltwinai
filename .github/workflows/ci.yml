@@ -59,3 +59,27 @@ jobs:
 
       - name: Unit tests
         run: python -m unittest discover -s physics/tests -p 'test_*.py'
+
+  data:
+    name: Dataset design gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile dataset scripts
+        run: python -m compileall datasets/scripts datasets/tests
+
+      - name: Unit tests
+        run: python -m unittest discover -s datasets/tests -p 'test_*.py'
+
+      - name: Generate smoke design
+        run: |
+          python datasets/scripts/sample_design.py --count 100 --seed 42 --output /tmp/design.jsonl
+          python datasets/scripts/validate_design.py /tmp/design.jsonl

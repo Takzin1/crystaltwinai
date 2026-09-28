@@ -1,0 +1,27 @@
+{
+  "dataset_id": "crystaltwin_sic_synth_v0",
+  "version": "0.0-design",
+  "status": "DESIGN_SPEC_ONLY",
+  "license_spdx": "CC-BY-4.0",
+  "physical_validity": "NO_SOLVER_OUTPUT_YET",
+  "generator": "datasets/scripts/sample_design.py",
+  "default_seed": 42,
+  "default_count": 100,
+  "split_policy": {
+    "train": "Furnace A, first 60%",
+    "validation": "Furnace A, next 15%",
+    "test_id": "Furnace A, next 15%",
+    "test_ood": "Furnace B/C, final 10%"
+  },
+  "anti_leakage": {
+    "adjacent_trajectory_snapshot_random_split_forbidden": true,
+    "design_case_ids_unique": true
+  },
+  "promotion_requirements": [
+    "source-verified material properties",
+    "source-verified boundary conditions",
+    "validated OpenFOAM solver setup",
+    "conservation checks",
+    "dataset checksums"
+  ]
+}
