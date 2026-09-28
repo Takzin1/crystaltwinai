@@ -13,6 +13,7 @@ import RecommendationPanel from "@/components/RecommendationPanel";
 import TimeSeriesChart from "@/components/TimeSeriesChart";
 import SimulationLog from "@/components/SimulationLog";
 import CrystalViz from "@/components/CrystalViz";
+import AgentControlPanel from "@/components/AgentControlPanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -91,6 +92,7 @@ export default function Home() {
             <RecommendationPanel lang={lang} recommendations={summary.recommendations} />
           </div>
 
+          <AgentControlPanel lang={lang} />
           <SimulationLog lang={lang} log={result.log} />
         </main>
       </div>
