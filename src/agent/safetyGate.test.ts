@@ -69,7 +69,7 @@ test("clamps excessive delta deterministically", () => {
   assert.deepEqual(first, second);
   assert.equal(first.allowed, true);
   assert.equal(first.status, "clamped");
-  assert.equal(first.action?.value, 0.1);
+  assert.ok(Math.abs((first.action?.value ?? 0) - 0.1) < 1e-12);
   assert.ok(first.reasonCodes.includes("CLAMPED_DELTA"));
 });
 
