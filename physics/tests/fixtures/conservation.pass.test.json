@@ -1,0 +1,12 @@
+{
+  "species_balance": {
+    "in": 10.0,
+    "out": 9.0,
+    "accumulation": 1.0
+  },
+  "energy_balance": {
+    "in": 100.0,
+    "out": 80.0,
+    "accumulation": 20.0
+  }
+}

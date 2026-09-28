@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crystaltwin.ai/schemas/property-record.schema.json",
+  "title": "CrystalTwin verified physical property record",
+  "type": "object",
+  "required": [
+    "property_id",
+    "value",
+    "unit",
+    "status",
+    "primary_source_id",
+    "locator",
+    "valid_temperature_range"
+  ],
+  "properties": {
+    "property_id": { "type": "string", "minLength": 1 },
+    "value": { "type": "number" },
+    "unit": { "type": "string", "minLength": 1 },
+    "status": { "const": "VERIFIED_PRIMARY_SOURCE" },
+    "primary_source_id": { "type": "string", "minLength": 1 },
+    "locator": { "type": "string", "minLength": 1 },
+    "doi": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "valid_temperature_range": {
+      "type": "object",
+      "required": ["min", "max", "unit"],
+      "properties": {
+        "min": { "type": ["number", "null"] },
+        "max": { "type": ["number", "null"] },
+        "unit": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "valid_composition_range": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "uncertainty": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "notes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}
