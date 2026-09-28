@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "nonphysical_test_fixture": true,
+  "warning": "TEST ONLY. Synthetic control ranges are not scientific values.",
+  "controls": {
+    "control_temperature_offset_norm": {
+      "physical_name": "control_temperature",
+      "min": 0.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": -1.0,
+      "normalized_max": 1.0,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    },
+    "seed_rotation_norm": {
+      "physical_name": "seed_rotation",
+      "min": 0.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": 0.0,
+      "normalized_max": 1.0,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    },
+    "crucible_rotation_norm": {
+      "physical_name": "crucible_rotation",
+      "min": -100.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": -1.0,
+      "normalized_max": 1.0,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    },
+    "rf_power_norm": {
+      "physical_name": "rf_power",
+      "min": 0.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": 0.8,
+      "normalized_max": 1.2,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    },
+    "coil_position_norm": {
+      "physical_name": "coil_vertical_position",
+      "min": -100.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": -1.0,
+      "normalized_max": 1.0,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    },
+    "seed_melt_gap_norm": {
+      "physical_name": "seed_melt_gap",
+      "min": 0.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": 0.8,
+      "normalized_max": 1.2,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    },
+    "magnetic_field_norm": {
+      "physical_name": "static_magnetic_field",
+      "min": 0.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": 0.0,
+      "normalized_max": 1.0,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    },
+    "carbon_supersaturation_norm": {
+      "physical_name": "initial_carbon_supersaturation",
+      "min": 0.0,
+      "max": 100.0,
+      "unit": "test-unit",
+      "normalized_min": 0.0,
+      "normalized_max": 1.0,
+      "status": "TEST_ONLY_NONPHYSICAL"
+    }
+  }
+}
