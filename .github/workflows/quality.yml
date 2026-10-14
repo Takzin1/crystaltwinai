@@ -28,6 +28,8 @@ jobs:
             }
             console.log("TOTAL", JSON.stringify(report.metadata?.vulnerabilities || {}));
           '
+      - name: Enforce dependency security (high and critical)
+        run: npm audit --audit-level=high
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
