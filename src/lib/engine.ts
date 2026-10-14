@@ -1,5 +1,6 @@
 import { SCORING_CONFIG as C } from "@/config/scoring.config";
 import { assessRisk } from "@/lib/risk";
+import { validateSimulationInput } from "@/lib/validation";
 import { recommend } from "@/lib/recommend";
 import {
   growthRate,
@@ -26,6 +27,7 @@ import type {
  * see docs/safety_and_scope.md.
  */
 export function runSimulation(input: SimulationInput): SimulationResult {
+  validateSimulationInput(input);
   const series: StepState[] = [];
   const log: LogEvent[] = [];
 

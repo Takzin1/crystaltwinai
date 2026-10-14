@@ -1,0 +1,35 @@
+name: Quality checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Dependency audit diagnostic
+        run: |
+          npm audit --json > "$RUNNER_TEMP/dependency-audit.json" || true
+          node -e '
+            const report = require(process.env.RUNNER_TEMP + "/dependency-audit.json");
+            for (const [name, v] of Object.entries(report.vulnerabilities || {})) {
+              const advisory = (v.via || []).filter(x => typeof x === "object").map(x => ({title:x.title, url:x.url, range:x.range, severity:x.severity}));
+              console.log(JSON.stringify({name,severity:v.severity,isDirect:v.isDirect,range:v.range,fixAvailable:v.fixAvailable,advisory}));
+            }
+            console.log("TOTAL", JSON.stringify(report.metadata?.vulnerabilities || {}));
+          '
+      - name: Enforce dependency security (high and critical)
+        run: npm audit --audit-level=high
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

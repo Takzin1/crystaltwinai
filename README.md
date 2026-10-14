@@ -34,14 +34,14 @@ CrystalTwin-AIは、結晶成長・溶液プロセス制御を題材にした**�
 ## セットアップ
 
 ```bash
-git clone https://github.com/<your-org>/crystaltwin-ai.git
+git clone https://github.com/Takzin1/crystaltwinai.git
 cd crystaltwin-ai
 npm install
 npm run dev
 # → http://localhost:3000
 ```
 
-要件: Node.js 18.17以上。外部APIキーは不要です(初期版は完全ローカル動作)。
+要件: Node.js 20.9以上。外部APIキーは不要です(初期版は完全ローカル動作)。
 
 本番ビルド:
 
@@ -138,6 +138,34 @@ AIとデジタルツインで無駄な作業や理解コストを減らし、**�
 
 補助資料を含む全文献リストと使い分けは [docs/references.md](docs/references.md) を参照。
 
+## Dataset ingestion (v1) / データセット取り込み
+
+ブラウザ内で実験データを読み込み、**簡略化した教育用モデルの出力と比較**できます。CSV / JSON をサポートします。ファイルはサーバーに送信せず、永続保存も行いません。データセットがモデルを自動学習・校正したり、実設備へ制御信号を送信することはありません。
+
+- 必須列: `step,temperature,concentration`
+- 任意列: `growthRate,crystalYield,quality`
+- `step` は昇順の整数、1〜200。欠番は許容、重複は不可。
+- 2〜200行、最大512 KiB。未知の列、重複ヘッダー、欠損必須値、NaN/Infinity、数値以外、許容範囲外の値は拒否。
+- 単位: temperature=°C (0–150)、concentration=g/mL (0–1)、growthRate=a.u. (0–200)、crystalYield=a.u. (0–100)、quality=0–100。これらの範囲は**インポート時のガードレール**であり、科学的なデータ検証ではありません。
+- 読み込んだデータのSHA-256と行数を表示（ブラウザのWeb Crypto利用時）。比較結果は一致ステップのみで計算し、`bias = observed - simulated`、MAE、RMSEを表示。
+- [合成サンプルCSV](public/examples/synthetic_crystallization.csv) を同梱。**合成データであり実測値ではありません**。
+- JSON形式: `{"schemaVersion":1,"name":"my-experiment","rows":[{"step":1,"temperature":61.4,"concentration":0.419},{"step":2,"temperature":60.9,"concentration":0.417}]}`
+- 実験データを公開リポジトリにコミットしないでください。機密性の高い実験データは利用組織の承認済み環境で扱ってください。
+- 検証ロジック: `src/lib/datasets.ts`。画面: `src/components/DatasetPanel.tsx`。
+
+品質チェック:
+
+```bash
+npm ci
+npm run typecheck
+npm test
+npm run build
+```
+
+`npm run lint` は現状、TypeScript静的チェックの互換エイリアスです（ESLintのスタイル監査ではありません）。PR/ mainへのpushでCIが同じ検証を実行します。
+
+**解釈上の制約**: 取り込む実測値とモデルが、同じ物質・工程・測定条件・単位系を表すことは自動検証できません。誤差が小さくてもモデル妥当性、プロセスバリデーション、工業的な適用可能性を保証しません。
+
 ## 今後の拡張方針
 
 - **制御の高度化**: PID制御デモ → MPC風推薦 → 強化学習(RL)エージェントの段階的追加
@@ -164,3 +192,11 @@ CrystalTwin-AIはOSSとして公開しています。以下のようなご要望
 ## License
 
 MIT License — see [LICENSE](LICENSE).
+
+### Experimental catalog (v1)
+
+- Maximum five datasets can coexist in browser memory. Switch the active dataset without re-importing.
+- Each dataset carries **user-declared**, unverified provenance category (unverified / synthetic / measured), material, experiment ID, notes and step interval. These declarations are **not** proof of the data source.
+- Time alignment: comparisons are **disabled** unless 1 dataset step equals 1 minute. This does not automatically align different start-time origins or verify experimental equivalence.
+- Export includes summary metrics, dataset content SHA-256 (if available), metadata, and the **current** simulation input. Original raw measurement rows are deliberately omitted.
+- All records are in-memory only; deleting a record or leaving the page clears it. Reports are created as local downloads.
