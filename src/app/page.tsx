@@ -1,5 +1,7 @@
 "use client";
 
+import "./dataset.css";
+
 import { useMemo, useState } from "react";
 import { DEFAULT_INPUT } from "@/config/parameters";
 import { SCENARIOS } from "@/config/scenarios";
@@ -13,6 +15,7 @@ import RecommendationPanel from "@/components/RecommendationPanel";
 import TimeSeriesChart from "@/components/TimeSeriesChart";
 import SimulationLog from "@/components/SimulationLog";
 import CrystalViz from "@/components/CrystalViz";
+import DatasetPanel from "@/components/DatasetPanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -92,6 +95,7 @@ export default function Home() {
           </div>
 
           <SimulationLog lang={lang} log={result.log} />
+          <DatasetPanel lang={lang} simulated={result.series} />
         </main>
       </div>
 
