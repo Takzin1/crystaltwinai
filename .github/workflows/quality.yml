@@ -17,6 +17,17 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Dependency audit diagnostic
+        run: |
+          npm audit --json > "$RUNNER_TEMP/dependency-audit.json" || true
+          node -e '
+            const report = require(process.env.RUNNER_TEMP + "/dependency-audit.json");
+            for (const [name, v] of Object.entries(report.vulnerabilities || {})) {
+              const advisory = (v.via || []).filter(x => typeof x === "object").map(x => ({title:x.title, url:x.url, range:x.range, severity:x.severity}));
+              console.log(JSON.stringify({name,severity:v.severity,isDirect:v.isDirect,range:v.range,fixAvailable:v.fixAvailable,advisory}));
+            }
+            console.log("TOTAL", JSON.stringify(report.metadata?.vulnerabilities || {}));
+          '
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
