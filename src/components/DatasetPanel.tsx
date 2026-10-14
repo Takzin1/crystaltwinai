@@ -75,11 +75,9 @@ export default function DatasetPanel({ lang, simulated, input }: Props) {
   }
 
   function removeSelected() {
-    setLibrary((prev) => {
-      const next = prev.filter((item) => item.id !== selectedId);
-      setSelectedId(next[0]?.id ?? null);
-      return next;
-    });
+    const next = library.filter((item) => item.id !== selectedId);
+    setLibrary(next);
+    setSelectedId(next[0]?.id ?? null);
     setError(null);
   }
 
