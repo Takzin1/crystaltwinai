@@ -80,3 +80,28 @@ test("engine rejects NaN, negative/out-of-range and unbounded steps", () => {
   assert.throws(() => runSimulation({ ...DEFAULT_INPUT, timeSteps: 10.1 }), /integer/);
   assert.deepEqual(runSimulation(DEFAULT_INPUT), runSimulation(DEFAULT_INPUT));
 });
+
+test("catalog provenance metadata and reporting excludes raw dataset rows", async () => {
+  const { DEFAULT_METADATA, normalizeMetadata, canCompareIntervals, makeComparisonReport } = await import("../src/lib/experiment-registry");
+  const sample = parseDataset(csv, "csv");
+  const simulation = runSimulation({ ...DEFAULT_INPUT, timeSteps: 10 });
+  const comparison = compareDataset(sample, simulation.series);
+  const metadata = normalizeMetadata({ ...DEFAULT_METADATA, source: "synthetic", material: " KCl ", experimentId: "demo-1", notes: "educational" });
+  assert.equal(metadata.material, "KCl");
+  assert.equal(canCompareIntervals(metadata), true);
+  assert.equal(canCompareIntervals({ ...metadata, intervalMinutes: 2 }), false);
+  assert.throws(() => normalizeMetadata({ ...metadata, intervalMinutes: Number.NaN }), /Interval/);
+  assert.throws(() => normalizeMetadata({ ...metadata, source: "hidden" as typeof metadata.source }), /Invalid/);
+  const report = makeComparisonReport({
+    dataset: sample, metadata, sha256: "abc",
+    simulatedInput: { ...DEFAULT_INPUT }, comparison,
+    generatedAt: "2026-10-14T00:00:00.000Z",
+  });
+  assert.equal(report.data.metadata.source, "synthetic");
+  assert.equal(report.data.rowCount, 2);
+  assert.ok(!JSON.stringify(report).includes("61.4"));
+  assert.throws(() => makeComparisonReport({
+    dataset: sample, metadata: { ...metadata, intervalMinutes: 2 }, sha256: null,
+    simulatedInput: DEFAULT_INPUT, comparison, generatedAt: "2026-10-14T00:00:00.000Z",
+  }), /Time interval/);
+});

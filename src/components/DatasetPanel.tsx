@@ -1,9 +1,14 @@
 "use client";
 
-import { useMemo, useState, type ChangeEvent } from "react";
+import { useMemo, useRef, useState, type ChangeEvent } from "react";
 import type { DataField, ExperimentalDataset } from "../lib/datasets";
 import { compareDataset, MAX_DATASET_BYTES, parseDataset } from "../lib/datasets";
-import type { LanguageCode, StepState } from "../lib/types";
+import type { LanguageCode, SimulationInput, StepState } from "../lib/types";
+import {
+  DEFAULT_METADATA, MAX_ACTIVE_DATASETS, canCompareIntervals,
+  makeComparisonReport, normalizeMetadata,
+  type DatasetMetadata,
+} from "../lib/experiment-registry";
 
 const FIELD_LABELS: Record<DataField, { ja: string; en: string }> = {
   temperature: { ja: "温度 (°C)", en: "Temperature (°C)" },
@@ -13,10 +18,15 @@ const FIELD_LABELS: Record<DataField, { ja: string; en: string }> = {
   quality: { ja: "品質 (0–100)", en: "Quality (0–100)" },
 };
 
-type LoadedData = { dataset: ExperimentalDataset; sha256: string | null };
-interface Props { lang: LanguageCode; simulated: StepState[] }
+type LoadedData = {
+  id: number;
+  dataset: ExperimentalDataset;
+  sha256: string | null;
+  metadata: DatasetMetadata;
+};
+interface Props { lang: LanguageCode; simulated: StepState[]; input: SimulationInput }
 
-function TemperatureComparison({ lang, dataset, simulated }: Props & { dataset: ExperimentalDataset }) {
+function TemperatureComparison({ lang, dataset, simulated }: Omit<Props, "input"> & { dataset: ExperimentalDataset }) {
   const width = 620, height = 165, left = 12, right = 12, top = 10, bottom = 26;
   const maxStep = Math.max(1, simulated.length, ...dataset.rows.map((row) => row.step));
   const values = [...simulated.map((row) => row.temperature), ...dataset.rows.map((row) => row.temperature)];
@@ -45,21 +55,64 @@ function TemperatureComparison({ lang, dataset, simulated }: Props & { dataset: 
   );
 }
 
-export default function DatasetPanel({ lang, simulated }: Props) {
-  const [loaded, setLoaded] = useState<LoadedData | null>(null);
+export default function DatasetPanel({ lang, simulated, input }: Props) {
+  const [library, setLibrary] = useState<LoadedData[]>([]);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const counter = useRef(0);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const loaded = library.find((item) => item.id === selectedId) ?? null;
+  const aligned = loaded ? canCompareIntervals(loaded.metadata) : false;
   const comparison = useMemo(
-    () => loaded ? compareDataset(loaded.dataset, simulated) : null,
-    [loaded, simulated]
+    () => loaded && aligned ? compareDataset(loaded.dataset, simulated) : null,
+    [loaded, aligned, simulated]
   );
+
+  function updateMetadata(patch: Partial<DatasetMetadata>) {
+    setLibrary((prev) => prev.map((item) =>
+      item.id === selectedId ? { ...item, metadata: { ...item.metadata, ...patch } } : item
+    ));
+  }
+
+  function removeSelected() {
+    setLibrary((prev) => {
+      const next = prev.filter((item) => item.id !== selectedId);
+      setSelectedId(next[0]?.id ?? null);
+      return next;
+    });
+    setError(null);
+  }
+
+  function exportReport() {
+    if (!loaded || !comparison) return;
+    try {
+      const report = makeComparisonReport({
+        dataset: loaded.dataset, metadata: loaded.metadata, sha256: loaded.sha256,
+        simulatedInput: input, comparison, generatedAt: new Date().toISOString(),
+      });
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "crystaltwin-comparison-report.json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Export failed.");
+    }
+  }
 
   async function onFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.[0];
     event.currentTarget.value = "";
     if (!file) return;
     setError(null);
-    setLoaded(null);
+    if (library.length >= MAX_ACTIVE_DATASETS) {
+      setError("Maximum five datasets. Remove one before importing.");
+      return;
+    }
     setBusy(true);
     try {
       const extension = file.name.split(".").pop()?.toLowerCase();
@@ -78,7 +131,12 @@ export default function DatasetPanel({ lang, simulated }: Props) {
           // Digest is provenance metadata, not required for import.
         }
       }
-      setLoaded({ dataset, sha256 });
+      if (library.some((item) => sha256 && item.sha256 === sha256)) {
+        throw new Error("This file is already in the current dataset library.");
+      }
+      const id = ++counter.current;
+      setLibrary((prev) => [...prev, { id, dataset, sha256, metadata: { ...DEFAULT_METADATA } }]);
+      setSelectedId(id);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Import failed.");
     } finally {
@@ -97,11 +155,14 @@ export default function DatasetPanel({ lang, simulated }: Props) {
       <div className="dataset-actions">
         <label className="dataset-upload">
           {busy ? (lang === "ja" ? "検証中…" : "Validating…") : (lang === "ja" ? "CSV / JSONを選択" : "Choose CSV / JSON")}
-          <input type="file" accept=".csv,.json,text/csv,application/json" onChange={onFileChange} disabled={busy} />
+          <input type="file" accept=".csv,.json,text/csv,application/json" onChange={onFileChange} disabled={busy || library.length >= MAX_ACTIVE_DATASETS} />
         </label>
         <a href="/examples/synthetic_crystallization.csv" download>{lang === "ja" ? "サンプルCSV" : "Sample CSV"}</a>
-        {loaded && <button className="dataset-clear" type="button" onClick={() => { setLoaded(null); setError(null); }}>
-          {lang === "ja" ? "データを削除" : "Clear data"}
+        {loaded && <button className="dataset-clear" type="button" onClick={removeSelected}>
+          {lang === "ja" ? "選択データを削除" : "Remove selected"}
+        </button>}
+        {loaded && comparison && <button className="dataset-clear" type="button" onClick={exportReport}>
+          {lang === "ja" ? "比較レポートを保存" : "Export comparison report"}
         </button>}
       </div>
       <p className="dataset-muted">
@@ -109,13 +170,57 @@ export default function DatasetPanel({ lang, simulated }: Props) {
           ? "必須: step, temperature, concentration / 任意: growthRate, crystalYield, quality / 最大200行・512 KiB"
           : "Required: step, temperature, concentration / Optional: growthRate, crystalYield, quality / Max 200 rows, 512 KiB"}
       </p>
+      <p className="dataset-muted">
+        {lang === "ja" ? `一時ライブラリ: ${library.length}/${MAX_ACTIVE_DATASETS}件（ページを閉じると消去）` : `In-memory library: ${library.length}/${MAX_ACTIVE_DATASETS} (cleared on page exit)`}
+      </p>
+      {library.length > 0 && (
+        <div className="dataset-metadata">
+          <label>
+            {lang === "ja" ? "比較対象データ" : "Active dataset"}
+            <select value={selectedId ?? ""} onChange={(event) => setSelectedId(Number(event.target.value))}>
+              {library.map((item) => <option key={item.id} value={item.id}>{item.dataset.name} ({item.dataset.rows.length} rows)</option>)}
+            </select>
+          </label>
+          {loaded && <>
+            <label>
+              {lang === "ja" ? "データ区分（自己申告）" : "Provenance (user declared)"}
+              <select value={loaded.metadata.source} onChange={(event) => updateMetadata({ source: event.target.value as DatasetMetadata["source"] })}>
+                <option value="unverified">{lang === "ja" ? "未確認" : "Unverified"}</option>
+                <option value="synthetic">{lang === "ja" ? "合成データ" : "Synthetic"}</option>
+                <option value="measured">{lang === "ja" ? "実測データ" : "Measured"}</option>
+              </select>
+            </label>
+            <label>
+              {lang === "ja" ? "試料・物質" : "Material / sample"}
+              <input type="text" maxLength={80} value={loaded.metadata.material} onChange={(event) => updateMetadata({ material: event.target.value })} />
+            </label>
+            <label>
+              {lang === "ja" ? "実験ID" : "Experiment ID"}
+              <input type="text" maxLength={80} value={loaded.metadata.experimentId} onChange={(event) => updateMetadata({ experimentId: event.target.value })} />
+            </label>
+            <label>
+              {lang === "ja" ? "1ステップあたり分数" : "Minutes per step"}
+              <input type="number" min="0.01" max="60" step="0.01" value={loaded.metadata.intervalMinutes}
+                onChange={(event) => updateMetadata({ intervalMinutes: Number(event.target.value) })} />
+            </label>
+            <label className="dataset-notes">
+              {lang === "ja" ? "実験条件・備考" : "Method / notes"}
+              <textarea rows={2} maxLength={240} value={loaded.metadata.notes} onChange={(event) => updateMetadata({ notes: event.target.value })} />
+            </label>
+          </>}
+        </div>
+      )}
       {error && <p className="dataset-error" role="alert">{lang === "ja" ? "検証エラー: " : "Validation error: "}{error}</p>}
+      {loaded && !aligned && <p className="dataset-error" role="status">
+        {lang === "ja" ? "時間軸が一致しません。モデルは1ステップ＝1分です。比較を停止しています。" : "Timebase mismatch. Model assumes one minute per step. Comparison disabled."}
+      </p>}
       {loaded && comparison && (
         <div aria-live="polite">
           <div className="dataset-details">
             <strong>{loaded.dataset.name}</strong>
             <span>{loaded.dataset.rows.length} rows · schema v{loaded.dataset.schemaVersion}</span>
             <span>{comparison.matchedRows} matched · {comparison.unmatchedRows} unmatched</span>
+            <span>{loaded.metadata.source === "measured" ? (lang === "ja" ? "実測（自己申告）" : "Measured (declared)") : loaded.metadata.source === "synthetic" ? (lang === "ja" ? "合成" : "Synthetic") : (lang === "ja" ? "未確認" : "Unverified")}</span>
           </div>
           {loaded.sha256 && <p className="dataset-checksum">SHA-256: <code>{loaded.sha256}</code></p>}
           {comparison.matchedRows > 0 ? (

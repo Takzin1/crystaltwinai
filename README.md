@@ -192,3 +192,11 @@ CrystalTwin-AIはOSSとして公開しています。以下のようなご要望
 ## License
 
 MIT License — see [LICENSE](LICENSE).
+
+### Experimental catalog (v1)
+
+- Maximum five datasets can coexist in browser memory. Switch the active dataset without re-importing.
+- Each dataset carries **user-declared**, unverified provenance category (unverified / synthetic / measured), material, experiment ID, notes and step interval. These declarations are **not** proof of the data source.
+- Time alignment: comparisons are **disabled** unless 1 dataset step equals 1 minute. This does not automatically align different start-time origins or verify experimental equivalence.
+- Export includes summary metrics, dataset content SHA-256 (if available), metadata, and the **current** simulation input. Original raw measurement rows are deliberately omitted.
+- All records are in-memory only; deleting a record or leaving the page clears it. Reports are created as local downloads.

@@ -95,7 +95,7 @@ export default function Home() {
           </div>
 
           <SimulationLog lang={lang} log={result.log} />
-          <DatasetPanel lang={lang} simulated={result.series} />
+          <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
         </main>
       </div>
 
