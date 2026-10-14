@@ -16,7 +16,7 @@ export const DATA_FIELDS = [
   "quality",
 ] as const;
 export type DataField = (typeof DATA_FIELDS)[number];
-export type Measurement = { step: number } & Partial<Record<DataField, number>>;
+export type Measurement = { step: number; temperature: number; concentration: number } & Partial<Record<Exclude<DataField, "temperature" | "concentration">, number>>;
 export interface ExperimentalDataset {
   schemaVersion: 1;
   name: string;
@@ -124,7 +124,7 @@ function normalizeRows(rawRows: unknown[], name: string): ExperimentalDataset {
       throw new Error(`Row ${i + 1}: step must be a strictly increasing integer in 1–${MAX_DATASET_ROWS}.`);
     }
     previousStep = step;
-    const output: Measurement = { step };
+    const output: Partial<Measurement> = { step };
     for (const field of DATA_FIELDS) {
       const value = record[field];
       if (value === undefined || value === null || value === "") {
@@ -141,7 +141,7 @@ function normalizeRows(rawRows: unknown[], name: string): ExperimentalDataset {
       output[field] = numeric;
       available.add(field);
     }
-    rows.push(output);
+    rows.push(output as Measurement);
   }
   return { schemaVersion: 1, name: name.slice(0, 120), rows, fields: DATA_FIELDS.filter((key) => available.has(key)) };
 }
