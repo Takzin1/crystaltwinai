@@ -200,3 +200,12 @@ MIT License — see [LICENSE](LICENSE).
 - Time alignment: comparisons are **disabled** unless 1 dataset step equals 1 minute. This does not automatically align different start-time origins or verify experimental equivalence.
 - Export includes summary metrics, dataset content SHA-256 (if available), metadata, and the **current** simulation input. Original raw measurement rows are deliberately omitted.
 - All records are in-memory only; deleting a record or leaving the page clears it. Reports are created as local downloads.
+
+
+## Research Schema v2 (experimental research importer)
+
+The educational v1 CSV/JSON comparator is unchanged. A separate in-browser Research v2 JSON import panel retains **source-declared** units, DOI/license metadata, provenance (measured/simulated/synthetic/mixed/unverified), and experiment mode. It enforces strict schema validation, file size (1 MiB) and rows (10,000), rejects semantically invalid conversions, and **does not automatically compare raw research records to the educational model**.
+
+See [Research Schema v2 design and limitations](docs/research-schema-v2.md) and [fictional JSON example](public/examples/research-v2-synthetic.json).
+
+Important: This is schema validation, not verification of published datasets or a physically calibrated model. Mendeley/ACS raw XLSX acquisition, license verification, substantive model calibration, and binned PSD comparators remain future tasks.

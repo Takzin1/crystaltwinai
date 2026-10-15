@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 2,
+  "metadata": {
+    "title": "Synthetic cooling trajectory (fictional; not laboratory measurements)",
+    "authors": [],
+    "provenance": "synthetic",
+    "experimentMode": "trajectory",
+    "material": "fictional solute (NOT measurements)",
+    "solvent": "water (fictional)",
+    "processType": "educational example",
+    "concentrationBasis": "g_per_mL_solution",
+    "temperatureSource": "sample",
+    "units": {
+      "time": "min",
+      "temperature": "°C",
+      "concentration": "g/mL"
+    },
+    "notes": "Invented numbers solely to test Research Schema v2. Not a published dataset."
+  },
+  "measurements": [
+    {
+      "time": 0,
+      "temperature": 65,
+      "concentration": 0.42
+    },
+    {
+      "time": 0.5,
+      "temperature": 64.8,
+      "concentration": 0.419
+    },
+    {
+      "time": 1.5,
+      "temperature": 64.2,
+      "concentration": 0.417
+    }
+  ]
+}
