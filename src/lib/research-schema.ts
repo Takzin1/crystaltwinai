@@ -256,6 +256,9 @@ export function parseResearchDataset(content: string): ResearchDataset {
       row.inductionTime === undefined && row.d10 === undefined && row.d50 === undefined && row.d90 === undefined) {
       throw new Error("Distribution requires induction time or particle-size data.");
     }
+    const psdFields = (["d10", "d50", "d90"] as const).filter(field => row[field] !== undefined);
+    const psdUnits = new Set(psdFields.map(field => metadata.units[field]));
+    if (psdUnits.size > 1) throw new Error("PSD quantiles must have the same declared size unit.");
     if (row.d10 !== undefined && row.d50 !== undefined && row.d10 > row.d50) throw new Error("d10 exceeds d50.");
     if (row.d50 !== undefined && row.d90 !== undefined && row.d50 > row.d90) throw new Error("d50 exceeds d90.");
     rows.push(row);
