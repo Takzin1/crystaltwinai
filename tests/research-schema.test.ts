@@ -55,7 +55,7 @@ test("reject improper numeric quantities and duplicate/unsorted times",()=>{
   assert.throws(()=>parse(mutate(x=>{x.measurements[1].time=0;})),/strictly increase/);
   assert.throws(()=>parse(mutate(x=>{x.measurements[0].concentration=102;})),/percent > 100/);
   assert.throws(()=>parse(mutate(x=>{x.measurements[0].temperature=-1;})),/Kelvin below zero/);
-  assert.throws(()=>parse(mutate(x=>{x.measurements[0].temperature=Number.NaN;})),/finite JSON number/);
+  assert.throws(()=>parse(mutate(x=>{x.measurements[0].temperature="NaN";})),/finite JSON number/);
   assert.throws(()=>parse(mutate(x=>{x.measurements[0].temperature=-273.16;x.metadata.units.temperature="°C";})),/absolute zero/);
 });
 test("equilibrium does not invent time; endpoint sweep does not invent steps",()=>{
