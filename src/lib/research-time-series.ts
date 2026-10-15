@@ -17,6 +17,14 @@ export function normalizedTrajectory(
   if (!timeUnit) throw new Error("Missing time unit.");
   const unit = dataset.metadata.units[field];
   if (!unit) throw new Error("Missing " + field + " unit.");
+  if (field === "concentration" &&
+    (dataset.metadata.concentrationBasis !== "g_per_mL_solution" || unit !== "g/mL")) {
+    throw new Error("Cannot normalize concentration without g/mL of solution.");
+  }
+  if (field === "pressure" &&
+    (dataset.metadata.pressureBasis !== "absolute" || unit !== "bar")) {
+    throw new Error("Cannot normalize gauge or non-bar pressure without explicit conversion.");
+  }
   const out: TimeValue[] = [];
   for (const row of dataset.measurements) {
     if (row[field] === undefined || row.time === undefined) continue;
