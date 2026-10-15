@@ -17,7 +17,7 @@ export function projectResearchToEducationalV1(
   if (m.concentrationBasis !== "g_per_mL_solution" || m.units.concentration !== "g/mL") {
     throw new Error("Concentration is not explicitly g/mL of solution.");
   }
-  if (!m.units.time || !m.units.temperature || m.units.temperatureSource !== "sample") {
+  if (!m.units.time || !m.units.temperature || m.temperatureSource !== "sample") {
     throw new Error("Explicit time units and sample-temperature semantics required.");
   }
   const t = normalizedTrajectory(dataset,"temperature");
