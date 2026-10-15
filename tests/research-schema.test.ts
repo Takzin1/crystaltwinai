@@ -102,3 +102,16 @@ test("no automatic v1 coercion of hydrate inhibitor mass%, bath temperature or u
   assert.throws(()=>projectResearchToEducationalV1(parse({...v,measurements:[{time:0,temperature:60,concentration:0.40},{time:1.5,temperature:59,concentration:0.39}]}),true),/non-integer/);
   assert.throws(()=>projectResearchToEducationalV1(parse({...v,metadata:{...v.metadata,temperatureSource:"bath"}}),true),/sample-temperature/);
 });
+
+test("research values with incompatible semantic units are never normalized as interchangeable",()=>{
+  const hydrate=parse(base);
+  assert.throws(()=>normalizedTrajectory(hydrate,"concentration"),/g\/mL of solution/);
+  const pressure={...base, metadata:{...base.metadata,pressureBasis:"gauge",units:{time:"min",temperature:"°C",pressure:"bar"}},measurements:[
+    {time:0,temperature:20,pressure:0.5},{time:1,temperature:21,pressure:0.4},
+  ]};
+  assert.throws(()=>normalizedTrajectory(parse(pressure),"pressure"),/gauge or non-bar/);
+});
+test("quantile comparisons reject inconsistent size units",()=>{
+  const d={...base,metadata:{...base.metadata,experimentMode:"distribution",units:{d10:"µm",d50:"mm"}},measurements:[{d10:3,d50:6}]};
+  assert.throws(()=>parse(d),/same declared size unit/);
+});
