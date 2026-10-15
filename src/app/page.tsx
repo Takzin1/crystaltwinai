@@ -16,6 +16,7 @@ import TimeSeriesChart from "@/components/TimeSeriesChart";
 import SimulationLog from "@/components/SimulationLog";
 import CrystalViz from "@/components/CrystalViz";
 import DatasetPanel from "@/components/DatasetPanel";
+import ResearchDatasetPanel from "@/components/ResearchDatasetPanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -96,6 +97,7 @@ export default function Home() {
 
           <SimulationLog lang={lang} log={result.log} />
           <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
+          <ResearchDatasetPanel lang={lang} />
         </main>
       </div>
 
