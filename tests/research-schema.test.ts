@@ -94,7 +94,7 @@ test("no automatic v1 coercion of hydrate inhibitor mass%, bath temperature or u
   assert.throws(()=>projectResearchToEducationalV1(data,false),/acknowledgement/);
   assert.throws(()=>projectResearchToEducationalV1(data,true),/g\/mL/);
   const v={...base,
-    metadata:{...base.metadata,concentrationBasis:"g_per_mL_solution",temperatureSource:"sample",units:{time:"min",temperature:"°C",concentration:"g/mL"}},
+    metadata:{...base.metadata,concentrationBasis:"g_per_mL_solution",timeOrigin:"relative_to_run_start",temperatureSource:"sample",units:{time:"min",temperature:"°C",concentration:"g/mL"}},
     measurements:[{time:1,temperature:60,concentration:0.40},{time:2,temperature:59,concentration:0.39}]};
   const mapped=projectResearchToEducationalV1(parse(v),true);
   assert.deepEqual(mapped.fields,["temperature","concentration"]);
