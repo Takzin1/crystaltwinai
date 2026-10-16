@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent } from "react";
 import { MAX_RESEARCH_BYTES, parseResearchDataset, type ResearchDataset } from "../lib/research-schema";
+import { summarizeResearchDataset } from "../lib/research-integrity";
 import type { LanguageCode } from "../lib/types";
 
 export default function ResearchDatasetPanel({ lang }: { lang: LanguageCode }) {
@@ -34,6 +35,7 @@ export default function ResearchDatasetPanel({ lang }: { lang: LanguageCode }) {
     } finally { setBusy(false); }
   }
   const meta=dataset?.metadata;
+  const diagnostics=dataset ? summarizeResearchDataset(dataset) : null;
   const keys=dataset ? Array.from(new Set(dataset.measurements.flatMap(row=>Object.keys(row)))).sort() : [];
   const issues = meta ? [
     ...(!meta.doi ? ["DOI not declared"] : []),
@@ -76,7 +78,29 @@ export default function ResearchDatasetPanel({ lang }: { lang: LanguageCode }) {
             <tbody>{keys.map(key=><tr key={key}><th scope="row">{key}</th><td>{key==="conditionId"?"—":meta.units[key as keyof typeof meta.units] || "—"}</td></tr>)}</tbody>
           </table>
         </div>
+        {diagnostics && <>
+          <p className="dataset-muted">
+            {lang==="ja" ? "系列数" : "Distinct series"}: {diagnostics.series.length} ·
+            {lang==="ja" ? " 変換記録（申告）" : " Declared transformations"}: {diagnostics.transformationCount}
+          </p>
+          <div className="dataset-scroll">
+            <table className="dataset-table">
+              <thead><tr>
+                <th scope="col">Run</th><th scope="col">Cycle</th><th scope="col">Channel</th>
+                <th scope="col">Rows</th><th scope="col">{lang==="ja"?"欠損項目":"Missing"}</th>
+              </tr></thead>
+              <tbody>{diagnostics.series.map((item,index)=><tr key={index}>
+                <td>{item.runId??"—"}</td><td>{item.cycleId??"—"}</td><td>{item.channelId??"—"}</td>
+                <td>{item.rows}</td><td>{item.missingFields}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+          {Object.keys(diagnostics.missingByField).length>0 && <p className="dataset-muted">
+            {lang==="ja"?"欠損内訳":"Missing by field"}: {Object.entries(diagnostics.missingByField).map(([key,value])=>`${key}: ${value}`).join(" / ")}
+          </p>}
+        </>}
         {checksum && <p className="dataset-checksum">Imported JSON SHA-256: <code>{checksum}</code></p>}
+        {diagnostics && <p className="dataset-muted">{diagnostics.unverifiedClaims.join(" · ")}</p>}
         {issues.length > 0 && <p className="dataset-error">{lang==="ja"?"未確認事項: ":"Warnings: "}{issues.join(" · ")}</p>}
         <p className="dataset-muted">{lang==="ja"
           ? "注意：この検証は形式・数値・単位宣言の整合性チェックです。原典の正当性や物理モデルの妥当性を証明しません。"
