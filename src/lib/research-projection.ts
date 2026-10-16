@@ -37,6 +37,7 @@ export function projectResearchToEducationalV1(
   const data: Measurement[]=[];
   for (let i=0;i<allRows.length;i++) {
     const point = t[i];
+    if (point.value === null) throw new Error("v1 projection refuses missing temperature.");
     const step = point.timeMinutes; // v1 step = 1 minute since reference origin
     if (!Number.isInteger(step) || step < 1 || step > 200) {
       throw new Error("Cannot project non-integer, out-of-range or zero-origin time to v1.");

@@ -35,7 +35,7 @@ test("v2 accepts native time, Kelvin, mass% without changing original values",()
   assert.equal(out.measurements[1].time,60);
   assert.equal(out.metadata.concentrationBasis,"mass_percent");
   assert.equal(normalizedTrajectory(out,"temperature")[1].timeMinutes,1);
-  assert.ok(Math.abs(normalizedTrajectory(out,"temperature")[0].value-26.85)<1e-9);
+  assert.ok(Math.abs((normalizedTrajectory(out,"temperature")[0].value ?? Number.NaN)-26.85)<1e-9);
 });
 test("reject unsupported schema, invalid JSON and excessive input",()=>{
   assert.throws(()=>parse({schemaVersion:1,metadata:base.metadata,measurements:base.measurements}),/schemaVersion/);
