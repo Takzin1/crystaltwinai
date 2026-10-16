@@ -14,6 +14,16 @@ export function projectResearchToEducationalV1(
   if (!explicitAcknowledgement) throw new Error("Explicit educational-only acknowledgement required.");
   const m=dataset.metadata;
   if (m.experimentMode !== "trajectory") throw new Error("Only trajectories can be projected to v1.");
+  if (m.timeOrigin !== "relative_to_run_start") {
+    throw new Error("v1 projection requires explicitly declared relative_to_run_start time origin.");
+  }
+  const series=new Set(dataset.measurements.map(row =>
+    JSON.stringify([row.runId??"",row.cycleId??"",row.channelId??""])
+  ));
+  if (series.size !== 1) throw new Error("v1 projection cannot combine multiple runs/cycles/channels.");
+  if (dataset.measurements.some(row => row.missingReasons?.temperature || row.missingReasons?.concentration)) {
+    throw new Error("v1 projection refuses explicitly missing temperature or concentration.");
+  }
   if (m.concentrationBasis !== "g_per_mL_solution" || m.units.concentration !== "g/mL") {
     throw new Error("Concentration is not explicitly g/mL of solution.");
   }
