@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 2,
+  "metadata": {
+    "researchRevision": "2.1",
+    "title": "FICTIONAL multi-run cooling dataset (not experimental observations)",
+    "authors": [],
+    "provenance": "synthetic",
+    "experimentMode": "trajectory",
+    "material": "fictional solute",
+    "solvent": "fictional water",
+    "timeOrigin": "relative_to_run_start",
+    "temperatureSource": "sample",
+    "concentrationBasis": "g_per_mL_solution",
+    "units": {
+      "time": "min",
+      "temperature": "°C",
+      "concentration": "g/mL"
+    },
+    "transformations": [
+      {
+        "operation": "source_mapping",
+        "software": "synthetic-fixture-generator",
+        "version": "1.0",
+        "notes": "Fabricated for unit tests and UI examples; no real experiment."
+      }
+    ],
+    "notes": "ALL values are invented; no external DOI or published laboratory data."
+  },
+  "measurements": [
+    {
+      "runId": "fictional-run-A",
+      "cycleId": "cycle-1",
+      "channelId": "probe-1",
+      "time": 0,
+      "temperature": 60,
+      "concentration": 0.4
+    },
+    {
+      "runId": "fictional-run-B",
+      "cycleId": "cycle-1",
+      "channelId": "probe-1",
+      "time": 0,
+      "temperature": 61,
+      "concentration": 0.41
+    },
+    {
+      "runId": "fictional-run-A",
+      "cycleId": "cycle-1",
+      "channelId": "probe-1",
+      "time": 1,
+      "temperature": null,
+      "concentration": 0.399,
+      "missingReasons": {
+        "temperature": "sensor_failure"
+      }
+    },
+    {
+      "runId": "fictional-run-B",
+      "cycleId": "cycle-1",
+      "channelId": "probe-1",
+      "time": 1,
+      "temperature": 60.5,
+      "concentration": 0.408
+    },
+    {
+      "runId": "fictional-run-A",
+      "cycleId": "cycle-1",
+      "channelId": "probe-1",
+      "time": 2,
+      "temperature": 59,
+      "concentration": 0.395
+    }
+  ]
+}

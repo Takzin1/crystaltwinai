@@ -209,3 +209,9 @@ The educational v1 CSV/JSON comparator is unchanged. A separate in-browser Resea
 See [Research Schema v2 design and limitations](docs/research-schema-v2.md) and [fictional JSON example](public/examples/research-v2-synthetic.json).
 
 Important: This is schema validation, not verification of published datasets or a physically calibrated model. Mendeley/ACS raw XLSX acquisition, license verification, substantive model calibration, and binned PSD comparators remain future tasks.
+
+### Research Schema v2.1 — provenance and multi-run integrity
+
+v2.1 preserves v2 JSON compatibility, and adds per-row run/cycle/channel identity, field-specific missingness reasons, time-origin guards, optional declared transformation history and conservative scientific-comparability diagnostics. The research importer displays per-series counts and missingness. **This is not raw XLSX ingestion or scientific model validation.**
+
+See [the v2.1 integrity design](docs/research-schema-v2.md) and [fictional multi-run example](public/examples/research-v2-1-synthetic-multirun.json).

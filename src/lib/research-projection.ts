@@ -14,8 +14,18 @@ export function projectResearchToEducationalV1(
   if (!explicitAcknowledgement) throw new Error("Explicit educational-only acknowledgement required.");
   const m=dataset.metadata;
   if (m.experimentMode !== "trajectory") throw new Error("Only trajectories can be projected to v1.");
+  const series=new Set(dataset.measurements.map(row =>
+    JSON.stringify([row.runId??"",row.cycleId??"",row.channelId??""])
+  ));
+  if (series.size !== 1) throw new Error("v1 projection cannot combine multiple runs/cycles/channels.");
+  if (dataset.measurements.some(row => row.missingReasons?.temperature || row.missingReasons?.concentration)) {
+    throw new Error("v1 projection refuses explicitly missing temperature or concentration.");
+  }
   if (m.concentrationBasis !== "g_per_mL_solution" || m.units.concentration !== "g/mL") {
     throw new Error("Concentration is not explicitly g/mL of solution.");
+  }
+  if (m.timeOrigin !== "relative_to_run_start") {
+    throw new Error("v1 projection requires explicitly declared relative_to_run_start time origin.");
   }
   if (!m.units.time || !m.units.temperature || m.temperatureSource !== "sample") {
     throw new Error("Explicit time units and sample-temperature semantics required.");
@@ -27,6 +37,7 @@ export function projectResearchToEducationalV1(
   const data: Measurement[]=[];
   for (let i=0;i<allRows.length;i++) {
     const point = t[i];
+    if (point.value === null) throw new Error("v1 projection refuses missing temperature.");
     const step = point.timeMinutes; // v1 step = 1 minute since reference origin
     if (!Number.isInteger(step) || step < 1 || step > 200) {
       throw new Error("Cannot project non-integer, out-of-range or zero-origin time to v1.");

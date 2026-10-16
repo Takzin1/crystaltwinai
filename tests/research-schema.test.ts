@@ -35,7 +35,7 @@ test("v2 accepts native time, Kelvin, mass% without changing original values",()
   assert.equal(out.measurements[1].time,60);
   assert.equal(out.metadata.concentrationBasis,"mass_percent");
   assert.equal(normalizedTrajectory(out,"temperature")[1].timeMinutes,1);
-  assert.ok(Math.abs(normalizedTrajectory(out,"temperature")[0].value-26.85)<1e-9);
+  assert.ok(Math.abs((normalizedTrajectory(out,"temperature")[0].value ?? Number.NaN)-26.85)<1e-9);
 });
 test("reject unsupported schema, invalid JSON and excessive input",()=>{
   assert.throws(()=>parse({schemaVersion:1,metadata:base.metadata,measurements:base.measurements}),/schemaVersion/);
@@ -94,7 +94,7 @@ test("no automatic v1 coercion of hydrate inhibitor mass%, bath temperature or u
   assert.throws(()=>projectResearchToEducationalV1(data,false),/acknowledgement/);
   assert.throws(()=>projectResearchToEducationalV1(data,true),/g\/mL/);
   const v={...base,
-    metadata:{...base.metadata,concentrationBasis:"g_per_mL_solution",temperatureSource:"sample",units:{time:"min",temperature:"°C",concentration:"g/mL"}},
+    metadata:{...base.metadata,concentrationBasis:"g_per_mL_solution",timeOrigin:"relative_to_run_start",temperatureSource:"sample",units:{time:"min",temperature:"°C",concentration:"g/mL"}},
     measurements:[{time:1,temperature:60,concentration:0.40},{time:2,temperature:59,concentration:0.39}]};
   const mapped=projectResearchToEducationalV1(parse(v),true);
   assert.deepEqual(mapped.fields,["temperature","concentration"]);
