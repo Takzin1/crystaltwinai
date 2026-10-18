@@ -189,6 +189,25 @@ CrystalTwin-AIはOSSとして公開しています。以下のようなご要望
 
 📧 **Contact**: e2470308@ipc.fukushima-u.ac.jp / [GitHub Issues](../../issues) / [LinkedIn](https://www.linkedin.com/in/takahito-yumita-91b1bb2b4) / [Linktree](https://linktr.ee/TakahitoYumita_NeuMann)
 
+
+## NVIDIA research bridge: QFabric × CrystalTwinAI (experimental)
+
+The **QFabric × CrystalTwinAI** panel exports the current educational simulation
+as a synthetic, versioned JSON snapshot and imports a locally generated QFabric
+research report. The report includes a *plan-only* QICK control profile, an
+*intent-only* readout description, and synthetic IQ calculations on CPU or
+optional NVIDIA CUDA/CuPy when actually available.
+
+- [Integration architecture, steps and safety scope](docs/qfabric-nvidia-bridge.md)
+- [Synthetic snapshot fixture](public/examples/qfabric-snapshot.synthetic.json)
+- [Synthetic report fixture](public/examples/qfabric-bridge-report.synthetic.json)
+- [QFabric Python bridge implementation](https://github.com/Takzin1/QFabric/blob/main/scripts/crystaltwin_bridge.py)
+
+**No physical quantum acquisition, quantum-enhanced crystal prediction, NVIDIA
+GPU usage on the public demo, or scientific validation is claimed.** The browser
+panel runs without any API or CUDA dependencies. The example file is not a
+performance benchmark.
+
 ## License
 
 MIT License — see [LICENSE](LICENSE).
