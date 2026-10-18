@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "qfabric-crystaltwin-report/1",
+  "kind": "qfabric_research_bridge_report",
+  "generatedAt": "2026-10-18T10:00:00Z",
+  "source": {
+    "repository": "Takzin1/crystaltwinai",
+    "mode": "educational_simulation",
+    "provenance": "synthetic",
+    "sha256": "02013d04e90a64ec5e585435820930988089824f6092eb85d0f8d5c133455080"
+  },
+  "snapshot": {
+    "input": {
+      "temperature": 65,
+      "concentration": 0.4,
+      "stirringSpeed": 300,
+      "coolingRate": 0.5,
+      "impurityLevel": 0.4,
+      "timeSteps": 2
+    },
+    "summary": {
+      "avgGrowthRate": 2,
+      "stabilityScore": 78,
+      "qualityScore": 80,
+      "finalYield": 4,
+      "maxSupersaturation": 1.12,
+      "nucleationEvents": 0
+    },
+    "rowCount": 2
+  },
+  "qfabric": {
+    "repository": "Takzin1/QFabric",
+    "mode": "plan_only",
+    "hardwareExecuted": false,
+    "readoutStatus": "intent_only",
+    "readoutIntent": {
+      "kind": "qick_readout_proposal",
+      "shots": 256,
+      "note": "No declare_readout / trigger / acquire calls are compiled or executed"
+    },
+    "qickReferenceCommit": "4da51a5154e448fa3613257a967bfa6a58959a8b",
+    "plan": {
+      "device_id": "qick-demo-no-hardware",
+      "message_id": "qfabric-crystaltwin-demo",
+      "profile_version": "0.1.0",
+      "qick_reference_repository": "openquantumhardware/qick",
+      "qick_reference_commit": "4da51a5154e448fa3613257a967bfa6a58959a8b",
+      "calls": [
+        {
+          "method": "declare_gen",
+          "kwargs": {
+            "ch": 0,
+            "nqz": 1
+          }
+        },
+        {
+          "method": "add_pulse",
+          "kwargs": {
+            "ch": 0,
+            "name": "qf_0000",
+            "style": "const",
+            "freq": 100,
+            "phase": 0,
+            "gain": 0.25,
+            "length": 1
+          }
+        },
+        {
+          "method": "pulse",
+          "kwargs": {
+            "ch": 0,
+            "name": "qf_0000",
+            "t": 0
+          }
+        }
+      ]
+    }
+  },
+  "analytics": {
+    "backend": "cpu",
+    "signalType": "synthetic_iq",
+    "algorithm": "analytic_unit_circle_v1",
+    "shots": 256,
+    "meanI": -3.9929784207233227e-17,
+    "meanQ": 3.419276048783865e-18,
+    "meanPower": 1,
+    "elapsedMs": 0,
+    "physicalMeasurement": false
+  },
+  "disclaimer": "SYNTHETIC FIXTURE / elapsedMs=0 is not a benchmark. No physical quantum readout, crystallization measurement, process control, verified speedup, or quantum advantage is claimed."
+}
