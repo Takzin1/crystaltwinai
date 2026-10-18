@@ -17,6 +17,7 @@ import SimulationLog from "@/components/SimulationLog";
 import CrystalViz from "@/components/CrystalViz";
 import DatasetPanel from "@/components/DatasetPanel";
 import ResearchDatasetPanel from "@/components/ResearchDatasetPanel";
+import QFabricBridgePanel from "@/components/QFabricBridgePanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -98,6 +99,7 @@ export default function Home() {
           <SimulationLog lang={lang} log={result.log} />
           <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
           <ResearchDatasetPanel lang={lang} />
+          <QFabricBridgePanel lang={lang} result={result} />
         </main>
       </div>
 
