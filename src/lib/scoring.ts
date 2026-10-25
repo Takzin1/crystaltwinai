@@ -1,4 +1,5 @@
 import { SCORING_CONFIG as C } from "@/config/scoring.config";
+import { pexp, ppow } from "@/lib/portable-math";
 import type { SimulationInput } from "@/lib/types";
 
 /**
@@ -8,6 +9,9 @@ import type { SimulationInput } from "@/lib/types";
  * process into 0–100 scores. Kept separate from the time-stepping
  * engine so it can be replaced by a fitted model, an ML regressor or
  * an industry-specific scoring scheme without touching engine.ts.
+ *
+ * exp/pow use portable-math so results are bit-identical in Node, browsers
+ * and any other IEEE-754 runtime (needed for byte-exact evidence replay).
  */
 
 const clamp = (v: number, lo = 0, hi = 100) => Math.min(hi, Math.max(lo, v));
@@ -25,7 +29,7 @@ export function supersaturation(concentration: number, temperature: number): num
 /** Stirring response factor in [floor, 1]: bell curve around the optimum. */
 export function stirringFactor(rpm: number): number {
   const x = (rpm - C.stirringOptimum) / C.stirringSpread;
-  return C.stirringFloor + (1 - C.stirringFloor) * Math.exp(-x * x);
+  return C.stirringFloor + (1 - C.stirringFloor) * pexp(-x * x);
 }
 
 /** Growth inhibition by impurities, in (0, 1]. */
@@ -36,7 +40,7 @@ export function impurityFactor(impurityLevel: number): number {
 /** Instantaneous linear growth rate (a.u./min). Zero below saturation. */
 export function growthRate(s: number, rpm: number, impurityLevel: number): number {
   if (s <= 1) return 0;
-  return C.kGrowth * Math.pow(s - 1, C.growthOrder) * stirringFactor(rpm) * impurityFactor(impurityLevel);
+  return C.kGrowth * ppow(s - 1, C.growthOrder) * stirringFactor(rpm) * impurityFactor(impurityLevel);
 }
 
 /** Instantaneous process stability, 0–100. */
