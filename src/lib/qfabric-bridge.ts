@@ -120,6 +120,24 @@ export function buildQFabricSnapshot(result: SimulationResult): QFabricSnapshot 
   if (!values.every((value) => typeof value === "number" && Number.isFinite(value))) {
     throw new Error("QFabric snapshots require finite values.");
   }
+  // A caller may synthesize a SimulationResult without using runSimulation.
+  // Reject inconsistent row order and implausible summaries before exporting.
+  snapshot.trajectory.forEach((row, index) => {
+    if (row.step !== index + 1 || row.growthRate < 0 ||
+        row.concentration < 0 || row.crystalYield < 0 || row.crystalYield > 100) {
+      throw new Error("QFabric snapshot contains invalid trajectory values or step order.");
+    }
+  });
+  if (!Number.isInteger(snapshot.input.timeSteps) ||
+      !Number.isInteger(summary.nucleationEvents) ||
+      summary.nucleationEvents < 0 ||
+      summary.nucleationEvents > snapshot.trajectory.length ||
+      summary.avgGrowthRate < 0 || summary.maxSupersaturation < 0 ||
+      [summary.qualityScore, summary.stabilityScore, summary.finalYield].some(
+        value => value < 0 || value > 100
+      )) {
+    throw new Error("QFabric snapshot contains inconsistent educational summary values.");
+  }
   return snapshot;
 }
 
@@ -187,9 +205,21 @@ export function parseQFabricBridgeReport(content: string): QFabricBridgeReport {
     throw new Error("Invalid or misleading QFabric report source provenance.");
   }
   const snapshot = record(doc.snapshot, "snapshot");
-  checkNumbers(snapshot.input, INPUT_FIELDS, "snapshot.input");
-  checkNumbers(snapshot.summary, SUMMARY_FIELDS, "snapshot.summary");
-  integer(snapshot.rowCount, "snapshot.rowCount", 1, 200);
+  const reportedInput = checkNumbers(snapshot.input, INPUT_FIELDS, "snapshot.input");
+  const reportedSummary = checkNumbers(snapshot.summary, SUMMARY_FIELDS, "snapshot.summary");
+  const rows = integer(snapshot.rowCount, "snapshot.rowCount", 1, 200);
+  // Synthetic legacy fixtures use 2 steps, so enforce the wire contract
+  // without silently reinterpreting these reports as current UI inputs.
+  if (integer(reportedInput.timeSteps, "snapshot.input.timeSteps", 1, 200) !== rows) {
+    throw new Error("QFabric report row count disagrees with input time steps.");
+  }
+  if (integer(reportedSummary.nucleationEvents, "snapshot.summary.nucleationEvents", 0, rows) > rows ||
+      reportedSummary.avgGrowthRate < 0 ||
+      reportedSummary.maxSupersaturation < 0 ||
+      [reportedSummary.qualityScore, reportedSummary.stabilityScore,
+       reportedSummary.finalYield].some(value => value < 0 || value > 100)) {
+    throw new Error("QFabric report contains invalid educational summary metrics.");
+  }
   const qfabric = record(doc.qfabric, "qfabric");
   if (qfabric.repository !== "Takzin1/QFabric" ||
       qfabric.mode !== "plan_only" ||
@@ -205,6 +235,9 @@ export function parseQFabricBridgeReport(content: string): QFabricBridgeReport {
   string(intent.note, "qfabric.readoutIntent.note");
   string(qfabric.qickReferenceCommit, "qfabric.qickReferenceCommit", 64);
   const plan = record(qfabric.plan, "qfabric.plan");
+  if (plan.qick_reference_commit !== qfabric.qickReferenceCommit) {
+    throw new Error("QICK reference commit does not match the reported plan.");
+  }
   string(plan.device_id, "qfabric.plan.device_id", 120);
   if (!Array.isArray(plan.calls) || plan.calls.length < 1 || plan.calls.length > 20) {
     throw new Error("Unexpected QICK plan length.");
