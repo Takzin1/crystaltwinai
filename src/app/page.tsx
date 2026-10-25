@@ -2,6 +2,7 @@
 
 import "./dataset.css";
 import "./research-workbench.css";
+import "./verification.css";
 
 import { useMemo, useState } from "react";
 import { DEFAULT_INPUT } from "@/config/parameters";
