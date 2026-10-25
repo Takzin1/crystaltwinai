@@ -207,3 +207,33 @@ test("pipeline: text scraping is not attempted (prose around JSON is rejected)",
   assert.equal(currentState(run.history), "REJECTED");
   assert.match(run.plannerRejection!, /must be UTF-8 JSON/);
 });
+
+test("live interpretation: contradicting claims → INCONCLUSIVE; verifier re-derives it", async () => {
+  const { finalizeRun, liveInferenceRecord, reviewRun, simulateRun } = await import("../src/lib/pilot/agent");
+  const { checkModelInterpretation } = await import("../src/lib/pilot/experiment");
+  const { unwrapModelContent } = await import("../src/lib/pilot/planner");
+  const { canonicalSha256 } = await import("../src/lib/pilot/canonical");
+  const run = await proposeExperiment({ mode: "offline", scenarioId: "unstable", input: { ...unstable.input } }, null);
+  const simulated = simulateRun(reviewRun(run, { reviewerLabel: "t", decision: "approve", attestEducationalOnly: true }));
+  // Model wrongly claims nucleation increased and overclaims validation.
+  const content = JSON.stringify({
+    summary: "This proves the process is validated for production.",
+    claims: [{ metric: "nucleationEvents", direction: "increase" }, { metric: "qualityScore", direction: "increase" }],
+    caveats: [],
+    followUpIdea: null,
+  });
+  const interpretation = checkModelInterpretation(content, simulated.experiment!, (c) => unwrapModelContent(c).text);
+  assert.deepEqual(interpretation.contradictions, ["nucleationEvents: model says increase, simulator computed decrease"]);
+  assert.ok(interpretation.overclaimWarnings.length >= 2);
+  const record = liveInferenceRecord(await mockCompleter(content)());
+  const done = finalizeRun(simulated, interpretation, record);
+  assert.equal(currentState(done.history), "INCONCLUSIVE");
+  const evidence = buildEvidence(done);
+  assert.equal(verifyEvidence(serializeEvidence(evidence)).overall, "PASS");
+  // Hide the contradiction and re-hash: the verifier re-derives it from the raw model output.
+  evidence.body.run.interpretation!.contradictions = [];
+  evidence.integrity.bodySha256 = canonicalSha256(evidence.body);
+  const report = verifyEvidence(serializeEvidence(evidence));
+  assert.equal(report.integrity, "VERIFIED");
+  assert.equal(report.overall, "FAIL");
+});

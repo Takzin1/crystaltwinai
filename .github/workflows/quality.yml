@@ -33,3 +33,11 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - name: Offline evaluation harness (no network, no model)
+        run: npm run eval -- --out "$RUNNER_TEMP/offline-eval.json"
+      - name: Browser E2E (offline demo mode)
+        run: |
+          npx playwright install --with-deps chromium
+          PORT=3100 npm run start &
+          for i in $(seq 1 60); do curl -sf http://localhost:3100/api/pilot/status >/dev/null && break; sleep 1; done
+          BASE_URL=http://localhost:3100 npm run e2e

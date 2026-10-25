@@ -11,10 +11,13 @@ import {
   type Interpretation,
   type ExperimentOutcome,
   deterministicInterpretation,
+  checkModelInterpretation,
   runApprovedExperiment,
 } from "./experiment";
 import { jsonEqual, makeAssessment, makeReview, parseSnapshot } from "./gate";
-import { type Prediction, type ProposalSource, buildProposalFromModel } from "./planner";
+import { findFixture } from "./fixtures";
+import { type Prediction, type ProposalSource, buildProposalFromModel, unwrapModelContent } from "./planner";
+import { SCENARIOS } from "../../config/scenarios";
 import { APP_NAME, APP_VERSION, engineFingerprint } from "./snapshot";
 import { sha256Text } from "./sha256";
 import { encodeUtf8, parseStrictJson } from "./strict-json";
@@ -225,6 +228,21 @@ export function verifyEvidence(text: string, options: { replay?: boolean } = {})
     add("history", "pass", `Valid transitions ending in ${currentState(run.history)}.`);
   });
 
+  guard("run_consistency", () => {
+    const scenario = SCENARIOS.find((s) => s.id === run.scenarioId);
+    if (!scenario || scenario.name.en !== run.scenarioName) throw new Error("Unknown scenario or mismatched scenario name.");
+    if (!Number.isInteger(run.iteration) || run.iteration < 1 || run.iteration > 20) throw new Error("Iteration out of range.");
+    if ((run.inference === null) === (run.inferenceError === null)) throw new Error("Exactly one of inference or inferenceError must be present.");
+    if (run.plannerRejection !== null && run.proposalText !== null) throw new Error("A planner rejection cannot coexist with a proposal.");
+    if (run.interpretation !== null && !["deterministic", "live_model"].includes(run.interpretation.origin)) {
+      throw new Error("Unknown interpretation origin.");
+    }
+    if ((run.interpretation?.origin === "live_model") !== (run.interpretationInference !== null)) {
+      throw new Error("A live interpretation must carry its inference record, and only then.");
+    }
+    add("run_consistency", "pass", "Scenario, iteration and artifact presence are mutually consistent.");
+  });
+
   if (run.inference) {
     const inf = run.inference;
     guard("inference_record", () => {
@@ -236,9 +254,13 @@ export function verifyEvidence(text: string, options: { replay?: boolean } = {})
         add("inference_record", inf.attestation ? "pass" : "warn",
           `Self-reported LIVE call to ${inf.responseModel ?? inf.requestedModel} (response id ${inf.responseId ?? "none"}). ` +
           (inf.attestation ? "Server attestation present — check it with /api/pilot/attest." : "No server attestation: provenance is unauthenticated."));
+      } else if (inf.mode === "offline_fixture") {
+        const fixture = inf.fixtureId ? findFixture(inf.fixtureId) : null;
+        if (inf.provider !== "offline" || !fixture) throw new Error("Offline record must name a known fixture.");
+        if (fixture.content !== inf.rawContent) throw new Error("Offline record content differs from its named fixture.");
+        add("inference_record", "pass", `OFFLINE fixture ${inf.fixtureId} reproduced byte-for-byte; no model was called.`);
       } else {
-        if (inf.provider !== "offline" || !inf.fixtureId) throw new Error("Offline record must name its fixture.");
-        add("inference_record", "pass", `OFFLINE fixture ${inf.fixtureId}; no model was called.`);
+        throw new Error(`Unknown inference mode: ${String(inf.mode).slice(0, 40)}`);
       }
     });
     guard("planner_replay", () => {
@@ -249,7 +271,8 @@ export function verifyEvidence(text: string, options: { replay?: boolean } = {})
         source: proposalSourceFor(inf),
       });
       const same = replay.ok
-        ? replay.proposalText === run.proposalText && jsonEqual(replay.prediction, run.prediction)
+        ? replay.proposalText === run.proposalText && jsonEqual(replay.prediction, run.prediction) &&
+          run.plannerRejection === null
         : replay.reason === run.plannerRejection && run.proposalText === null;
       if (!same) throw new Error("Recorded proposal does not follow from the recorded model content.");
       add("planner_replay", "pass", replay.ok
@@ -312,6 +335,11 @@ export function verifyEvidence(text: string, options: { replay?: boolean } = {})
           if (!jsonEqual(deterministicInterpretation(replay, changes), run.interpretation)) {
             throw new Error("Deterministic interpretation does not reproduce.");
           }
+        } else if (run.interpretation?.origin === "live_model" && run.interpretationInference) {
+          const inf = run.interpretationInference;
+          if (sha256Text(inf.rawContent) !== inf.rawContentSha256) throw new Error("Interpretation content hash mismatch.");
+          const recheck = checkModelInterpretation(inf.rawContent, replay, (c) => unwrapModelContent(c).text);
+          if (!jsonEqual(recheck, run.interpretation)) throw new Error("Live interpretation does not follow from its recorded model output.");
         }
       });
     }
