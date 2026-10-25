@@ -14,7 +14,8 @@
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "e2e": "tsx tests/e2e/pilot.e2e.mts"
+    "e2e": "tsx tests/e2e/pilot.e2e.mts",
+    "verify:evidence": "tsx scripts/verify-evidence.mts"
   },
   "dependencies": {
     "next": "^16.4.3",
