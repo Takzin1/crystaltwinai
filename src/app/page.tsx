@@ -21,6 +21,7 @@ import ResearchDatasetPanel from "@/components/ResearchDatasetPanel";
 import QFabricBridgePanel from "@/components/QFabricBridgePanel";
 import QuantumTheoryEvidencePanel from "@/components/QuantumTheoryEvidencePanel";
 import BaselineComparisonPanel from "@/components/BaselineComparisonPanel";
+import VerificationLabPanel from "@/components/VerificationLabPanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -68,9 +69,10 @@ export default function Home() {
 
       <nav className="workbench-nav" aria-label={lang === "ja" ? "研究ワークスペースの移動" : "Research workspace navigation"}>
         <a href="#simulation"><span>01</span>{lang === "ja" ? "シミュレーション" : "Simulation"}</a>
-        <a href="#datasets"><span>02</span>{lang === "ja" ? "データ照合" : "Data comparison"}</a>
-        <a href="#bridge"><span>03</span>{lang === "ja" ? "QFabric連携" : "QFabric bridge"}</a>
-        <a href="#literature"><span>04</span>{lang === "ja" ? "研究論文" : "Research papers"}</a>
+        <a href="#verification"><span>02</span>{lang === "ja" ? "定量検証" : "Verification"}</a>
+        <a href="#datasets"><span>03</span>{lang === "ja" ? "データ照合" : "Data comparison"}</a>
+        <a href="#bridge"><span>04</span>{lang === "ja" ? "QFabric連携" : "QFabric bridge"}</a>
+        <a href="#literature"><span>05</span>{lang === "ja" ? "研究論文" : "Research papers"}</a>
       </nav>
       <div className="workbench-intro">
         <strong>{lang === "ja" ? "操作 → 比較 → 検証 → 出典確認" : "Experiment → Compare → Validate → Examine evidence"}</strong>
@@ -119,9 +121,17 @@ export default function Home() {
             onRestore={(saved) => setInput({ ...saved })} />
           </div>
 
+          <div id="verification" className="workbench-section">
+            <div className="workbench-section-header">
+              <h2>{lang === "ja" ? "02 · モデルを定量検証する" : "02 · Quantitative verification"}</h2>
+              <p>{lang === "ja" ? "異種モデル比較・入力感度" : "Model discrepancy and input sensitivity"}</p>
+            </div>
+            <VerificationLabPanel lang={lang} result={result} />
+          </div>
+
           <div id="datasets" className="workbench-section">
             <div className="workbench-section-header">
-              <h2>{lang === "ja" ? "02 · データを照合する" : "02 · Examine datasets"}</h2>
+              <h2>{lang === "ja" ? "03 · データを照合する" : "03 · Examine datasets"}</h2>
               <p>{lang === "ja" ? "単位と由来を確認してから比較" : "Check units and provenance before comparing"}</p>
             </div>
             <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
@@ -130,7 +140,7 @@ export default function Home() {
 
           <div id="bridge" className="workbench-section">
             <div className="workbench-section-header">
-              <h2>{lang === "ja" ? "03 · QFabricに接続する" : "03 · QFabric interoperability"}</h2>
+              <h2>{lang === "ja" ? "04 · QFabricに接続する" : "04 · QFabric interoperability"}</h2>
               <p>{lang === "ja" ? "オフライン・制御計画のみ" : "Offline and plan-only"}</p>
             </div>
             <QFabricBridgePanel lang={lang} result={result} />
@@ -138,7 +148,7 @@ export default function Home() {
 
           <div id="literature" className="workbench-section">
             <div className="workbench-section-header">
-              <h2>{lang === "ja" ? "04 · 研究根拠を確認する" : "04 · Explore research evidence"}</h2>
+              <h2>{lang === "ja" ? "05 · 研究根拠を確認する" : "05 · Explore research evidence"}</h2>
               <p>{lang === "ja" ? "一次原典・引用数・適用限界" : "Original DOI, citation provenance, limitations"}</p>
             </div>
             <QuantumTheoryEvidencePanel lang={lang} />
