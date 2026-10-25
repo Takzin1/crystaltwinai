@@ -86,3 +86,13 @@ a:focus-visible, summary:focus-visible, textarea:focus-visible {
   html { scroll-behavior:auto; }
   .workbench-nav a { transition:none; }
 }
+
+
+.baseline-panel { min-width:0; }
+.baseline-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:14px 0; }
+.baseline-metric { background:var(--panel-raised); border:1px solid var(--line); border-radius:8px; padding:12px; min-width:0; }
+.baseline-metric span { display:block; color:var(--text-dim); font-size:11px; }
+.baseline-metric strong { display:block; color:var(--cyan); font:600 24px var(--mono); font-variant-numeric:tabular-nums; margin:6px 0; }
+.baseline-metric small { display:block; color:var(--text-dim); font-size:11px; }
+@media(max-width:850px) { .baseline-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:480px) { .baseline-metrics { gap:7px; } .baseline-metric { padding:9px; } .baseline-metric strong { font-size:20px; } }
