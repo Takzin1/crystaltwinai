@@ -2,6 +2,7 @@
 
 import "./dataset.css";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { DEFAULT_INPUT } from "@/config/parameters";
 import { SCENARIOS } from "@/config/scenarios";
@@ -20,7 +21,7 @@ import ResearchDatasetPanel from "@/components/ResearchDatasetPanel";
 import QFabricBridgePanel from "@/components/QFabricBridgePanel";
 
 export default function Home() {
-  const [lang, setLang] = useState<LanguageCode>("ja");
+  const [lang, setLang] = useState<LanguageCode>("en");
   const [scenarioId, setScenarioId] = useState<string>(SCENARIOS[0].id);
   const [input, setInput] = useState<SimulationInput>({ ...DEFAULT_INPUT });
 
@@ -52,6 +53,9 @@ export default function Home() {
           <p className="subtitle">{LABELS.appSubtitle[lang]}</p>
         </div>
         <span className="badge">{LABELS.badgeEducational[lang]}</span>
+        <Link className="pilot-cta" href="/pilot">
+          {lang === "ja" ? "CrystalPilot：Nemotron実験エージェント →" : "CrystalPilot: Nemotron experiment agent →"}
+        </Link>
         <div className="lang-toggle" role="group" aria-label="Language">
           <button type="button" className={lang === "ja" ? "active" : ""} onClick={() => setLang("ja")}>
             日本語
