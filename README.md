@@ -262,3 +262,24 @@ The source bibliography remains at
 All quantum references are **background or hypothesis context only** and do
 not modify the simulator's coefficients, claim quantum speedup, certify
 physical crystallization kinetics or drive QICK hardware.
+
+
+### Quantitative Verification Lab / 定量検証ラボ
+
+The browser now includes a stand-alone software verification stage:
+**independent simplified kinetic comparator**, **128-seed input sensitivity
+ranges**, and expanded v1 dataset residual diagnostics (worst error,
+coverage, and an optional descriptive block-resampled bias interval).
+
+- The alternative first-order solute relaxation model and the primary engine
+  compare only commensurable **temperature and concentration** outputs.
+- The seeded input-sensitivity P5–P95 is **not** experimental measurement
+  uncertainty or a calibrated prediction interval.
+- For dataset comparison, at least 8 matched points are required before
+  offering a descriptive moving-block resampling range.
+- Strict malformed-input and 256-case cross-model tests run with Node 20/22 CI.
+
+All data stays in the browser; **no automatic re-calibration, equipment
+control, quantum-device execution or real process validation** is implied.
+
+[Detailed assumptions and test limitations](docs/quantitative-verification-v1.md).
