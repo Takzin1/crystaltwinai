@@ -55,3 +55,31 @@ test("adversarial model values, steps and reported observations are rejected", (
     rows: d.rows.map((r, i) => i === 0 ? { ...r, concentration: Infinity } : r),
   }, sim.series), /Dataset steps/);
 });
+
+
+test("nine matched but discontinuous steps suppress misleading serial bootstrap", () => {
+  const sim = runSimulation({ ...DEFAULT_INPUT, timeSteps: 30 });
+  const steps = [1, 2, 3, 4, 5, 12, 13, 14, 15];
+  const d = parseDataset(JSON.stringify({
+    schemaVersion: 1, name: "gapped synthetic",
+    rows: steps.map(step => ({
+      step, temperature: 58, concentration: 0.3,
+    })),
+  }), "json");
+  const result = assessObservedResiduals(d, sim.series);
+  assert.ok(result.every(field => field.count === 9 &&
+    field.coverageFraction === 1 && field.bootstrapBias === null));
+});
+
+test("unmatched long gap in simulation prevents artificial adjacent residual blocks", () => {
+  const sim = runSimulation({ ...DEFAULT_INPUT, timeSteps: 20 });
+  const d = parseDataset(JSON.stringify({
+    schemaVersion: 1, name: "complete synthetic",
+    rows: sim.series.slice(0, 12).map(row => ({
+      step: row.step, temperature: row.temperature, concentration: row.concentration,
+    })),
+  }), "json");
+  const reference = sim.series.filter(row => row.step !== 6);
+  const result = assessObservedResiduals(d, reference);
+  assert.ok(result.every(field => field.count === 11 && field.bootstrapBias === null));
+});
