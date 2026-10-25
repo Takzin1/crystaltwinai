@@ -39,10 +39,9 @@ bias for exactly matched steps, never extrapolating missing observations.
 New diagnostics include maximum absolute error and the proportion of
 available field observations with matched model steps.
 
-When at least 8 matched residuals exist, a descriptive 95% percentile range
+When at least 8 matched residuals exist **at consecutive integer steps with no gaps**, a descriptive 95% percentile range
 for mean bias is computed via 400 deterministic circular moving-block bootstrap
-samples (block length max(2, floor(sqrt(N)))). For fewer than 8 points, no
-interval is shown.
+samples (block length max(2, floor(sqrt(N)))). For fewer than 8 points or discontinuous observations, no interval is shown.
 
 This does **not** estimate instrument error or establish statistical coverage.
 Autocorrelation, systematic uncertainty, nonstationarity, unlabeled
