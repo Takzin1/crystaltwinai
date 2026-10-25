@@ -151,3 +151,16 @@ test("256 fixed-seed wide input configurations preserve model agreement on cooli
     assert.ok(comparison.fields[1].rmse >= 0 && Number.isFinite(comparison.fields[1].rmse));
   }
 });
+
+
+test("forged baseline metrics and mismatched trajectories fail closed", () => {
+  const pristine = runSimulation({ ...DEFAULT_INPUT });
+  const forged = structuredClone(pristine);
+  forged.summary.qualityScore = Infinity;
+  assert.throws(() => runInputSensitivity(forged, 0.05, 16), /finite and consistent/);
+  const altered = structuredClone(pristine);
+  altered.summary.finalYield = -1;
+  assert.throws(() => runInputSensitivity(altered, 0.05, 16), /finite and consistent/);
+  const incomplete = { ...pristine, series: pristine.series.slice(1) };
+  assert.throws(() => runInputSensitivity(incomplete, 0.05, 16), /finite and consistent/);
+});
