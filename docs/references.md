@@ -63,3 +63,32 @@ CrystalTwin-AIの設計に用いた文献・Web資料を、**一軍文献(設計
 | 免責・安全境界(実設備制御禁止) | [10] [17] [26] |
 | ML/MPC/RLへの拡張ロードマップ | [9] [14] [19] [20] [23] [27] |
 | OSSシミュレータとしての位置づけ | [2] [6] [24] |
+
+
+---
+
+## 5. QFabricとの量子理論・文献連携（2026-10-26）
+
+原典DOI・引用数のスナップショット・研究用途・適用限界は
+[量子理論のレジストリ](../public/examples/quantum-theory-evidence-v1.json) に、
+機械判読できる形で11本格納。QFabric側の
+[\`data/quantum_theory_evidence_v1.json\`](https://github.com/Takzin1/QFabric/blob/main/data/quantum_theory_evidence_v1.json)
+と同一の版を運用します。OpenAlex引用数は研究の正しさや再現性を保証しません。
+
+主要出典：
+- Feynman (1982): https://doi.org/10.1007/BF02650179
+- Shor (FOCS 1994): https://doi.org/10.1109/SFCS.1994.365700
+- Grover (1996): https://doi.org/10.1145/237814.237866
+- Preskill (2018): https://doi.org/10.22331/q-2018-08-06-79
+- Peruzzo et al. (2014): https://doi.org/10.1038/ncomms5213
+- Cerezo et al. (2021): https://doi.org/10.1038/s42254-021-00348-9
+- Google Quantum AI (2025): https://doi.org/10.1038/s41586-024-08449-y
+- Williamson & Yoder (2026): https://doi.org/10.1038/s41567-026-03220-8
+- Sivak et al. (2026): https://doi.org/10.1038/s41586-026-10759-2
+- Thacker et al. (2026): https://doi.org/10.1021/acs.jctc.6c00542
+- Li et al. (2026): https://doi.org/10.1038/s41567-026-03486-y
+
+**物理的な境界**：この11本は晶析モデルの速度式・溶解度モデル・
+結晶核生成・結晶成長速度の校正根拠ではありません。量子化学・量子計算研究と
+晶析教育用モデルの関係は、現段階では研究構想レベルです。引用文献は
+参考資料の一覧表示に限り、シミュレーション計算や推奨値に流し込まれません。
