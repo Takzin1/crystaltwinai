@@ -1,0 +1,15 @@
+/* Synthetic verification laboratory; all readouts are non-calibrated. */
+#verification { scroll-margin-top:24px; }
+.verification-panel { min-width:0; }
+.verification-subsection { border-top:1px solid var(--line); margin-top:17px; padding-top:14px; min-width:0; }
+.verification-subsection h3 { font-size:14px; font-weight:600; color:var(--text); margin:0 0 8px; }
+.verification-subhead { display:flex; align-items:center; gap:14px; justify-content:space-between; flex-wrap:wrap; }
+.verification-subhead label { font-size:11px; color:var(--text-dim); display:flex; align-items:center; gap:8px; }
+.verification-subhead select { background:var(--panel-raised); color:var(--text); border:1px solid var(--line-strong); border-radius:6px; padding:8px; max-width:100%; }
+.verification-bands { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:12px 0; }
+.verification-band { min-width:0; border-radius:8px; background:var(--panel-raised); border:1px solid var(--line); padding:13px; }
+.verification-band p { margin:0 0 8px; color:var(--text-dim); font-size:11px; }
+.verification-band strong { display:block; color:var(--cyan); font:600 clamp(16px,2vw,24px)/1.5 var(--mono); overflow-wrap:anywhere; }
+.verification-band span,.verification-band small { display:block; color:var(--text-dim); font-size:11px; margin-top:5px; }
+.verification-caution { background:rgba(232,169,78,.07); border:1px solid rgba(232,169,78,.25); padding:12px; border-radius:7px; line-height:1.7; color:var(--amber); font-size:11.5px; }
+@media (max-width:900px) {.verification-bands{grid-template-columns:1fr;} }
