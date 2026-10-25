@@ -234,3 +234,31 @@ Important: This is schema validation, not verification of published datasets or 
 v2.1 preserves v2 JSON compatibility, and adds per-row run/cycle/channel identity, field-specific missingness reasons, time-origin guards, optional declared transformation history and conservative scientific-comparability diagnostics. The research importer displays per-series counts and missingness. **This is not raw XLSX ingestion or scientific model validation.**
 
 See [the v2.1 integrity design](docs/research-schema-v2.md) and [fictional multi-run example](public/examples/research-v2-1-synthetic-multirun.json).
+
+
+## Research Workbench UX (2026-10)
+
+The application now offers a four-stage, keyboard-accessible workflow:
+**simulation → dataset comparison → QFabric offline bridge → literature explorer**.
+The links are in-page navigation and do not unload datasets or reset local
+state.
+
+- **Baseline comparison:** capture the current educational run, change a
+  parameter and inspect deterministic deltas in four summary metrics. Restore
+  baseline inputs explicitly. Baseline lives only in page memory; refresh
+  discards it. Deltas are not statistical, safety or optimization evidence.
+- **Quantum literature explorer:** full-text search across bundled paper
+  metadata, foundational/recent filters, year or source-displayed-citation
+  sorting and up to two papers compared by reported claim, testable question
+  and stated scientific limits. Unknown citation counts remain unavailable,
+  never represented as zero.
+- **Responsive/accessibility:** card-based literature, labels on search/sort
+  controls, clear empty states, visible keyboard focus and reduced-motion
+  handling. The bibliography is still the versioned QFabric snapshot: no
+  unaudited remote API calls in the browser.
+
+The source bibliography remains at
+[public/examples/quantum-theory-evidence-v1.json](public/examples/quantum-theory-evidence-v1.json).
+All quantum references are **background or hypothesis context only** and do
+not modify the simulator's coefficients, claim quantum speedup, certify
+physical crystallization kinetics or drive QICK hardware.
