@@ -213,11 +213,13 @@ export function parseQFabricBridgeReport(content: string): QFabricBridgeReport {
   if (integer(reportedInput.timeSteps, "snapshot.input.timeSteps", 1, 200) !== rows) {
     throw new Error("QFabric report row count disagrees with input time steps.");
   }
-  if (integer(reportedSummary.nucleationEvents, "snapshot.summary.nucleationEvents", 0, rows) > rows ||
-      reportedSummary.avgGrowthRate < 0 ||
-      reportedSummary.maxSupersaturation < 0 ||
-      [reportedSummary.qualityScore, reportedSummary.stabilityScore,
-       reportedSummary.finalYield].some(value => value < 0 || value > 100)) {
+  integer(reportedSummary.nucleationEvents, "snapshot.summary.nucleationEvents", 0, rows);
+  if (finite(reportedSummary.avgGrowthRate, "snapshot.summary.avgGrowthRate") < 0 ||
+      finite(reportedSummary.maxSupersaturation, "snapshot.summary.maxSupersaturation") < 0 ||
+      ["qualityScore", "stabilityScore", "finalYield"].some(key => {
+        const value = finite(reportedSummary[key], "snapshot.summary." + key);
+        return value < 0 || value > 100;
+      })) {
     throw new Error("QFabric report contains invalid educational summary metrics.");
   }
   const qfabric = record(doc.qfabric, "qfabric");
