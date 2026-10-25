@@ -251,14 +251,14 @@ export default function DatasetPanel({ lang, simulated, input }: Props) {
                     <td>{detail ? (detail.coverageFraction * 100).toFixed(1) + "%" : "—"}</td>
                     <td>{detail?.bootstrapBias
                       ? detail.bootstrapBias.lower.toFixed(4) + " – " + detail.bootstrapBias.upper.toFixed(4)
-                      : (lang === "ja" ? "N<8：算出なし" : "N<8: unavailable")}</td>
+                      : (lang === "ja" ? "N<8・欠測ギャップ：算出なし" : "N<8 or gaps: unavailable")}</td>
                   </tr>;
                   })}</tbody>
                 </table>
               </div>
               <p className="dataset-muted">{lang === "ja"
-                ? "誤差 = 観測値 − モデル値。対応率は同じ変数の有効入力点のうち一致した割合。区間はN≥8の連続ブロック再標本化（400回、乱数固定）によるバイアスの記述的範囲で、測定不確実性・物理モデルの信頼区間ではありません。"
-                : "Error = observed minus model. Coverage is the matched share of provided field observations. The bias interval uses 400 seeded moving-block resamples if N≥8; it is descriptive, not measurement uncertainty, a validated confidence interval or proof of physical accuracy."}</p>
+                ? "誤差 = 観測値 − モデル値。対応率は同じ変数の有効入力点のうち一致した割合。区間はN≥8かつ連続した観測ステップでのみ行うブロック再標本化（400回、乱数固定）によるバイアスの記述的範囲で、測定不確実性・物理モデルの信頼区間ではありません。"
+                : "Error = observed minus model. Coverage is the matched share of provided field observations. The bias interval uses 400 seeded moving-block resamples if N≥8 and matched steps are contiguous; it is descriptive, not measurement uncertainty, a validated confidence interval or proof of physical accuracy."}</p>
             </>
           ) : <p className="dataset-error" role="status">{lang === "ja" ? "一致するステップがありません。シミュレーション時間を確認してください。" : "No matching steps. Check the simulation duration."}</p>}
         </div>
