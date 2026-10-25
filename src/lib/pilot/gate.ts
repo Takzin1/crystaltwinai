@@ -1,5 +1,6 @@
 /**
  * TypeScript port of QFabric's research gate (`src/qfabric/orchestration.py`,
+ * Apache-2.0, same author;
  * Takzin1/QFabric). The hosted Next.js runtime cannot execute that Python
  * package, so this port runs instead and is held to the Python behaviour by
  * golden cases exported from the real module

@@ -1,4 +1,91 @@
-# CrystalTwin-AI
+# CrystalPilot · CrystalTwin-AI
+
+**CrystalPilot — an evidence-gated AI experiment lab.** An NVIDIA Nemotron
+model on Nebius Token Factory proposes experiments for an educational
+crystallization simulator; deterministic code validates them, a human
+approves them, the engine recomputes them, and every step is exported as a
+verifiable evidence file.
+
+> Nebius × NVIDIA Global AI Hackathon 2026 entry (Best Apps and Agents).
+> 🧪 Education / research / PoC only — not a validated process model, never
+> connected to equipment. See [docs/SCIENTIFIC_LIMITATIONS.md](docs/SCIENTIFIC_LIMITATIONS.md).
+
+**Live inference status:** implemented, **not yet verified against the real
+service** (see [docs/EVALUATION.md](docs/EVALUATION.md#7-live-inference--not-measured)).
+Without `NEBIUS_API_KEY` the app runs in clearly labelled OFFLINE DEMO mode.
+
+## The problem
+
+LLM output is untrusted text. Agents that execute what a model says — or
+that keep no record of why something ran — are unsafe to put near
+experiments. Learners and researchers need a working example of a loop where
+an AI can propose but cannot act unchecked.
+
+## The workflow
+
+```
+Scenario ─▶ Proposal (Nemotron) ─▶ Gate (deterministic) ─▶ Review (human)
+        ─▶ Simulate (engine) ─▶ Compare + checks ─▶ Interpret ─▶ Evidence ─▶ Verify
+```
+
+| Step | What happens | Where |
+|---|---|---|
+| Scenario | Baseline simulated; snapshot bytes SHA-256-hashed | server |
+| Proposal | Nemotron returns hypothesis, ≤3 changes, falsifiable prediction | server → Nebius |
+| Gate | Strict JSON, server-owned envelope, whitelist, ranges, hash binding (port of QFabric's gate, held to 39 Python golden cases) | server |
+| Review | Self-attested approval of the exact bytes; required | browser |
+| Simulate | Deterministic engine recomputes; 8 independent checks; prediction scored | browser |
+| Interpret | Nemotron interprets; every claim checked for contradictions/overclaims | server → Nebius |
+| Evidence | `crystalpilot-evidence/1`, canonical-JSON SHA-256 | browser |
+| Verify | Integrity + recomputation + full simulation replay (TS) or gate/review recomputation (QFabric Python) | anywhere |
+
+Three demos: **A** a successful experiment, **B** hostile candidates
+(out-of-range, NaN, injected self-approval, hardware action, forged
+provenance…) rejected with reasons, **C** evidence export, tampering and
+integrity failure.
+
+Labels in the UI keep claims honest: `LIVE NEMOTRON`, `OFFLINE DEMO`,
+`SIMULATED DATA`, `FILE INTEGRITY`, `UNVERIFIED SCIENCE`.
+
+## Quick start
+
+```bash
+git clone https://github.com/Takzin1/crystaltwinai.git && cd crystaltwinai
+npm ci
+cp .env.example .env.local   # optional: add NEBIUS_API_KEY for live mode
+npm run build && npm start   # → http://localhost:3000/pilot
+```
+
+Node ≥ 20.9. No key is needed for the offline demo. Never commit `.env.local`.
+
+| Command | Purpose |
+|---|---|
+| `npm test` | 119 unit / contract / golden / regression tests |
+| `npm run typecheck` | TypeScript |
+| `npm run e2e` | Playwright browser E2E (server on `BASE_URL`, default :3100) |
+| `npm run eval` | Offline evaluation → `eval/results/offline-eval.json` |
+| `npm run verify:evidence -- file.json` | Verify an exported evidence file with replay |
+| `npm run live:smoke` | **Paid** live check against Nebius (needs `NEBIUS_API_KEY`) |
+
+Deploy: any Node host or Vercel. Set `NEBIUS_API_KEY` (and optionally
+`NEBIUS_MODEL`, `EVIDENCE_ATTESTATION_SECRET`) as **server** environment
+variables; see `.env.example`. Set a spend limit on the Nebius account.
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md) — components, runtime boundaries, state machine
+- [Scientific limitations](docs/SCIENTIFIC_LIMITATIONS.md)
+- [Evaluation](docs/EVALUATION.md) — executed tests and measured results
+- [Hackathon compliance](docs/HACKATHON_COMPLIANCE.md) · [Build changelog](docs/BUILD_CHANGELOG.md)
+- [Devpost draft](docs/DEVPOST_SUBMISSION.md) · [Demo script](docs/DEMO_SCRIPT.md) · [Nebius/NVIDIA feedback](docs/NEBIUS_NVIDIA_FEEDBACK.md)
+- Companion: [QFabric](https://github.com/Takzin1/QFabric) — gate reference implementation and Python evidence verifier
+
+License: MIT (this repository). QFabric is Apache-2.0.
+
+---
+
+# CrystalTwin-AI (simulator) / シミュレータ
+
 
 🔗 **Live Demo**: https://crystaltwinai.vercel.app
 
