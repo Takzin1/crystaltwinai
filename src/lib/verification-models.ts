@@ -104,6 +104,13 @@ export function runInputSensitivity(
   seed = 0x5eed2026,
 ): SensitivityStudy {
   validateSimulationInput(baseline.input);
+  if (baseline.series.length !== baseline.input.timeSteps ||
+      (["finalYield", "qualityScore", "stabilityScore"] as const).some(key => {
+        const value = baseline.summary[key];
+        return !Number.isFinite(value) || value < 0 || value > 100;
+      })) {
+    throw new Error("Sensitivity requires a finite and consistent baseline.");
+  }
   if (!Number.isFinite(inputFraction) || inputFraction < 0 || inputFraction > 0.2) {
     throw new RangeError("Input variation fraction must be 0..0.2.");
   }
