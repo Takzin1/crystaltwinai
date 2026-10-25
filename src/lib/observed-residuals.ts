@@ -44,13 +44,16 @@ export function assessObservedResiduals(
     throw new Error("Unknown or duplicated data fields.");
   }
   return dataset.fields.map(field => {
-    const residuals = dataset.rows.flatMap(row => {
+    const matched = dataset.rows.flatMap(row => {
       const observed = row[field];
       if (observed === undefined) return [];
       if (!Number.isFinite(observed)) throw new Error("Nonfinite observed value.");
       const target = model.get(row.step);
-      return target ? [observed - target[field]] : [];
+      return target ? [{ step: row.step, residual: observed - target[field] }] : [];
     });
+    const residuals = matched.map(row => row.residual);
+    const consecutive = matched.every((row, i) =>
+      i === 0 || row.step === matched[i - 1].step + 1);
     if (!residuals.length) return {
       field, count: 0, coverageFraction: 0,
       maxAbs: 0, bootstrapBias: null,
@@ -60,7 +63,7 @@ export function assessObservedResiduals(
       field, count: statistics.n,
       coverageFraction: statistics.n / dataset.rows.filter(row => row[field] !== undefined).length,
       maxAbs: statistics.maxAbs,
-      bootstrapBias: blockBootstrapBias(residuals),
+      bootstrapBias: consecutive ? blockBootstrapBias(residuals) : null,
     };
   });
 }
