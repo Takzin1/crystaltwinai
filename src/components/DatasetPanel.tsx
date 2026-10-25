@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState, type ChangeEvent } from "react";
 import type { DataField, ExperimentalDataset } from "../lib/datasets";
 import { compareDataset, MAX_DATASET_BYTES, parseDataset } from "../lib/datasets";
+import { assessObservedResiduals } from "../lib/observed-residuals";
 import type { LanguageCode, SimulationInput, StepState } from "../lib/types";
 import {
   DEFAULT_METADATA, MAX_ACTIVE_DATASETS, canCompareIntervals,
@@ -66,6 +67,11 @@ export default function DatasetPanel({ lang, simulated, input }: Props) {
   const comparison = useMemo(
     () => loaded && aligned ? compareDataset(loaded.dataset, simulated) : null,
     [loaded, aligned, simulated]
+  );
+
+  const observedDiagnostics = useMemo(
+    () => loaded && aligned ? assessObservedResiduals(loaded.dataset, simulated) : [],
+    [loaded, aligned, simulated],
   );
 
   function updateMetadata(patch: Partial<DatasetMetadata>) {
@@ -232,17 +238,27 @@ export default function DatasetPanel({ lang, simulated, input }: Props) {
                     <th scope="col">MAE</th>
                     <th scope="col">RMSE</th>
                     <th scope="col">{lang === "ja" ? "偏り" : "Bias"}</th>
+                    <th scope="col">Max |Δ|</th><th scope="col">{lang === "ja" ? "対応率" : "Coverage"}</th>
+                    <th scope="col">{lang === "ja" ? "バイアスの再標本化区間" : "Bias resampling interval"}</th>
                   </tr></thead>
-                  <tbody>{comparison.fields.map((m) => <tr key={m.field}>
+                  <tbody>{comparison.fields.map((m) => {
+                    const detail = observedDiagnostics.find(v => v.field === m.field);
+                    return <tr key={m.field}>
                     <th scope="row">{FIELD_LABELS[m.field][lang]}</th>
                     <td>{m.count}</td><td>{m.mae.toFixed(4)}</td>
                     <td>{m.rmse.toFixed(4)}</td><td>{m.bias.toFixed(4)}</td>
-                  </tr>)}</tbody>
+                    <td>{detail?.maxAbs.toFixed(4) ?? "—"}</td>
+                    <td>{detail ? (detail.coverageFraction * 100).toFixed(1) + "%" : "—"}</td>
+                    <td>{detail?.bootstrapBias
+                      ? detail.bootstrapBias.lower.toFixed(4) + " – " + detail.bootstrapBias.upper.toFixed(4)
+                      : (lang === "ja" ? "N<8・欠測ギャップ：算出なし" : "N<8 or gaps: unavailable")}</td>
+                  </tr>;
+                  })}</tbody>
                 </table>
               </div>
               <p className="dataset-muted">{lang === "ja"
-                ? "誤差 = 観測値 − モデル値。未一致ステップは評価対象外。結果は物理モデルの妥当性を証明しません。"
-                : "Error = observation minus model. Unmatched steps are excluded. These metrics do not validate the physical model."}</p>
+                ? "誤差 = 観測値 − モデル値。対応率は同じ変数の有効入力点のうち一致した割合。区間はN≥8かつ連続した観測ステップでのみ行うブロック再標本化（400回、乱数固定）によるバイアスの記述的範囲で、測定不確実性・物理モデルの信頼区間ではありません。"
+                : "Error = observed minus model. Coverage is the matched share of provided field observations. The bias interval uses 400 seeded moving-block resamples if N≥8 and matched steps are contiguous; it is descriptive, not measurement uncertainty, a validated confidence interval or proof of physical accuracy."}</p>
             </>
           ) : <p className="dataset-error" role="status">{lang === "ja" ? "一致するステップがありません。シミュレーション時間を確認してください。" : "No matching steps. Check the simulation duration."}</p>}
         </div>
