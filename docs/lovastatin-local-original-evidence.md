@@ -97,3 +97,18 @@ bias and standardized residuals (descriptive only).
 Next: obtain and inspect the experiment-condition map and the source
 authors' training/validation protocol; fit only disjoint experiment IDs
 and run the *new* model on genuinely held-out complete experiments.
+
+### iPhone / iOS file-picker compatibility
+
+If the local JSON file is greyed out in the iOS Files picker, ensure the latest
+app is deployed. Older builds restricted selectable files by a JSON MIME
+accept list, which some iOS file providers do not classify consistently.
+The updated picker permits selection of all filenames, **but still rejects
+non-JSON extensions before parsing** and validates the exact JSON schema,
+three workbook hashes, row counts, experiment overlaps and source metrics.
+Select a decompressed `.json` file; **do not select `.xlsx` or `.zip`**.
+The successful read is acknowledged in the UI. This is client-side File API
+reading, not a network upload or a server-side import.
+
+GitHub merge alone does not publish a refreshed hosted Web application.
+If the Lovastatin panel is absent, check the actual deployment status.
