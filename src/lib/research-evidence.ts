@@ -126,6 +126,7 @@ export function makeResearchEvidenceManifest(args: {
       timeOrigin: metadata.timeOrigin ?? null,
       temperatureSource: metadata.temperatureSource ?? null,
       measurementMethod: metadata.measurementMethod ?? null,
+      solidForm: metadata.solidForm ?? null,
       units: { ...metadata.units },
       transformationCount: metadata.transformations?.length ?? 0,
     },
