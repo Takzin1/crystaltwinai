@@ -178,7 +178,7 @@ export function runAnalyticPbeAccuracyStudy(options?:{
   const maxCourant=options?.maxCourant??0.4;
   if(!Number.isFinite(maxCourant)||maxCourant<0.05||maxCourant>0.4)
     throw new RangeError("Courant must lie within [0.05,0.4].");
-  const support=options?.initialSupportUm??(profile==="smooth_sin4"?[15,45]:[10,20]);
+  const support:[number,number]=options?.initialSupportUm??(profile==="smooth_sin4"?[15,45]:[10,20]);
   if(!Array.isArray(support)||support.length!==2||support.some(v=>!Number.isFinite(v))||
     support[0]<0||support[1]>120||support[0]>=support[1]||support[1]-support[0]<2)
     throw new RangeError("Analytic initial support must be a bounded interval at least 2 µm wide.");
