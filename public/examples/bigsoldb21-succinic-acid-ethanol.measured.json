@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 2,
+  "metadata": {
+    "sourceUrl": "https://huggingface.co/datasets/levakrasnov/BigSolDBv2.1",
+    "authors": [
+      "Krasnov, L.",
+      "Malikov, D.",
+      "Kiseleva, M.",
+      "Tatarin, S.",
+      "Sosnin, S.",
+      "Bezzubov, S."
+    ],
+    "publicationYear": 2025,
+    "license": "CC BY 4.0 (BigSolDB v2.1 compilation; underlying articles not independently licensed)",
+    "provenance": "measured",
+    "experimentMode": "equilibrium_curve",
+    "solvent": "ethanol",
+    "processType": "literature-compiled measured equilibrium solubility",
+    "concentrationBasis": "mole_fraction",
+    "temperatureSource": "unknown",
+    "measurementMethod": "not independently verified in the source article",
+    "units": {
+      "temperature": "K",
+      "solubility": "mole_fraction"
+    },
+    "title": "BigSolDB v2.1: Succinic acid / ethanol (12 literature-compiled points)",
+    "material": "Succinic acid",
+    "doi": "10.1007/s10953-012-9951-z",
+    "notes": "BigSolDB v2.1 HF public viewer, sampled 12 rows, sourced from a secondary compilation; viewer values checked 2026-11-03. CAS 110-15-6. Author names refer to compilers. DOI refers to original reported article; original laboratory files, crystal solid form, replicates, instrument method and original article reuse conditions are not independently verified. Dataset compilation licensed CC BY 4.0. No full-source-file digest established; no volume/mass-unit conversion, kinetics, nucleation or PBE validation."
+  },
+  "measurements": [
+    {
+      "temperature": 278.15,
+      "solubility": 0.0354
+    },
+    {
+      "temperature": 283.15,
+      "solubility": 0.0401
+    },
+    {
+      "temperature": 288.15,
+      "solubility": 0.0422
+    },
+    {
+      "temperature": 293.15,
+      "solubility": 0.0438
+    },
+    {
+      "temperature": 298.15,
+      "solubility": 0.0525
+    },
+    {
+      "temperature": 303.15,
+      "solubility": 0.0633
+    },
+    {
+      "temperature": 308.15,
+      "solubility": 0.0753
+    },
+    {
+      "temperature": 313.15,
+      "solubility": 0.096
+    },
+    {
+      "temperature": 318.15,
+      "solubility": 0.1159
+    },
+    {
+      "temperature": 323.15,
+      "solubility": 0.1372
+    },
+    {
+      "temperature": 328.15,
+      "solubility": 0.1638
+    },
+    {
+      "temperature": 333.15,
+      "solubility": 0.1967
+    }
+  ]
+}
