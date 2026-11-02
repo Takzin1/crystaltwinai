@@ -6,7 +6,7 @@ import {
   EQUILIBRIUM_BENCHMARK_VERSION, evaluateEquilibriumReference,
 } from "../src/lib/equilibrium-reference";
 import {
-  BIGSOLDB21_SHA256, readCsvTable, convertBigSolDB21,
+  BIGSOLDB21_SOURCE, verifyBigSolDB21Blob, readCsvTable, convertBigSolDB21,
 } from "../scripts/import-bigsoldb21";
 
 const path="public/examples/bigsoldb21-paracetamol-ethanol.measured.json";
@@ -77,6 +77,13 @@ const columns=[
   "Compound_Name","CAS","PubChem_CID","FDA_Approved","Source",
 ];
 const values=[0.05045,0.0546,0.062,0.067,0.0705];
+test("v2.1 official author Git blob gate refuses synthetic or modified CSV bytes",()=>{
+  assert.equal(BIGSOLDB21_SOURCE.repository,"levakrasnovs/mcp-bigsoldb");
+  assert.equal(BIGSOLDB21_SOURCE.sizeBytes,19675205);
+  assert.equal(BIGSOLDB21_SOURCE.gitBlobSha1,"4a6f2af6819507bae9cfd690e927fe349927d8c5");
+  assert.throws(()=>verifyBigSolDB21Blob(Buffer.from("synthetic input")),/byte length/);
+});
+
 const mockCSV=()=>[columns.join(","),...values.map((v,i)=>
   ["CC(=O)Nc1ccc(O)cc1",(293.15+i*5).toFixed(2),"ethanol","CCO",
     String(v),"1","0","Paracetamol","103-90-2","1983","Yes",selection.doi].join(",")
@@ -84,10 +91,10 @@ const mockCSV=()=>[columns.join(","),...values.map((v,i)=>
 
 test("strict BigSolDB 2.1 adapter preserves source-native units and grouping",()=>{
   const csv=mockCSV();
-  const adapted=convertBigSolDB21(csv,selection,BIGSOLDB21_SHA256);
+  const adapted=convertBigSolDB21(csv,selection,"a".repeat(64));
   assert.deepEqual(adapted.measurements,dataset().measurements);
-  assert.equal(adapted.metadata.sourceFileSha256,BIGSOLDB21_SHA256);
-  assert.equal(adapted.metadata.transformations?.[0]?.inputSha256,BIGSOLDB21_SHA256);
+  assert.equal(adapted.metadata.sourceFileSha256,"a".repeat(64));
+  assert.equal(adapted.metadata.transformations?.[0]?.inputSha256,"a".repeat(64));
   assert.equal(adapted.metadata.provenance,"measured");
   assert.equal(evaluateEquilibriumReference(adapted).partition.holdoutCount,2);
 });
@@ -101,11 +108,11 @@ test("CSV parser handles quotes and rejects malformed input",()=>{
 
 test("adversarial adapter rows: refuse incorrect headers, mixed identities, duplicates and small samples",()=>{
   const csv=mockCSV();
-  assert.throws(()=>convertBigSolDB21(csv.replace("Temperature_K","Temp"),selection,BIGSOLDB21_SHA256),/schema/);
-  assert.throws(()=>convertBigSolDB21(csv, {...selection,doi:"10.0000/wrong"},BIGSOLDB21_SHA256),/5–1000/);
-  assert.throws(()=>convertBigSolDB21(csv.replace("0.05045",""),selection,BIGSOLDB21_SHA256),/Invalid/);
-  assert.throws(()=>convertBigSolDB21(csv.replace("303.15","298.15"),selection,BIGSOLDB21_SHA256),/Duplicate/);
-  assert.throws(()=>convertBigSolDB21(csv.replace("CCO,0.062","CO,0.062"),selection,BIGSOLDB21_SHA256),/Mixed/);
-  assert.throws(()=>convertBigSolDB21(csv.replace("0.062","999"),selection,BIGSOLDB21_SHA256),/Invalid/);
+  assert.throws(()=>convertBigSolDB21(csv.replace("Temperature_K","Temp"),selection,"a".repeat(64)),/schema/);
+  assert.throws(()=>convertBigSolDB21(csv, {...selection,doi:"10.0000/wrong"},"a".repeat(64)),/5–1000/);
+  assert.throws(()=>convertBigSolDB21(csv.replace("0.05045",""),selection,"a".repeat(64)),/Invalid/);
+  assert.throws(()=>convertBigSolDB21(csv.replace("303.15","298.15"),selection,"a".repeat(64)),/Duplicate/);
+  assert.throws(()=>convertBigSolDB21(csv.replace("CCO,0.062","CO,0.062"),selection,"a".repeat(64)),/Mixed/);
+  assert.throws(()=>convertBigSolDB21(csv.replace("0.062","999"),selection,"a".repeat(64)),/Invalid/);
   assert.throws(()=>convertBigSolDB21(csv,selection,"ABC"),/sha256/);
 });
