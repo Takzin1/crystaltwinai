@@ -35,7 +35,7 @@ CrystalTwin-AIは、結晶成長・溶液プロセス制御を題材にした**�
 
 ```bash
 git clone https://github.com/Takzin1/crystaltwinai.git
-cd crystaltwin-ai
+cd crystaltwinai
 npm install
 npm run dev
 # → http://localhost:3000
