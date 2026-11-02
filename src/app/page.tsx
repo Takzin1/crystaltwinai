@@ -27,6 +27,7 @@ import VerificationLabPanel from "@/components/VerificationLabPanel";
 import FalsificationBenchPanel from "@/components/FalsificationBenchPanel";
 import PbeNumericalPanel from "@/components/PbeNumericalPanel";
 import SourceEvidenceGallery from "@/components/SourceEvidenceGallery";
+import EquilibriumReferencePanel from "@/components/EquilibriumReferencePanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -165,6 +166,7 @@ export default function Home() {
             <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
             <ResearchDatasetPanel lang={lang} />
             <SourceEvidenceGallery lang={lang} />
+            <EquilibriumReferencePanel lang={lang} />
           </div>
 
           <div id="bridge" className="workbench-section">
