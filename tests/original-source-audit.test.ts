@@ -20,7 +20,7 @@ test("external published source shapes are explicit, exact and source-native",()
   assert.deepEqual([...SOURCE_TABLE_SHAPES.v22.columns].slice(-2),["Source","solid_form_label"]);
   assert.ok(SOURCE_TABLE_SHAPES.v21.columns.includes("Solubility(mole_fraction)"));
   assert.ok(SOURCE_TABLE_SHAPES.v22.columns.includes("Solubility(mole_fraction)"));
-  assert.ok(!SOURCE_TABLE_SHAPES.v22.columns.includes("method"));
+  assert.ok(!(SOURCE_TABLE_SHAPES.v22.columns as readonly string[]).includes("method"));
   assert.ok(SOURCE_TABLE_SHAPES.methods.columns.includes("method"));
 });
 
@@ -40,7 +40,7 @@ test("header contract refuses swapped, missing and invented source columns",()=>
   for(const key of ["v21","v22","methods","solidForms"] as const){
     const original=[...SOURCE_TABLE_SHAPES[key].columns];
     assert.deepEqual(verifyKnownFullSourceHeaderFixture(key,original.join(",")+"\n"),original);
-    const changed=original.slice();
+    const changed:string[]=original.slice();
     changed[0]="Fictitious_Source_Column";
     assert.throws(()=>verifyKnownFullSourceHeaderFixture(key,changed.join(",")+"\n"),/header differs/);
     assert.throws(()=>verifyKnownFullSourceHeaderFixture(key,original.slice(1).join(",")+"\n"),/header differs/);
