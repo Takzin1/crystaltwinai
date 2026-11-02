@@ -49,8 +49,16 @@ function score(predictions:readonly PredictionRow[],key:ModelKey):ModelScore {
 export function evaluateEquilibriumProtocolV2(source:ResearchDataset) {
   // v1 enforces strict declared units, 5+ observations, no duplicate temperatures,
   // and independent high-temperature holdout for linear and constant baselines.
-  const base=evaluateEquilibriumReference(source);
-  const dataset=parseResearchDataset(JSON.stringify(source));
+  // JSON.stringify silently rewrites NaN/Infinity to null. A scientific
+  // evaluation must *reject* those in-memory inputs instead of losing them.
+  const serialized=JSON.stringify(source,(_key,value)=>{
+    if(typeof value==="number" && !Number.isFinite(value)) {
+      throw new Error("Non-finite research measurement or metadata number.");
+    }
+    return value;
+  });
+  const dataset=parseResearchDataset(serialized);
+  const base=evaluateEquilibriumReference(dataset);
   const identityGroups=new Set(dataset.measurements.map(row=>
     JSON.stringify([row.runId??null,row.cycleId??null,row.channelId??null])));
   if(identityGroups.size!==1){
