@@ -425,3 +425,18 @@ a **metadata-only** report. Original data are never committed or
 published in Actions artifacts. This only establishes source-byte and
 mapping reproducibility, **not** lab provenance or physical model fidelity.
 See [source audit scope and reproduction steps](docs/bigsoldb-original-source-ci-audit.md).
+
+## Experimental struvite PSD (source-native, no synthetic relabeling)
+
+A user-provided, published **Poiseuille-flow struvite crystallizer** ZIP was
+unzipped and its single source XLSX worksheet parsed. The Research Studio
+has a dedicated observed-versus-source-model panel for **87 particle-size
+bins** and three SI conditions, distinguishing **R measured/optimized-fit**
+from **IJ measured/Galbraith-parameter reference** groups and retaining
+measured versus simulated PO4-P time-series, explicit missing readings,
+reported confidence-interval columns and **source ZIP/XLSX SHA-256s**.
+The normalized losslessly compressed JSON is checked against its SHA-256
+in browser and CI. Volume-% PSD data are **not** number-density PBE
+measurements and do not establish independent optimized-parameter IJ
+validation. The app does not auto-fit kinetics or silently align PO4-P.
+See [original workbook mapping and scientific limitations](docs/struvite-poiseuille-source-intake.md).
