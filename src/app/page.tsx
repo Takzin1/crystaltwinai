@@ -26,6 +26,7 @@ import BaselineComparisonPanel from "@/components/BaselineComparisonPanel";
 import VerificationLabPanel from "@/components/VerificationLabPanel";
 import FalsificationBenchPanel from "@/components/FalsificationBenchPanel";
 import PbeNumericalPanel from "@/components/PbeNumericalPanel";
+import PbeAccuracyPanel from "@/components/PbeAccuracyPanel";
 import SourceEvidenceGallery from "@/components/SourceEvidenceGallery";
 import EquilibriumReferencePanel from "@/components/EquilibriumReferencePanel";
 
@@ -156,6 +157,7 @@ export default function Home() {
             <VerificationLabPanel lang={lang} result={result} />
             <FalsificationBenchPanel lang={lang} input={result.input} />
             <PbeNumericalPanel lang={lang} />
+            <PbeAccuracyPanel lang={lang} />
           </div>
 
           <div id="datasets" className="workbench-section">

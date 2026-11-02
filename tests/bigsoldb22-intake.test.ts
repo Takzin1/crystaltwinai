@@ -98,3 +98,25 @@ test("no silent unit conversion or chemical/provenance mixtures",()=>{
   assert.throws(()=>convertBigSolDB22Rows(csv(),{...selection,methodColumn:"Solid_Phase"},stub),/must differ/);
   assert.throws(()=>convertBigSolDB22Rows(csv(),selection,{...stub,sha256:"bad"}),/Malformed source evidence/);
 });
+
+
+test("official v2.2 solid_form_label is an explicit gate rather than silently pooling polymorphs",()=>{
+  const officialFixture=csv().replace("Solid_Phase","solid_form_label");
+  assert.throws(()=>convertBigSolDB22Rows(officialFixture,
+    {...selection,solidFormColumn:undefined},stub),
+    /requires explicit --solid-form-column/);
+  const selected=convertBigSolDB22Rows(officialFixture,
+    {...selection,solidFormColumn:"solid_form_label"},stub);
+  assert.equal(selected.metadata.solidForm,"Form A");
+  assert.throws(()=>convertBigSolDB22Rows(
+    officialFixture.replace(",Form A\n",",\n"),
+    {...selection,solidFormColumn:"solid_form_label"},stub),
+    /solid form is missing/);
+});
+
+test("pure-solvent molarity and logS cannot impersonate measurement protocol metadata",()=>{
+  for(const methodColumn of ["Solubility(mol/L)","LogS(mol/L)","CAS"]){
+    assert.throws(()=>convertBigSolDB22Rows(csv(),{...selection,methodColumn},stub),
+      /cannot be mapped to a numeric or chemical metadata column/);
+  }
+});
