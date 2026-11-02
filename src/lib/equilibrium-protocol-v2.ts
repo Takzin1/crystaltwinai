@@ -7,7 +7,7 @@
  *
  * This module never downloads files or mutates the imported observations.
  */
-import { evaluateEquilibriumReference, type Metric } from "./equilibrium-reference";
+import { evaluateEquilibriumReference } from "./equilibrium-reference";
 import { parseResearchDataset, type ResearchDataset } from "./research-schema";
 
 export const EQUILIBRIUM_PROTOCOL_V2 = "crystaltwin-equilibrium-evaluation/2" as const;
