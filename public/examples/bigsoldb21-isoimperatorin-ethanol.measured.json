@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 2,
+  "metadata": {
+    "sourceUrl": "https://huggingface.co/datasets/levakrasnov/BigSolDBv2.1",
+    "authors": [
+      "Krasnov, L.",
+      "Malikov, D.",
+      "Kiseleva, M.",
+      "Tatarin, S.",
+      "Sosnin, S.",
+      "Bezzubov, S."
+    ],
+    "publicationYear": 2025,
+    "license": "CC BY 4.0 (BigSolDB v2.1 compilation; underlying articles not independently licensed)",
+    "provenance": "measured",
+    "experimentMode": "equilibrium_curve",
+    "solvent": "ethanol",
+    "processType": "literature-compiled measured equilibrium solubility",
+    "concentrationBasis": "mole_fraction",
+    "temperatureSource": "unknown",
+    "measurementMethod": "not independently verified in the source article",
+    "units": {
+      "temperature": "K",
+      "solubility": "mole_fraction"
+    },
+    "title": "BigSolDB v2.1: Isoimperatorin / ethanol (9 literature-compiled points)",
+    "material": "Isoimperatorin",
+    "doi": "10.1007/s10953-012-9917-1",
+    "notes": "BigSolDB v2.1 HF public viewer, sampled 9 rows, sourced from a secondary compilation; viewer values checked 2026-11-03. CAS 482-45-1. Author names refer to compilers. DOI refers to original reported article; original laboratory files, crystal solid form, replicates, instrument method and original article reuse conditions are not independently verified. Dataset compilation licensed CC BY 4.0. No full-source-file digest established; no volume/mass-unit conversion, kinetics, nucleation or PBE validation."
+  },
+  "measurements": [
+    {
+      "temperature": 288.2,
+      "solubility": 0.002631
+    },
+    {
+      "temperature": 293.2,
+      "solubility": 0.003774
+    },
+    {
+      "temperature": 298.2,
+      "solubility": 0.005313
+    },
+    {
+      "temperature": 303.2,
+      "solubility": 0.00733
+    },
+    {
+      "temperature": 308.2,
+      "solubility": 0.009987
+    },
+    {
+      "temperature": 313.2,
+      "solubility": 0.013379
+    },
+    {
+      "temperature": 318.2,
+      "solubility": 0.017758
+    },
+    {
+      "temperature": 323.2,
+      "solubility": 0.023003
+    },
+    {
+      "temperature": 328.2,
+      "solubility": 0.03005
+    }
+  ]
+}
