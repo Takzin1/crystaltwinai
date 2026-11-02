@@ -28,6 +28,7 @@ import FalsificationBenchPanel from "@/components/FalsificationBenchPanel";
 import PbeNumericalPanel from "@/components/PbeNumericalPanel";
 import PbeAccuracyPanel from "@/components/PbeAccuracyPanel";
 import SourceEvidenceGallery from "@/components/SourceEvidenceGallery";
+import StruviteEvidencePanel from "@/components/StruviteEvidencePanel";
 import EquilibriumReferencePanel from "@/components/EquilibriumReferencePanel";
 
 export default function Home() {
@@ -168,6 +169,7 @@ export default function Home() {
             <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
             <ResearchDatasetPanel lang={lang} />
             <SourceEvidenceGallery lang={lang} />
+            <StruviteEvidencePanel lang={lang} />
             <EquilibriumReferencePanel lang={lang} />
           </div>
 
