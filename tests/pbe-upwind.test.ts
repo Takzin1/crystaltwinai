@@ -131,7 +131,7 @@ test("malformed numerical settings are refused before allocation or propagation"
     {initialSeedCountPerMl:1e10,crystalDensityGPerCm3:5,maxLengthUm:20,minLengthUm:19},
   ];
   for(const settings of cases){
-    assert.throws(()=>validatePbeSettings({...base,...settings}),undefined,JSON.stringify(settings));
+    assert.throws(()=>validatePbeSettings({...base,...settings}),/./,JSON.stringify(settings));
   }
 });
 
