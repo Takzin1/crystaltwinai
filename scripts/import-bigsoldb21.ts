@@ -9,10 +9,28 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { parseResearchDataset } from "../src/lib/research-schema";
 
-export const BIGSOLDB21_SHA256 =
-  "212cb511e05051917f7ab8811282c06c99512e4f720cf270be555fdf07b4a854";
+export const BIGSOLDB21_SOURCE = {
+  repository:"levakrasnovs/mcp-bigsoldb",
+  commit:"a29e91061dc2d3d543343c5cd2cdd5e539165915",
+  filename:"BigSolDBv2_1.csv",
+  sizeBytes:19675205,
+  gitBlobSha1:"4a6f2af6819507bae9cfd690e927fe349927d8c5",
+} as const;
 export const BIGSOLDB21_ORIGINAL_URL =
-  "https://huggingface.co/datasets/levakrasnov/BigSolDBv2.1";
+  "https://raw.githubusercontent.com/levakrasnovs/mcp-bigsoldb/a29e91061dc2d3d543343c5cd2cdd5e539165915/BigSolDBv2_1.csv";
+
+/** Verify a selected CSV matches the author's exact Git blob, then fingerprint with SHA-256. */
+export function verifyBigSolDB21Blob(bytes: Uint8Array): string {
+  if (bytes.byteLength !== BIGSOLDB21_SOURCE.sizeBytes) {
+    throw new Error("Pinned BigSolDB v2.1 source file byte length mismatch.");
+  }
+  const gitHash=createHash("sha1").update("blob "+bytes.byteLength+"\\0")
+    .update(bytes).digest("hex");
+  if (gitHash !== BIGSOLDB21_SOURCE.gitBlobSha1) {
+    throw new Error("Pinned BigSolDB v2.1 Git blob SHA-1 mismatch.");
+  }
+  return createHash("sha256").update(bytes).digest("hex");
+}
 const COLUMNS=[
   "SMILES_Solute","Temperature_K","Solvent","SMILES_Solvent",
   "Solubility(mole_fraction)","Solubility(mol/L)","LogS(mol/L)",
@@ -127,10 +145,7 @@ function execute(){
   const path=value("--source");
   const data=readFileSync(path);
   if(data.byteLength>MAX_CSV_BYTES)throw Error("Full CSV too large.");
-  const checksum=createHash("sha256").update(data).digest("hex");
-  if(checksum!==BIGSOLDB21_SHA256) {
-    throw Error("Source CSV checksum differs from pinned BigSolDB v2.1 HuggingFace file; refusing.");
-  }
+  const checksum=verifyBigSolDB21Blob(data);
   const selection={compound:value("--compound"),solvent:value("--solvent"),doi:value("--doi")};
   const converted=convertBigSolDB21(new TextDecoder("utf-8",{fatal:true}).decode(data),selection,checksum);
   const serialized=JSON.stringify(converted,null,2)+"\n";
