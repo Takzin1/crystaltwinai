@@ -5,6 +5,14 @@
  */
 export const SOURCE_GALLERY = [
   {
+    id:"paracetamol-ethanol",material:"Paracetamol",formula:"C8H9NO2",
+    doi:"10.1007/s10953-005-9007-8",points:5,
+    path:"/examples/bigsoldb21-paracetamol-ethanol.measured.json",
+    provenance:"secondary_compilation_viewer_sample" as const,
+    temperatureRangeK:[293.15,313.15] as const,
+    hue:"cyan" as const,
+  },
+  {
     id:"succinic-ethanol",material:"Succinic acid",formula:"C4H6O4",
     doi:"10.1007/s10953-012-9951-z",points:12,
     path:"/examples/bigsoldb21-succinic-acid-ethanol.measured.json",
