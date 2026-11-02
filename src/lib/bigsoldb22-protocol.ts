@@ -29,8 +29,8 @@ function exactTable(csv:string,headers:readonly string[],name:string){
   const actual=rows.shift()!;
   if(actual.length!==headers.length||headers.some((h,i)=>h!==actual[i]))
     throw new Error(name+" exact official header names and order required.");
-  return rows.map((row,index)=>Object.fromEntries(headers.map((h,i)=>[h,row[i]]))
-    as Record<typeof headers[number],string>);
+  return rows.map(row=>
+    Object.fromEntries(headers.map((h,i)=>[h,row[i]])) as Record<string,string>);
 }
 function finiteOptional(value:string,label:string):number|null{
   if(value.trim()==="")return null;
