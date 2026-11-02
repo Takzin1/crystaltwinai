@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main, audit/2026-11-snapshot-integrity]
+    branches: [main]
 permissions:
   contents: read
 jobs:
