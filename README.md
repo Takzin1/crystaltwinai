@@ -283,3 +283,21 @@ All data stays in the browser; **no automatic re-calibration, equipment
 control, quantum-device execution or real process validation** is implied.
 
 [Detailed assumptions and test limitations](docs/quantitative-verification-v1.md).
+
+
+## Research Evidence Intake v1 (2026-11)
+
+Research Schema v2 now supports an **offline original-source byte audit**.
+After importing an experimental research JSON, you may optionally select the
+original scientific file (up to 32 MiB, any format) in the same browser.
+CrystalTwinAI computes SHA-256 of its exact bytes and compares it with the
+`metadata.sourceFileSha256` declaration. It can export a local JSON evidence
+manifest containing checksum status, declared metadata and explicit blockers.
+No original bytes are sent to a server or included in the exported manifest.
+
+**Important:** even when bytes match a user-supplied hash, neither the
+publisher nor measurement origin, redistribution rights, physical model fit
+or scientific comparability is authenticated. Experimental spectra are *not*
+automatically compatible with the educational temperature/concentration model.
+See [evidence intake specification and current public data leads](docs/research-evidence-intake-v1.md).
+
