@@ -24,7 +24,7 @@ export function verifyBigSolDB21Blob(bytes: Uint8Array): string {
   if (bytes.byteLength !== BIGSOLDB21_SOURCE.sizeBytes) {
     throw new Error("Pinned BigSolDB v2.1 source file byte length mismatch.");
   }
-  const gitHash=createHash("sha1").update("blob "+bytes.byteLength+"\\0")
+  const gitHash=createHash("sha1").update("blob "+bytes.byteLength+"\0")
     .update(bytes).digest("hex");
   if (gitHash !== BIGSOLDB21_SOURCE.gitBlobSha1) {
     throw new Error("Pinned BigSolDB v2.1 Git blob SHA-1 mismatch.");
