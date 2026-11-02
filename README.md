@@ -399,3 +399,16 @@ it is **not** automatically converted or treated as a physical
 solute concentration of the educational simulator.
 
 See [numeric derivation and protocol limitations](docs/pbe-analytic-accuracy-and-source-protocol.md).
+
+## Reproducible numerical PBE convergence (v2)
+
+The analytic size-advection lab now compares discontinuous top-hat and
+**compact smooth sin⁴** profiles against exact per-bin integrals, with
+spatial refinement (64/128/256 bins), fixed-grid temporal self-convergence
+(CFL 0.4/0.2/0.1), conservative number and positivity tests, and
+32 additional deterministic parameter configurations. CI on Node 20/22
+publishes **downloadable machine-readable JSON artifacts** with all
+predicted and exact bin counts via `npx tsx scripts/report-pbe-convergence.ts`.
+This establishes a more reproducible numerical test—not fitted physical
+crystal growth, real laboratory PSD or independent experimental validation.
+See [exact assumptions and evidence boundaries](docs/pbe-smooth-convergence-v2.md).
