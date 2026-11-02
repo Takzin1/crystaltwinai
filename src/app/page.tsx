@@ -25,6 +25,7 @@ import QuantumTheoryEvidencePanel from "@/components/QuantumTheoryEvidencePanel"
 import BaselineComparisonPanel from "@/components/BaselineComparisonPanel";
 import VerificationLabPanel from "@/components/VerificationLabPanel";
 import FalsificationBenchPanel from "@/components/FalsificationBenchPanel";
+import PbeNumericalPanel from "@/components/PbeNumericalPanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -131,6 +132,7 @@ export default function Home() {
             </div>
             <VerificationLabPanel lang={lang} result={result} />
             <FalsificationBenchPanel lang={lang} input={result.input} />
+            <PbeNumericalPanel lang={lang} />
           </div>
 
           <div id="datasets" className="workbench-section">
