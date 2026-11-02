@@ -3,6 +3,7 @@
 import "./dataset.css";
 import "./research-workbench.css";
 import "./verification.css";
+import "./studio-theme.css";
 
 import { useMemo, useState } from "react";
 import { DEFAULT_INPUT } from "@/config/parameters";
@@ -25,6 +26,7 @@ import BaselineComparisonPanel from "@/components/BaselineComparisonPanel";
 import VerificationLabPanel from "@/components/VerificationLabPanel";
 import FalsificationBenchPanel from "@/components/FalsificationBenchPanel";
 import PbeNumericalPanel from "@/components/PbeNumericalPanel";
+import SourceEvidenceGallery from "@/components/SourceEvidenceGallery";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -54,10 +56,11 @@ export default function Home() {
     <div className="shell">
       <header className="topbar">
         <div className="brand-block">
-          <h1 className="brand">
-            Crystal<span className="accent">Twin</span>-AI
-          </h1>
-          <p className="subtitle">{LABELS.appSubtitle[lang]}</p>
+          <div className="studio-brand-line">
+            <span className="studio-brand-symbol" aria-hidden="true"><span /></span>
+            <div><h1 className="brand">Crystal<span className="accent">Twin</span><span className="brand-ai">AI</span></h1>
+            <p className="subtitle">{LABELS.appSubtitle[lang]}</p></div>
+          </div>
         </div>
         <span className="badge">{LABELS.badgeEducational[lang]}</span>
         <div className="lang-toggle" role="group" aria-label="Language">
@@ -77,11 +80,31 @@ export default function Home() {
         <a href="#bridge"><span>04</span>{lang === "ja" ? "QFabric連携" : "QFabric bridge"}</a>
         <a href="#literature"><span>05</span>{lang === "ja" ? "研究論文" : "Research papers"}</a>
       </nav>
-      <div className="workbench-intro">
-        <strong>{lang === "ja" ? "操作 → 比較 → 検証 → 出典確認" : "Experiment → Compare → Validate → Examine evidence"}</strong>
-        <p>{lang === "ja"
-          ? "まずパラメータを変更し、結果を比較します。研究データ・量子計算の論文は別の検証段階で扱い、実機や物理モデルの妥当性は推定しません。"
-          : "Explore input changes and simulated outcomes. Research data and quantum literature remain separate evidence layers; no physical process validation is implied."}</p>
+      <div className="studio-hero">
+        <div className="studio-hero-content">
+          <p className="studio-eyebrow"><span className="studio-live-pulse" aria-hidden="true" />RESEARCH WORKSPACE · VIRTUAL LAB</p>
+          <h2>{lang === "ja" ? "結晶化を、" : "Make crystallization"}<span>{lang === "ja" ? "可視化から検証へ。" : "testable."}</span></h2>
+          <p className="studio-hero-copy">{lang === "ja"
+            ? "パラメータを動かし、異なるモデルを比較し、出典付きデータを吟味する。教育用シミュレーションと研究データを混同しない、透明性を重視した実験ワークスペース。"
+            : "Explore hypotheses, compare numerical models and inspect source-attributed observations—while keeping education, provenance and physical validation clearly separated."}</p>
+          <div className="studio-hero-actions">
+            <a href="#simulation" className="studio-hero-primary">{lang === "ja" ? "シミュレーションを操作" : "Open simulation"} <span aria-hidden="true">↗</span></a>
+            <a href="#datasets" className="studio-hero-secondary">{lang === "ja" ? "公開データを見る" : "Inspect published data"} <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div className="studio-hero-visual" aria-hidden="true">
+          <div className="studio-orbit studio-orbit-a" />
+          <div className="studio-orbit studio-orbit-b" />
+          <div className="studio-orbit studio-orbit-c" />
+          <div className="studio-core">◇</div>
+          <span className="studio-hero-visual-label">DIGITAL TWIN / EXPERIMENTAL</span>
+        </div>
+      </div>
+      <div className="studio-trust-strip" aria-label={lang === "ja" ? "機能の適用範囲" : "Scope of the workspace"}>
+        <span><i aria-hidden="true" />{lang === "ja" ? "教育用モデル" : "Educational models"}</span>
+        <span><i aria-hidden="true" />{lang === "ja" ? "独立した数値検証" : "Independent numeric audits"}</span>
+        <span><i aria-hidden="true" />{lang === "ja" ? "出典付き公開データ" : "Attributed source records"}</span>
+        <strong>{lang === "ja" ? "実設備制御不可" : "NOT FOR EQUIPMENT CONTROL"}</strong>
       </div>
       <div className="layout">
         <ParameterPanel
@@ -141,6 +164,7 @@ export default function Home() {
             </div>
             <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
             <ResearchDatasetPanel lang={lang} />
+            <SourceEvidenceGallery lang={lang} />
           </div>
 
           <div id="bridge" className="workbench-section">
