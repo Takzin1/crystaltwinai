@@ -120,3 +120,17 @@ a:focus-visible, summary:focus-visible, textarea:focus-visible {
 .research-evidence-status .dataset-checksum { overflow-wrap: anywhere; }
 .research-evidence-intake .dataset-actions { flex-wrap: wrap; }
 .research-evidence-intake .dataset-clear:disabled { opacity: .5; cursor: not-allowed; }
+
+
+/* Research-only equilibrium evaluation: values and failures remain legible. */
+.reference-benchmark-panel .dataset-actions button:disabled { opacity:.5; cursor:wait; }
+.reference-benchmark-result { min-width:0; }
+.reference-benchmark-result .dataset-table { min-width:650px; }
+.reference-benchmark-result .dataset-table td,
+.reference-benchmark-result .dataset-table th { font-variant-numeric:tabular-nums; }
+.reference-benchmark-result .bench-summary strong {
+  font-size:clamp(14px,2vw,22px);
+  overflow-wrap:anywhere;
+}
+.reference-limitations { color:var(--text-dim); font-size:11px; line-height:1.75; padding-left:20px; }
+.reference-limitations li { margin-bottom:5px; }
