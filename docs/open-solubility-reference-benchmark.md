@@ -15,7 +15,7 @@
   temperatures held out for **extrapolation**. A constant-training-mean
   predictor is included to prevent interpreting small errors without context.
 - An optional **offline full-file converter** for BigSolDB v2.1, with a
-  pinned SHA-256 from the dataset publisher's Hugging Face repository,
+  Git blob fingerprint from the dataset author's versioned GitHub repository,
   strict same-compound/same-solvent/same-source filtering, and no implicit
   concentration-basis conversions.
 - Transparent source, DOI, license, measurements, and limitations in the UI.
@@ -54,20 +54,17 @@ The curated subset was verified *against the visible table* on the data
 publisher's page on 2026-11-02. The full BigSolDB CSV was **not** downloaded
 or independently authenticated in this environment, so the bundled sample
 deliberately omits `sourceFileSha256` and is explicitly a secondary
-compilation. The converter pins the publisher-listed full file SHA-256:
-`212cb511e05051917f7ab8811282c06c99512e4f720cf270be555fdf07b4a854`.
-A successful local conversion produces a *new* derived subset with that
-specific original CSV digest in `sourceFileSha256`.
+compilation. The converter is pinned to the author's repository `levakrasnovs/mcp-bigsoldb`, commit `a29e91061dc2d3d543343c5cd2cdd5e539165915`, file `BigSolDBv2_1.csv`, Git blob SHA-1 `4a6f2af6819507bae9cfd690e927fe349927d8c5` (19,675,205 bytes). The earlier asserted Hugging Face SHA-256 was **not independently verified** and is no longer used. A successful local conversion independently computes the input's SHA-256 and records it in `sourceFileSha256`. Git SHA-1 is a revision-binding fingerprint, not source-paper authentication.
 
 ## Offline expansion to more reference curves
 
-1. Download `BigSolDBv2.1.csv` (19.7 MB) **yourself** from the publisher:
-   https://huggingface.co/datasets/levakrasnov/BigSolDBv2.1/resolve/main/BigSolDBv2.1.csv
+1. Download `BigSolDBv2_1.csv` (19,675,205 bytes) **yourself** from the author's pinned GitHub commit:
+   https://raw.githubusercontent.com/levakrasnovs/mcp-bigsoldb/a29e91061dc2d3d543343c5cd2cdd5e539165915/BigSolDBv2_1.csv
 2. Run the byte-verified conversion:
 
 ```bash
 npx tsx scripts/import-bigsoldb21.ts \
-  --source ./BigSolDBv2.1.csv \
+  --source ./BigSolDBv2_1.csv \
   --compound Paracetamol --solvent ethanol \
   --doi 10.1007/s10953-005-9007-8 \
   --out ./paracetamol-ethanol-from-pinned-full-csv.json
