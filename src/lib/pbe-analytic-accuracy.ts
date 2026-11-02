@@ -13,7 +13,8 @@
  * Report measured L1 errors rather than guessed orders.
  */
 
-export const ADVECTION_ACCURACY_VERSION="crystaltwin-advection-analytic/1" as const;
+export const ADVECTION_ACCURACY_VERSION="crystaltwin-advection-analytic/2" as const;
+export type InitialProfile="top_hat"|"smooth_sin4";
 export type FluxScheme="upwind"|"muscl-minmod-ssprk2";
 export type AccuracyCase={
   bins:number;
@@ -34,11 +35,12 @@ export type AccuracyCase={
 };
 export type AccuracyStudy={
   version:typeof ADVECTION_ACCURACY_VERSION;
-  kind:"analytic_const_velocity_top_hat_numeric_verification";
+  kind:"analytic_const_velocity_top_hat_numeric_verification"|"analytic_const_velocity_smooth_numeric_verification";
   settings:{
     sizeMinUm:0;
     sizeMaxUm:120;
     initialSupportUm:[number,number];
+    initialProfile:InitialProfile;
     numberPerMl:number;
     growthUmPerMin:number;
     timeMinutes:number;
@@ -79,10 +81,31 @@ function overlap(cellLeft:number,cellRight:number,left:number,right:number){
   return Math.max(0,Math.min(cellRight,right)-Math.max(cellLeft,left));
 }
 const sum=(rows:readonly number[])=>rows.reduce((acc,v)=>acc+v,0);
+/**
+ * Exact cell integral of a compact sin^4 profile. Its derivative up to
+ * order 3 vanishes at the support boundaries, so unlike the top-hat
+ * it is smooth enough for spatial convergence tests.
+ */
+function smoothCellCount(
+  cellLeft:number,cellRight:number,shift:number,
+  support:[number,number],numberPerMl:number,
+):number {
+  const [a,b]=support;
+  const width=b-a;
+  const left=Math.max(a,Math.min(b,cellLeft-shift));
+  const right=Math.max(a,Math.min(b,cellRight-shift));
+  if(right<=left)return 0;
+  const primitive=(x:number)=>{
+    const z=Math.PI*(x-a)/width;
+    return (width/Math.PI)*(3*z/8-Math.sin(2*z)/4+Math.sin(4*z)/32);
+  };
+  const density=numberPerMl/(width*3/8);
+  return Math.max(0,density*(primitive(right)-primitive(left)));
+}
 function advectionCase(
   bins:number,scheme:FluxScheme,
   numberPerMl:number,growthUmPerMin:number,timeMinutes:number,
-  support:[number,number],
+  support:[number,number],profile:InitialProfile,maxCourant:number,
 ):AccuracyCase{
   if(!Number.isInteger(bins)||bins<32||bins>256)
     throw new RangeError("Grid must contain 32..256 cells.");
@@ -92,12 +115,14 @@ function advectionCase(
   if(support[1]+exactShift>=120)
     throw new Error("Analytic support must remain inside the size domain.");
   const exact=(shift:number)=>Array.from({length:bins},(_,i)=>
-    density*overlap(i*dx,(i+1)*dx,support[0]+shift,support[1]+shift));
+    profile==="smooth_sin4" ?
+      smoothCellCount(i*dx,(i+1)*dx,shift,support,numberPerMl) :
+      density*overlap(i*dx,(i+1)*dx,support[0]+shift,support[1]+shift));
   let values=exact(0);
   const exactCells=exact(exactShift);
-  const steps=Math.max(1,Math.ceil(exactShift/(dx*0.4)));
+  const steps=Math.max(1,Math.ceil(exactShift/(dx*maxCourant)));
   const courant=exactShift/(steps*dx);
-  if(courant>0.4000000001||!Number.isFinite(courant))
+  if(courant>maxCourant+1e-10||!Number.isFinite(courant))
     throw new Error("Internal CFL contract violated.");
   const advance=(source:readonly number[]):number[]=>{
     const slopes=scheme==="upwind"?
@@ -140,13 +165,20 @@ function advectionCase(
 export function runAnalyticPbeAccuracyStudy(options?:{
   growthUmPerMin?:number;timeMinutes?:number;numberPerMl?:number;
   initialSupportUm?:[number,number];meshes?:number[];
+  initialProfile?:InitialProfile;maxCourant?:number;
 }):AccuracyStudy {
   const growthUmPerMin=nonnegative(options?.growthUmPerMin??0.65,"growth");
   const timeMinutes=nonnegative(options?.timeMinutes??20,"time");
   const numberPerMl=options?.numberPerMl??100000;
   if(!Number.isFinite(numberPerMl)||numberPerMl<=0||numberPerMl>1e9)
     throw new RangeError("Count must lie within (0, 1e9].");
-  const support=options?.initialSupportUm??[10,20];
+  const profile=options?.initialProfile??"top_hat";
+  if(profile!=="top_hat"&&profile!=="smooth_sin4")
+    throw new RangeError("Unknown analytic initial profile.");
+  const maxCourant=options?.maxCourant??0.4;
+  if(!Number.isFinite(maxCourant)||maxCourant<0.05||maxCourant>0.4)
+    throw new RangeError("Courant must lie within [0.05,0.4].");
+  const support=options?.initialSupportUm??(profile==="smooth_sin4"?[15,45]:[10,20]);
   if(!Array.isArray(support)||support.length!==2||support.some(v=>!Number.isFinite(v))||
     support[0]<0||support[1]>120||support[0]>=support[1]||support[1]-support[0]<2)
     throw new RangeError("Analytic initial support must be a bounded interval at least 2 µm wide.");
@@ -156,7 +188,7 @@ export function runAnalyticPbeAccuracyStudy(options?:{
   if(meshes.length!==3||meshes.some((n,i)=>!Number.isInteger(n)||n<32||n>256||(i>0&&n<=meshes[i-1])))
     throw new RangeError("Use three strictly increasing grids from 32..256.");
   const cases=meshes.flatMap(bins=>(["upwind","muscl-minmod-ssprk2"] as FluxScheme[])
-    .map(scheme=>advectionCase(bins,scheme,numberPerMl,growthUmPerMin,timeMinutes,support)));
+    .map(scheme=>advectionCase(bins,scheme,numberPerMl,growthUmPerMin,timeMinutes,support,profile,maxCourant)));
   const comparisons=meshes.map(bins=>{
     const upwind=cases.find(c=>c.bins===bins&&c.scheme==="upwind")!;
     const muscl=cases.find(c=>c.bins===bins&&c.scheme==="muscl-minmod-ssprk2")!;
@@ -168,11 +200,11 @@ export function runAnalyticPbeAccuracyStudy(options?:{
   });
   return{
     version:ADVECTION_ACCURACY_VERSION,
-    kind:"analytic_const_velocity_top_hat_numeric_verification",
+    kind:profile==="smooth_sin4"?"analytic_const_velocity_smooth_numeric_verification":"analytic_const_velocity_top_hat_numeric_verification",
     settings:{
       sizeMinUm:0,sizeMaxUm:120,
-      initialSupportUm:[...support],numberPerMl,growthUmPerMin,timeMinutes,
-      maxCourant:0.4,meshes:[...meshes],
+      initialSupportUm:[...support],initialProfile:profile,numberPerMl,growthUmPerMin,timeMinutes,
+      maxCourant,meshes:[...meshes],
     },
     expectedMeanUm:(support[0]+support[1])/2+growthUmPerMin*timeMinutes,
     cases,comparisons,
@@ -190,7 +222,9 @@ export function runAnalyticPbeAccuracyStudy(options?:{
     },
     limitations:[
       "This is a numerical verification against an exact constant-positive-growth translation, NOT physical crystallization validation.",
-      "The discontinuous top-hat initial condition cannot prove second-order asymptotic convergence of a MUSCL scheme.",
+      profile==="top_hat"?
+        "A discontinuous top-hat cannot prove second-order asymptotic convergence.":
+        "The smooth sin^4 test supports empirical spatial convergence analysis; observed orders are conditional on discretisation, finite grids, CFL and profile, not a global proof.",
       "No nucleation, solvent mass depletion, agglomeration, dissolution, temperature or phase-change mechanisms are tested here.",
       "No full BigSolDB source CSV or laboratory particle-size measurements are involved.",
       "Both schemes use the SAME physical support across grids; this benchmark deliberately avoids the separate PBE teaching solver's first-bin seed-placement sensitivity.",
