@@ -334,3 +334,20 @@ the current official-source and laboratory-evidence review gate is tracked
 in issue #32.
 
 See [the exact numerical protocol and validity limits](docs/pbe-numerical-bench-v1.md).
+
+
+## Research Studio refresh & attributed published-viewer data
+
+The front-end includes a redesigned, responsive instrument-workbench
+hero, improved navigation and evidence/source labeling. The new
+Published Observation Gallery contains **21 source-native points**
+manually inspected against BigSolDB v2.1's public viewer: succinic acid
+(12) and isoimperatorin (9), each in ethanol with separate source DOI,
+Kelvin and solute mole-fraction units, compilation CC BY 4.0 attribution,
+and Research Schema v2 JSON downloads.
+
+This is not a bulk BigSolDB ingestion, original raw-lab authentication,
+kinetics, PBE physical calibration or equipment-control integration.
+Lovastatin (Strathclyde, CC BY-NC-ND) and zeolite Raman/XRD (Zenodo,
+rights review pending) remain external reference candidates only.
+See [full data sources, restrictions and design evidence](docs/research-studio-source-gallery-2026-11.md).
