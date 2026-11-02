@@ -89,9 +89,9 @@ test("mixed measurement protocols and polymorphs fail closed unless explicitly s
 test("no silent unit conversion or chemical/provenance mixtures",()=>{
   assert.throws(()=>convertBigSolDB22Rows(csv({badUnit:true}),selection,stub),/Invalid source-native/);
   assert.throws(()=>convertBigSolDB22Rows(csv({duplicates:true}),selection,stub),/Duplicate temperatures/);
-  assert.throws(()=>convertBigSolDB22Rows(csv().replace("Toy reference compound","Other compound"),selection,stub),/5..1000/);
+  assert.throws(()=>convertBigSolDB22Rows(csv().replace("Toy reference compound","Other compound").replace("Toy reference compound","Other compound"),selection,stub),/5..1000/);
   assert.throws(()=>convertBigSolDB22Rows(csv().replace("TOY-SOLUTE,308.15","OTHER-SOLUTE,308.15"),selection,stub),/Mixed or missing SMILES_Solute/);
-  assert.throws(()=>convertBigSolDB22Rows(csv().replace("10.1234/synthetic-test-only","10.9999/different"),selection,stub),/5..1000/);
+  assert.throws(()=>convertBigSolDB22Rows(csv().replace("10.1234/synthetic-test-only","10.9999/different").replace("10.1234/synthetic-test-only","10.9999/different"),selection,stub),/5..1000/);
   assert.throws(()=>convertBigSolDB22Rows(csv().replace("Solubility(mole_fraction)","Solubility(mol/kg)"),selection,stub),/Duplicate header names|Missing required/);
   assert.throws(()=>convertBigSolDB22Rows(csv(),{...selection,methodColumn:"not_a_column"},stub),/existing metadata column/);
   assert.throws(()=>convertBigSolDB22Rows(csv(),{...selection,solidFormValue:"Form A",solidFormColumn:undefined},stub),/requires an explicit/);
