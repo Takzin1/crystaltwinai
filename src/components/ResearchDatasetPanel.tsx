@@ -57,7 +57,7 @@ export default function ResearchDatasetPanel({ lang }: { lang: LanguageCode }) {
         originalSourceFile: originalFile, generatedAt: new Date().toISOString(),
       });
       const url = URL.createObjectURL(new Blob(
-        [JSON.stringify(manifest, null, 2) + "\\n"], {type:"application/json"}
+        [JSON.stringify(manifest, null, 2) + "\n"], {type:"application/json"}
       ));
       const link = document.createElement("a");
       link.href = url;
