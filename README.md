@@ -314,3 +314,18 @@ certificate. In particular, the primary engine's 0–100 yield score is **not**
 a mass fraction, and Model C's internal closure cannot validate it.
 
 See [falsification protocol and scientific boundaries](docs/falsification-bench-v1.md).
+
+## Published experimental-origin reference dataset (BigSolDB v2.1)
+
+The **Data comparison** workspace includes an openly attributed five-point
+paracetamol/ethanol equilibrium solubility reference from BigSolDB v2.1
+(CC BY 4.0 dataset compilation). Values are **native mole fractions** and
+are evaluated with a deterministic three-point-fit/two-point
+high-temperature **extrapolation holdout**. The associated converter
+accepts an official locally downloaded 19.7 MB BigSolDB CSV only when
+its full-file SHA-256 matches the pinned publisher checksum.
+
+This is **not** a physics-certified growth/nucleation/PBE result and is
+not compatible with the existing arbitrary-unit kinetic simulator without
+independent substance-specific calibration and unit conversion.
+See [sources, attribution, method and limits](docs/open-solubility-reference-benchmark.md).
