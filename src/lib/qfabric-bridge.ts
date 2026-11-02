@@ -4,6 +4,7 @@
  * scientific model validation is implied.
  */
 import type { SimulationResult } from "./types";
+import { validateSimulationInput } from "./validation";
 
 export const QFABRIC_SNAPSHOT_VERSION = "crystaltwin-qfabric-snapshot/1" as const;
 export const QFABRIC_REPORT_VERSION = "qfabric-crystaltwin-report/1" as const;
@@ -85,6 +86,7 @@ export interface QFabricBridgeReport {
 }
 
 export function buildQFabricSnapshot(result: SimulationResult): QFabricSnapshot {
+  validateSimulationInput(result.input);
   const input = Object.fromEntries(INPUT_FIELDS.map((key) => [key, result.input[key]])) as SnapshotInput;
   const summary = Object.fromEntries(
     SUMMARY_FIELDS.map((key) => [key, result.summary[key]]),
@@ -122,12 +124,28 @@ export function buildQFabricSnapshot(result: SimulationResult): QFabricSnapshot 
   }
   // A caller may synthesize a SimulationResult without using runSimulation.
   // Reject inconsistent row order and implausible summaries before exporting.
+  let previousTemperature = snapshot.input.temperature;
+  let previousConcentration = snapshot.input.concentration;
+  let previousYield = 0;
+  let totalGrowth = 0;
   snapshot.trajectory.forEach((row, index) => {
     if (row.step !== index + 1 || row.growthRate < 0 ||
-        row.concentration < 0 || row.crystalYield < 0 || row.crystalYield > 100) {
-      throw new Error("QFabric snapshot contains invalid trajectory values or step order.");
+        row.temperature < 0 || row.temperature > previousTemperature + 1e-9 ||
+        row.concentration < 0 || row.concentration > Math.min(1, previousConcentration + 1e-9) ||
+        row.crystalYield < previousYield - 1e-9 || row.crystalYield > 100) {
+      throw new Error("QFabric snapshot contains inconsistent trajectory values or step order.");
     }
+    previousTemperature = row.temperature;
+    previousConcentration = row.concentration;
+    previousYield = row.crystalYield;
+    totalGrowth += row.growthRate;
   });
+  const approximatelyEqual = (a: number, b: number) =>
+    Math.abs(a - b) <= Math.max(1e-8, 1e-9 * Math.max(Math.abs(a), Math.abs(b)));
+  if (!approximatelyEqual(summary.finalYield, previousYield) ||
+      !approximatelyEqual(summary.avgGrowthRate, totalGrowth / snapshot.trajectory.length)) {
+    throw new Error("QFabric snapshot summary disagrees with the trajectory.");
+  }
   if (!Number.isInteger(snapshot.input.timeSteps) ||
       !Number.isInteger(summary.nucleationEvents) ||
       summary.nucleationEvents < 0 ||
