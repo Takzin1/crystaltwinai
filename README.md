@@ -329,3 +329,21 @@ This is **not** a physics-certified growth/nucleation/PBE result and is
 not compatible with the existing arbitrary-unit kinetic simulator without
 independent substance-specific calibration and unit conversion.
 See [sources, attribution, method and limits](docs/open-solubility-reference-benchmark.md).
+
+
+## BigSolDB v2.2 offline intake (Git-blob-pinned)
+
+An opt-in CSV converter now accepts BigSolDB v2.2 **only** when the exact
+24,678,209-byte source matches the official author's Git blob SHA-1
+`0108873f585dae3700923367b59030e002ac71f5`, from commit
+`6a6072d6825112c7d55e79c03ceb724739d956ab` in
+`levakrasnovs/BigSolDBv2.0`. The converter computes an additional
+source-byte SHA-256, preserves **mole fraction** and **Kelvin** as native
+units, and supports explicitly mapped method and solid-form columns with
+failure on mixed groups. The full 125,752-row file is **not** embedded;
+the positive full-source workflow still requires a real local original
+CSV test. Experimental paper authenticity and redistribution licensing
+have **not** been independently established; output provenance is
+`unverified`. No physical-model validation is implied.
+
+See [official source and offline conversion instructions](docs/bigsoldb22-provenance-gated-intake.md).
