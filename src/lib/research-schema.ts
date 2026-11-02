@@ -50,6 +50,8 @@ export interface ResearchMetadata {
   pressureBasis?: "gauge" | "absolute";
   temperatureSource?: "sample" | "bath" | "unknown";
   measurementMethod?: string;
+  /** Reported source solid form (not independent confirmation). */
+  solidForm?: string;
   coolingRate?: number;
   stirringSpeed?: number;
   units: Partial<Record<ResearchField, string>>;
@@ -221,6 +223,7 @@ function metadataFrom(raw: unknown): ResearchMetadata {
     processType: optional(m.processType,"processType",160),
     concentrationBasis, pressureBasis, temperatureSource,
     measurementMethod: optional(m.measurementMethod,"measurementMethod",300),
+    solidForm: optional(m.solidForm,"solidForm",160),
     coolingRate: optionalNumber(m.coolingRate,"coolingRate"),
     stirringSpeed: optionalNumber(m.stirringSpeed,"stirringSpeed"),
     units,

@@ -1,0 +1,42 @@
+name: Research evidence / dataset proposal
+description: Suggest an external source for a scientific benchmark without uploading restricted files.
+title: "[Evidence] "
+labels: ["research", "data"]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Public original source and DOI
+      placeholder: "https://doi.org/..."
+    validations:
+      required: true
+  - type: textarea
+    id: observations
+    attributes:
+      label: Observables, units, conditions and uncertainties
+      description: e.g. time, sample temperature, liquid concentration, growth, PSD d10/d50/d90, solid form, replicates.
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: License or redistribution terms
+      placeholder: "Unknown / CC BY 4.0 / publisher-specific"
+    validations:
+      required: false
+  - type: textarea
+    id: provenance
+    attributes:
+      label: Source-byte hashes and method
+      description: Commit, SHA-256, article section, source transformations and original instrument evidence (where permitted).
+    validations:
+      required: false
+  - type: checkboxes
+    id: gating
+    attributes:
+      label: Research integrity
+      options:
+        - label: I understand that a DOI or Git hash is not itself physical model validation.
+          required: true
+        - label: I will not upload files lacking redistribution permission.
+          required: true

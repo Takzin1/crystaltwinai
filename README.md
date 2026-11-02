@@ -1,5 +1,34 @@
 # CrystalTwin-AI
 
+[![Quality checks](https://github.com/Takzin1/crystaltwinai/actions/workflows/quality.yml/badge.svg)](https://github.com/Takzin1/crystaltwinai/actions/workflows/quality.yml)
+[![MIT License](https://img.shields.io/badge/Code-MIT-blue)](LICENSE)
+[![Data source](https://img.shields.io/badge/Research%20data-BigSolDB%20v2.1%20CC%20BY%204.0-informational)](THIRD_PARTY_DATA.md)
+
+> **Open-source educational and research workbench — not a calibrated industrial twin.**
+>
+> **OSSとして公開**しています。MITはコードのライセンスであり、第三者提供のデータ・論文・図表には別途のライセンスと出典条件が適用されます。実設備制御・医療・安全上の判断には使用できません。
+
+### Start in 60 seconds / クイックスタート
+
+```bash
+git clone https://github.com/Takzin1/crystaltwinai.git
+cd crystaltwinai
+npm ci
+npm run dev
+# http://localhost:3000
+```
+
+Requires Node.js 20.9+. Test/reproduce: `npm run typecheck && npm test && npm run build`.
+
+**Research layers:** (1) rule-based educational simulation; (2) **synthetic**, mass-audited numerical PBE; (3) **26 BigSolDB v2.1 literature-compiled** native solubility records (5 paracetamol, 12 succinic acid, 9 isoimperatorin); (4) separate high-temperature holdout evaluation of constant, linear and apparent van't Hoff baselines; (5) local **v2.1/v2.2 Git-blob-pinned source-file importers**, awaiting original complete CSV end-to-end verification. Neither a source DOI nor a SHA makes this a physically validated process model.
+
+**Important OSS resources:** [LICENSE](LICENSE) · [CONTRIBUTING](CONTRIBUTING.md) · [SECURITY](SECURITY.md) · [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) · [GOVERNANCE](GOVERNANCE.md) · [THIRD_PARTY_DATA](THIRD_PARTY_DATA.md) · [CITATION.cff](CITATION.cff) · [CHANGELOG](CHANGELOG.md) · [SUPPORT](SUPPORT.md).
+
+**Science and reproducibility:** [Data license and attribution](THIRD_PARTY_DATA.md) · [Equilibrium holdout protocol](docs/equilibrium-evaluation-protocol-v2.md) · [v2.1 offline importer](docs/open-solubility-reference-benchmark.md) · [v2.2 importer](docs/bigsoldb22-provenance-gated-intake.md) · [PBE numerical assumptions](docs/pbe-numerical-bench-v1.md) · [Open validation tasks](https://github.com/Takzin1/crystaltwinai/issues/32).
+
+---
+
+
 🔗 **Live Demo**: https://crystaltwinai.vercel.app
 
 ![CrystalTwin-AI demo](docs/assets/demo.gif)

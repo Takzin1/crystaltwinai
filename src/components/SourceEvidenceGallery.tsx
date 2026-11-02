@@ -45,7 +45,7 @@ export default function SourceEvidenceGallery({lang}:{lang:LanguageCode}){
       const raw=await response.text();
       if(new TextEncoder().encode(raw).byteLength>MAX_RESEARCH_BYTES)throw new Error("Research JSON exceeds 1 MiB.");
       const dataset=parseResearchDataset(raw);
-      if(dataset.metadata.doi!==item.doi||dataset.metadata.material!==item.material||
+      if(dataset.metadata.doi!==item.doi||!(dataset.metadata.material===item.material || dataset.metadata.material.startsWith(item.material+" ("))||
          dataset.metadata.solvent!=="ethanol"||dataset.metadata.units.temperature!=="K"||
          dataset.metadata.units.solubility!=="mole_fraction"||
          dataset.metadata.concentrationBasis!=="mole_fraction"||

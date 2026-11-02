@@ -129,6 +129,8 @@ export default function ResearchDatasetPanel({ lang }: { lang: LanguageCode }) {
           {meta.experimentMode} · {meta.provenance} ({lang==="ja"?"申告値":"declared"}) · {dataset.measurements.length} {lang==="ja"?"行":"rows"}
         </p>
         <p className="dataset-muted">{lang==="ja"?"物質":"Material"}: {meta.material} · {lang==="ja"?"溶媒":"Solvent"}: {meta.solvent || (lang==="ja"?"未入力":"unspecified")}</p>
+        {meta.measurementMethod && <p className="dataset-muted">{lang==="ja"?"申告された測定方法":"Declared measurement method"}: {meta.measurementMethod}</p>}
+        {meta.solidForm && <p className="dataset-muted">{lang==="ja"?"申告された結晶形":"Declared polymorph / solid form"}: {meta.solidForm}</p>}
         {meta.doi && <p className="dataset-muted">DOI: {meta.doi}</p>}
         {meta.license && <p className="dataset-muted">License: {meta.license}</p>}
         {meta.sourceUrl && <p className="dataset-muted"><a href={meta.sourceUrl} rel="noopener noreferrer" target="_blank">{lang==="ja"?"申告された出典URL":"Declared source URL"}</a></p>}
