@@ -5,3 +5,9 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# Private-only imported research workbooks and derived observations
+artifacts/lovastatin-private/
+private-research-data/
+lovastatin_gFP_MV_*.xlsx
+lovastatin-local-*.json

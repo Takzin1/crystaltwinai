@@ -440,3 +440,18 @@ in browser and CI. Volume-% PSD data are **not** number-density PBE
 measurements and do not establish independent optimized-parameter IJ
 validation. The app does not auto-fit kinetics or silently align PO4-P.
 See [original workbook mapping and scientific limitations](docs/struvite-poiseuille-source-intake.md).
+
+## Lovastatin: rights-aware private Excel research intake
+
+Three real uploaded University of Strathclyde Lovastatin Excel workbooks
+(37 growth / 38 primary / 75 secondary measurements) are supported via
+`python3 scripts/import_lovastatin.py`. The CLI verifies their **exact
+source XLSX SHA-256** and outputs a **private, local JSON** for the
+Research Studio Lovastatin source-comparison panel, which parses it
+entirely in-browser. **No source measurement/prediction rows or Excel
+bytes are stored in Git** due to reported CC BY-NC-ND rights.
+Important: **five experiment IDs appear in both growth and secondary**,
+so the secondary workbook is not an independent held-out set. Source
+`Predicted values` are externally reported simulations, **not** a
+CrystalTwinAI-generated physical PBE prediction. Units remain unverified.
+See [import instructions, original SHA digests and scientific boundaries](docs/lovastatin-local-original-evidence.md).

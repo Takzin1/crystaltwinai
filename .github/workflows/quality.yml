@@ -36,6 +36,8 @@ jobs:
         run: npm audit --audit-level=high
       - run: npm run typecheck
       - run: npm test
+      - name: Test offline Lovastatin XLSX original-source ingestion with synthetic adversarial fixtures
+        run: python3 -m unittest discover -s tests -p 'test_lovastatin*.py' -v
       - name: Generate analytic PBE convergence artifact
         run: npx tsx scripts/report-pbe-convergence.ts
       - name: Upload deterministic PBE numerical verification

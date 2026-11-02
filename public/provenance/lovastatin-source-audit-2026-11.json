@@ -1,0 +1,97 @@
+{
+  "schema": "crystaltwin-lovastatin-metadata-only-attestation/1",
+  "sourceUrl": "https://pureportal.strath.ac.uk/en/datasets/data-for-benchmarking-model-based-design-of-experiment-approaches/",
+  "rights": "CC BY-NC-ND as previously listed on source; original Excel not redistributed; attribution and permission review required for adapted public datasets",
+  "books": {
+    "growth": {
+      "fileSha256": "507dbcfd45d4db149a19f5c33cbc6d2a27879007a16193877ae39f30ed0f3594",
+      "sourceObservationCount": 37,
+      "experimentCount": 5,
+      "experimentIds": [
+        "PICKL73",
+        "PICKL75",
+        "PICKL78",
+        "PICKL86",
+        "PICKL89"
+      ],
+      "descriptiveSourcePredictions": {
+        "rmseInUnverifiedUnits": 0.02130476821117333,
+        "maeInUnverifiedUnits": 0.015194067733022778
+      }
+    },
+    "primary": {
+      "fileSha256": "91130c164d5c47af854cb3385422353863f79989bb3743de69eba4b1496b4618",
+      "sourceObservationCount": 38,
+      "experimentCount": 4,
+      "experimentIds": [
+        "PICKL80",
+        "PICKL83",
+        "PICKL84",
+        "PICKL85"
+      ],
+      "descriptiveSourcePredictions": {
+        "rmseInUnverifiedUnits": 0.031102849787629755,
+        "maeInUnverifiedUnits": 0.025305570819768485
+      }
+    },
+    "secondary": {
+      "fileSha256": "2b478e12fdaf13a54c6c3d53921915a7e80d027df7d03830c0d3bcffcf5f06a5",
+      "sourceObservationCount": 75,
+      "experimentCount": 11,
+      "experimentIds": [
+        "PICKL72",
+        "PICKL73",
+        "PICKL74",
+        "PICKL75",
+        "PICKL76",
+        "PICKL77",
+        "PICKL78",
+        "PICKL86",
+        "PICKL87",
+        "PICKL89",
+        "PICKL90"
+      ],
+      "descriptiveSourcePredictions": {
+        "rmseInUnverifiedUnits": 0.020907622656589096,
+        "maeInUnverifiedUnits": 0.015529344249409422
+      }
+    }
+  },
+  "leakage": {
+    "growthSecondaryOverlappingIds": [
+      "PICKL73",
+      "PICKL75",
+      "PICKL78",
+      "PICKL86",
+      "PICKL89"
+    ],
+    "primarySecondaryOverlappingIds": [],
+    "secondaryOnlyCandidates": [
+      "PICKL72",
+      "PICKL74",
+      "PICKL76",
+      "PICKL77",
+      "PICKL87",
+      "PICKL90"
+    ],
+    "secondaryGloballyIndependentHoldout": false,
+    "sourcePredictionsAreProvenIndependent": false
+  },
+  "dataContract": {
+    "inputColumns": [
+      "Experiment",
+      "Time",
+      "Measured values",
+      "Predicted values",
+      "Standard deviation"
+    ],
+    "declaredTimeUnit": "unknown",
+    "declaredMeasurementUnit": "unknown",
+    "standardDeviationMeaningVerified": false,
+    "sourcePredictionsAreExternalNumbers": true,
+    "physicalKineticsCalibrated": false,
+    "experimentalProtocolsIndependentlyReproduced": false
+  },
+  "containsMeasurements": false,
+  "containsSourceModelPredictions": false
+}
