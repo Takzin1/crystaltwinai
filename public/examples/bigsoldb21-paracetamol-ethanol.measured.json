@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 2,
+  "metadata": {
+    "title": "BigSolDB v2.1 — Paracetamol / ethanol equilibrium solubility (5 published dataset records)",
+    "sourceUrl": "https://huggingface.co/datasets/levakrasnov/BigSolDBv2.1",
+    "doi": "10.1007/s10953-005-9007-8",
+    "authors": [
+      "Krasnov, Lev",
+      "Malikov, Dmitry",
+      "Kiseleva, Marina",
+      "Tatarin, Sergei",
+      "Sosnin, Sergey",
+      "Bezzubov, Stanislav"
+    ],
+    "license": "CC BY 4.0 (BigSolDB v2.1 dataset compilation; verify original article reuse independently)",
+    "provenance": "measured",
+    "experimentMode": "equilibrium_curve",
+    "material": "Paracetamol (CAS 103-90-2; reported original study)",
+    "solvent": "ethanol",
+    "processType": "aggregated published equilibrium solubility observations; not crystallization kinetics",
+    "concentrationBasis": "mole_fraction",
+    "measurementMethod": "not independently determined from original article; compiled experimental measurements",
+    "temperatureSource": "unknown",
+    "units": {
+      "temperature": "K",
+      "solubility": "mole_fraction"
+    },
+    "notes": "Five records transcribed without conversion from the BigSolDB v2.1 Hugging Face viewer. Original article DOI is in the Source column. Dataset compilers listed as authors, NOT asserted to be the original experimental authors. Values lack a full downloaded-file SHA-256 linkage; see original dataset. Measurements are reported as experimental by BigSolDB; original raw source data/solid form not independently authenticated. No kinetics or thermal-control validation. Ordered from low to high temperature."
+  },
+  "measurements": [
+    {
+      "temperature": 293.15,
+      "solubility": 0.05045
+    },
+    {
+      "temperature": 298.15,
+      "solubility": 0.0546
+    },
+    {
+      "temperature": 303.15,
+      "solubility": 0.062
+    },
+    {
+      "temperature": 308.15,
+      "solubility": 0.067
+    },
+    {
+      "temperature": 313.15,
+      "solubility": 0.0705
+    }
+  ]
+}
