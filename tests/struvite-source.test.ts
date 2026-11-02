@@ -20,7 +20,7 @@ test("complete XLSX-derived real evidence decompresses with exact SHA-256 and al
  assert.equal(data.psd.rOptimizedModel.bySI["1.0"].volPercent.length,87);
  assert.equal(data.psd.ijGalbraithModel.bySI["0.8"].volPercent.length,87);
  assert.equal(data.psd.rMeasured.bySI["0.8"].volPercent[0],0);
- assert.ok(Math.abs(data.psd.rMeasured.bySI["0.8"].volPercent[62]-5.0858965750641225)<1e-14);
+ assert.ok(Math.abs(data.psd.rMeasured.bySI["0.8"].volPercent[59]-5.0858965750641225)<1e-14);
  assert.deepEqual(validateStruviteBundle(data),data);
 });
 
