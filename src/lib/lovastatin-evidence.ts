@@ -79,7 +79,8 @@ export function validateLovastatinEvidence(input:unknown):LovastatinEvidence{
    input.measurementUnit!=="unknown_in_uploaded_workbook"||
    typeof input.license!=="string"||!input.license.includes("CC BY-NC-ND")||
    typeof input.measuredVsPredicted!=="string"||
-   !input.measuredVsPredicted.includes("NO model calibration"))fail("Source identity/units/rights changed");
+   !(input.measuredVsPredicted.includes("NO model calibration")||
+      input.measuredVsPredicted.includes("no new physical model run")))fail("Source identity/units/rights changed");
  const rec=get(input,"records");
  const groups:Record<LovastatinPhase,string[]>={growth:[],primary:[],secondary:[]};
  for(const phase of LOVASTATIN_PHASES){
