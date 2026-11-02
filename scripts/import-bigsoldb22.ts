@@ -72,6 +72,11 @@ function nonempty(value:string, name:string,limit=160):string {
 function hasMappedColumn(column:string|undefined,header:readonly string[],label:string){
   if(!column) return null;
   const name=nonempty(column,label,120);
+  // v2.2 mol/L is moles per L of PURE SOLVENT, not solution; numerical
+  // concentration and log columns are never measurement protocol labels.
+  if(["Solubility(mol/L)","LogS(mol/L)","LogS(mole_fraction)","CAS",
+      "PubChem_CID","FDA_Approved"].includes(name))
+    throw new Error(label+" cannot be mapped to a numeric or chemical metadata column.");
   if(!header.includes(name) || REQUIRED.some(field=>field===name)){
     throw new Error(label+" must identify a distinct existing metadata column.");
   }
@@ -123,6 +128,11 @@ export function convertBigSolDB22Rows(
     if(!map.has(field)) throw new Error("Missing required BigSolDB v2.2 column: "+field);
   }
   const idx=(field:typeof REQUIRED[number])=>map.get(field)!;
+  // Official v2.2 puts a solid_form_label in its 14-column main CSV.
+  // Missing/unknown form can mean a polymorph was not reported; it must
+  // never be silently grouped with an identified crystal form.
+  if(header.includes("solid_form_label")&&!selection.solidFormColumn)
+    throw new Error("Official v2.2 source requires explicit --solid-form-column solid_form_label.");
   const methodIndex=hasMappedColumn(selection.methodColumn,header,"measurement method");
   const formIndex=hasMappedColumn(selection.solidFormColumn,header,"solid form");
   if(methodIndex!==null&&methodIndex===formIndex)
