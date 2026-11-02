@@ -363,3 +363,18 @@ network upload, implicit mass/molar conversion, PBE, kinetic fitting,
 solid-phase authentication or equipment control.
 
 See [the scientific protocol and leakage boundaries](docs/equilibrium-evaluation-protocol-v2.md).
+
+
+## Synthetic size-structured PBE numerical reference
+
+The Verification workspace includes an **uncalibrated, opt-in
+size-structured PBE experiment** with a positive upwind scheme
+(CFL ≤ 0.8), particle-number bookkeeping, a notional 1 mL
+liquid/solid mass inventory, **number-weighted** size quantiles,
+a 32/64/128-bin grid sensitivity study, independent post-hoc
+software auditing and JSON export. Inputs G and J are hypothetical,
+and high-size boundary truncation is flagged. This does **not**
+constitute laboratory validation, a scientifically fitted growth law,
+thermodynamic closure or equipment control.
+
+See [the exact numerical protocol and validity limits](docs/pbe-numerical-bench-v1.md).
