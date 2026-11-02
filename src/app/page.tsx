@@ -23,6 +23,7 @@ import QFabricBridgePanel from "@/components/QFabricBridgePanel";
 import QuantumTheoryEvidencePanel from "@/components/QuantumTheoryEvidencePanel";
 import BaselineComparisonPanel from "@/components/BaselineComparisonPanel";
 import VerificationLabPanel from "@/components/VerificationLabPanel";
+import FalsificationBenchPanel from "@/components/FalsificationBenchPanel";
 
 export default function Home() {
   const [lang, setLang] = useState<LanguageCode>("ja");
@@ -128,6 +129,7 @@ export default function Home() {
               <p>{lang === "ja" ? "異種モデル比較・入力感度" : "Model discrepancy and input sensitivity"}</p>
             </div>
             <VerificationLabPanel lang={lang} result={result} />
+            <FalsificationBenchPanel lang={lang} input={result.input} />
           </div>
 
           <div id="datasets" className="workbench-section">
