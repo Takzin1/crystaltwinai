@@ -314,3 +314,23 @@ certificate. In particular, the primary engine's 0–100 yield score is **not**
 a mass fraction, and Model C's internal closure cannot validate it.
 
 See [falsification protocol and scientific boundaries](docs/falsification-bench-v1.md).
+
+
+## Synthetic size-structured PBE numerical reference
+
+The Verification workspace includes an **uncalibrated, opt-in
+size-structured PBE experiment** with a positive upwind scheme
+(CFL ≤ 0.8), particle-number bookkeeping, a notional 1 mL
+liquid/solid mass inventory, **number-weighted** size quantiles,
+a 32/64/128-bin grid sensitivity study, independent post-hoc
+software auditing and JSON export. Inputs G and J are hypothetical,
+and high-size boundary truncation is flagged. This does **not**
+constitute laboratory validation, a scientifically fitted growth law,
+thermodynamic closure or equipment control.
+
+This PBE numerical reference is deliberately separate from the unmerged
+BigSolDB source intake and equilibrium-curve evaluation draft PRs;
+the current official-source and laboratory-evidence review gate is tracked
+in issue #32.
+
+See [the exact numerical protocol and validity limits](docs/pbe-numerical-bench-v1.md).
