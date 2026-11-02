@@ -348,3 +348,18 @@ have **not** been independently established; output provenance is
 `unverified`. No physical-model validation is implied.
 
 See [official source and offline conversion instructions](docs/bigsoldb22-provenance-gated-intake.md).
+
+## Equilibrium Evaluation Protocol v2
+
+The Data comparison area offers a **local Research Schema v2 JSON
+evaluation** in addition to a bundled literature-compiled example.
+Native solute mole fractions are evaluated against **three predeclared
+training-only baselines** (constant, linear-in-T, apparent
+van't Hoff-type log(x)-vs-1/T), with the highest-temperature
+30% reserved for extrapolation. The report includes exact imported
+JSON SHA-256, split temperatures, fitted parameters, comparable
+holdout errors and out-of-domain failure states. No external
+network upload, implicit mass/molar conversion, PBE, kinetic fitting,
+solid-phase authentication or equipment control.
+
+See [the scientific protocol and leakage boundaries](docs/equilibrium-evaluation-protocol-v2.md).
