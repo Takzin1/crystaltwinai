@@ -19,6 +19,7 @@ import SimulationLog from "@/components/SimulationLog";
 import CrystalViz from "@/components/CrystalViz";
 import DatasetPanel from "@/components/DatasetPanel";
 import ResearchDatasetPanel from "@/components/ResearchDatasetPanel";
+import EquilibriumReferencePanel from "@/components/EquilibriumReferencePanel";
 import QFabricBridgePanel from "@/components/QFabricBridgePanel";
 import QuantumTheoryEvidencePanel from "@/components/QuantumTheoryEvidencePanel";
 import BaselineComparisonPanel from "@/components/BaselineComparisonPanel";
@@ -139,6 +140,7 @@ export default function Home() {
             </div>
             <DatasetPanel lang={lang} simulated={result.series} input={result.input} />
             <ResearchDatasetPanel lang={lang} />
+            <EquilibriumReferencePanel lang={lang} />
           </div>
 
           <div id="bridge" className="workbench-section">
