@@ -1,0 +1,67 @@
+{
+  "schema": "crystaltwin-source-attestation-snapshot/1",
+  "auditKind": "downloaded-full-original-csv-byte-verification",
+  "auditRun": "https://github.com/Takzin1/crystaltwinai/actions/runs/41483414927",
+  "observedDateJST": "2026-11-03",
+  "evidenceType": "GitHub Actions runner execution; external published checksum cross-check",
+  "inputs": [
+    {
+      "id": "BigSolDB-v2.1",
+      "source": "https://raw.githubusercontent.com/levakrasnovs/mcp-bigsoldb/a29e91061dc2d3d543343c5cd2cdd5e539165915/BigSolDBv2_1.csv",
+      "bytes": 19675205,
+      "rows": 112465,
+      "columns": 12,
+      "sha256": "212cb511e05051917f7ab8811282c06c99512e4f720cf270be555fdf07b4a854",
+      "gitBlobSha1": "4a6f2af6819507bae9cfd690e927fe349927d8c5",
+      "independentChecksum": "author Hugging Face LFS SHA256",
+      "licenseStatus": "Compilation CC BY 4.0; original articles unverified"
+    },
+    {
+      "id": "BigSolDB-v2.2",
+      "source": "https://raw.githubusercontent.com/levakrasnovs/BigSolDBv2.0/6a6072d6825112c7d55e79c03ceb724739d956ab/BigSolDBv2.2.csv",
+      "bytes": 24678209,
+      "rows": 125752,
+      "columns": 14,
+      "sha256": "6b63f86601369f92530bedf6b93c3fb92a2731390b28a0aabf55ad005acba401",
+      "gitBlobSha1": "0108873f585dae3700923367b59030e002ac71f5",
+      "independentChecksum": "author Zenodo MD5 a1e12ae9575319ac4f89fea6a63a6422",
+      "licenseStatus": "Redistribution license not independently verified"
+    },
+    {
+      "id": "BigSolDB-v2.2-methods",
+      "source": "https://zenodo.org/records/22648301/files/BigSolDBv2.2_methods.csv?download=1",
+      "rows": 1842,
+      "columns": 10,
+      "sha256": "1ed6e3aadfd6095c4ff3e5f9307087ba7ec4a688201b94e8b5efc4827a635eae",
+      "independentChecksum": "Zenodo MD5 4e7a688055d0e8ebf4c8c3a202b29b7c"
+    },
+    {
+      "id": "BigSolDB-v2.2-solid-forms",
+      "source": "https://zenodo.org/records/22648301/files/BigSolDBv2.2_solid_forms.csv?download=1",
+      "rows": 2295,
+      "columns": 15,
+      "sha256": "e2f62971eb32a6806daac6da4e2d39a029235b496452c4d2e03cfdf4d9df2584",
+      "independentChecksum": "Zenodo MD5 3a077abad5373f52341f7915a9a38757"
+    }
+  ],
+  "convertedOriginalSourceGroups": {
+    "v21ParacetamolEthanol": {
+      "points": 5,
+      "originalRowsCompared": true,
+      "units": "K and solute mole fraction"
+    },
+    "v22ExplicitSolidFormDOIGroup": {
+      "points": 13,
+      "originalRowsCompared": true,
+      "companionMethodAndFormJoined": true,
+      "originalLabDataAuthenticated": false
+    }
+  },
+  "sourceIdentityVerified": true,
+  "originalLabRecordsAuthenticated": false,
+  "physicalKineticsValidated": false,
+  "realPbePredictionsValidated": false,
+  "v22RawRedistributionAuthorized": false,
+  "rawSourceRowsIncluded": false,
+  "notes": "Full source bytes passed their public checksum and exact schema gates; this is not a validation of primary lab notebooks, original papers, thermodynamics, kinetic laws or reuse permissions. See GitHub Actions run for reproducible evidence."
+}
