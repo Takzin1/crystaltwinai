@@ -48,3 +48,30 @@ No automatic direct original-source download occurs in the library or public res
 - The real PSD/crystal-kinetic experiments needed to evaluate a crystallization model.
 
 **Only successful live GitHub Actions jobs and their attached reports establish that the complete original CSV bytes were processed.** A pinned URI or committed workflow alone is not successful execution.
+
+## First independently executed full-file audit — 2026-11-03 JST
+
+The first end-to-end run **completed successfully** on GitHub Actions:
+[original-file workflow #41483414927](https://github.com/Takzin1/crystaltwinai/actions/runs/41483414927).
+It downloaded full, pinned original source bytes, cross-checked all
+published digests and headers, and processed the actual input files.
+
+| Input | Original parsed rows | SHA-256 of actual bytes |
+|---|---:|---|
+| BigSolDB v2.1 | 112,465 | `212cb511e05051917f7ab8811282c06c99512e4f720cf270be555fdf07b4a854` |
+| BigSolDB v2.2 | 125,752 | `6b63f86601369f92530bedf6b93c3fb92a2731390b28a0aabf55ad005acba401` |
+| v2.2 methods | 1,842 | `1ed6e3aadfd6095c4ff3e5f9307087ba7ec4a688201b94e8b5efc4827a635eae` |
+| v2.2 solid forms | 2,295 | `e2f62971eb32a6806daac6da4e2d39a029235b496452c4d2e03cfdf4d9df2584` |
+
+**Genuine original-source conversions completed:** 5 paracetamol/ethanol
+v2.1 observations; one explicitly identified and companion-protocol-joined
+v2.2 solid-form group containing **13 observations**. Numeric entries
+are omitted from the published attestation to avoid unreviewed rights claims.
+The [machine-readable attestation snapshot](../public/provenance/bigsoldb-original-source-attestation-2026-11.json)
+retains these source hashes and claims boundaries.
+
+This resolves the *source-byte acquisition and end-to-end conversion*
+portion of issue #32, but **NOT** the original article or laboratory
+measurements, permission to redistribute BigSolDB v2.2 observations,
+experimental kinetics, PSD or physical prediction fidelity. These
+remain explicit follow-up gates, not a claim of complete scientific validation.
