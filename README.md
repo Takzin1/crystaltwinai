@@ -301,3 +301,16 @@ or scientific comparability is authenticated. Experimental spectra are *not*
 automatically compatible with the educational temperature/concentration model.
 See [evidence intake specification and current public data leads](docs/research-evidence-intake-v1.md).
 
+
+
+## Synthetic falsification bench (v1)
+
+The **Verification** workspace now offers an on-demand comparison of three
+unfitted *educational* models over the four synthetic presets and current inputs.
+It detects software invariants, arithmetic closure in a separate
+two-compartment toy model, repeatability and concentration model disagreement.
+It exports a versioned synthetic JSON report, **not** a physical validation
+certificate. In particular, the primary engine's 0–100 yield score is **not**
+a mass fraction, and Model C's internal closure cannot validate it.
+
+See [falsification protocol and scientific boundaries](docs/falsification-bench-v1.md).
