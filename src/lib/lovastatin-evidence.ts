@@ -103,7 +103,8 @@ export function validateLovastatinEvidence(input:unknown):LovastatinEvidence{
       !numeric(r.reportedStdDevSource)||r.reportedStdDevSource<=0||
       r.timeSource<=(latest.get(r.experimentId)??-Infinity))
      fail(phase+" malformed row/time/provenance at "+i);
-   latest.set(r.experimentId as string,r.timeSource as number);
+   const validated=r as LovastatinRow;
+   latest.set(validated.experimentId,validated.timeSource);
    observedRows.push(r as LovastatinRow);
   }
   const fromRows=sorted([...latest.keys()]);
