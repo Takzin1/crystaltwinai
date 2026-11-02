@@ -322,8 +322,9 @@ paracetamol/ethanol equilibrium solubility reference from BigSolDB v2.1
 (CC BY 4.0 dataset compilation). Values are **native mole fractions** and
 are evaluated with a deterministic three-point-fit/two-point
 high-temperature **extrapolation holdout**. The associated converter
-accepts an official locally downloaded 19.7 MB BigSolDB CSV only when
-its full-file SHA-256 matches the pinned publisher checksum.
+accepts an author-repository CSV only when its exact byte size and Git
+blob SHA-1 match the pinned public Git revision. It then computes a fresh
+full-file SHA-256 for provenance. The actual full CSV was not tested here.
 
 This is **not** a physics-certified growth/nucleation/PBE result and is
 not compatible with the existing arbitrary-unit kinetic simulator without
