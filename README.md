@@ -412,3 +412,16 @@ predicted and exact bin counts via `npx tsx scripts/report-pbe-convergence.ts`.
 This establishes a more reproducible numerical test—not fitted physical
 crystal growth, real laboratory PSD or independent experimental validation.
 See [exact assumptions and evidence boundaries](docs/pbe-smooth-convergence-v2.md).
+
+## Auditing complete original BigSolDB CSVs (optional, rights-aware)
+
+The separate [scientific original-source CI workflow](.github/workflows/scientific-source-audit.yml)
+fetches pinned original v2.1/v2.2 main CSVs and Zenodo methods/solid-forms
+companion tables onto a temporary runner and verifies independently
+published Git/Hugging Face/Zenodo file digests, column schemas and
+expected row counts. It then attempts **actual original-byte-gated**
+source-native conversion and companion method/form joins, publishing only
+a **metadata-only** report. Original data are never committed or
+published in Actions artifacts. This only establishes source-byte and
+mapping reproducibility, **not** lab provenance or physical model fidelity.
+See [source audit scope and reproduction steps](docs/bigsoldb-original-source-ci-audit.md).
