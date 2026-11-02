@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use CrystalTwinAI, please cite this research software and separately cite any BigSolDB source data used."
+type: software
+title: "CrystalTwinAI: Open-source crystallization research workbench"
+authors:
+  - name: "CrystalTwinAI contributors"
+version: 0.1.0
+url: "https://github.com/Takzin1/crystaltwinai"
+repository-code: "https://github.com/Takzin1/crystaltwinai"
+license: MIT
+keywords:
+  - crystallization
+  - population-balance-equation
+  - research-software
+  - digital-twin
+  - reproducibility
+abstract: "Educational crystallization twin with source-native research evidence, synthetic PBE numerical audits, and open reproducibility workflows. Not a validated laboratory process-control model."
