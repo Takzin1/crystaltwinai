@@ -74,5 +74,5 @@ test("published provenance attestation pins the actual original-byte CI result w
   assert.equal(report.inputs[2].rows,SOURCE_TABLE_SHAPES.methods.expectedRows);
   assert.equal(report.inputs[3].rows,SOURCE_TABLE_SHAPES.solidForms.expectedRows);
   assert.equal(report.convertedOriginalSourceGroups.v22ExplicitSolidFormDOIGroup.points,13);
-  assert.match(report.auditRun,/github.com\\/Takzin1\\/crystaltwinai\\/actions\\/runs\\/\\d+/);
+  assert.ok(report.auditRun.startsWith("https://github.com/Takzin1/crystaltwinai/actions/runs/"));
 });
