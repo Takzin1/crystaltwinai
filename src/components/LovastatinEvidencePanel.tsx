@@ -31,19 +31,26 @@ export default function LovastatinEvidencePanel({lang}:{lang:LanguageCode}){
  const t=(ja:string,en:string)=>lang==="ja"?ja:en;
  const [data,setData]=useState<LovastatinEvidence|null>(null);
  const [error,setError]=useState<string|null>(null);
+ const [fileName,setFileName]=useState<string|null>(null);
  const [phase,setPhase]=useState<LovastatinPhase>("growth");
  const [run,setRun]=useState<string>("");
  const source=useMemo(()=>data?.records[phase], [data,phase]);
  const selected=run&&source?.experiments.includes(run)?run:source?.experiments[0];
  const comparison=data&&selected?lovastatinRunComparison(data,phase,selected):null;
  async function readLocal(file:File|null){
-  setError(null);setData(null);setRun("");
+  setError(null);setData(null);setRun("");setFileName(null);
   if(!file)return;
+  if(!/\.json$/i.test(file.name)){
+   setError(file.name.toLowerCase().endsWith(".xlsx")?
+    t("Excel（.xlsx）はこの欄に直接取り込めません。変換済みJSONを選んでください。","Excel (.xlsx) is not accepted here. Select the converted JSON file."):
+    t("ZIPは解凍し、.jsonファイルそのものを選んでください。","Unzip the archive, then select the .json file itself."));
+   return;
+  }
   try{
    if(file.size<100||file.size>1024*1024)throw new Error("Expected local-only JSON smaller than 1 MiB.");
    const raw=JSON.parse(await file.text());
    const parsed=validateLovastatinEvidence(raw);
-   setData(parsed);setPhase("growth");setRun(parsed.records.growth.experiments[0]);
+   setData(parsed);setFileName(file.name);setPhase("growth");setRun(parsed.records.growth.experiments[0]);
   }catch(e){setError(e instanceof Error?e.message:"Invalid Lovastatin evidence file");}
  }
  return <section className="panel" aria-labelledby="lovastatin-evidence-title">
@@ -58,10 +65,16 @@ export default function LovastatinEvidencePanel({lang}:{lang:LanguageCode}){
    "GrowthとSecondaryは5実験IDが重複します。Secondary全体を独立ホールドアウトと主張することは禁止。公表予測値の残差は新しいPBEモデルの予測精度ではありません。",
    "Growth and Secondary share five experiment IDs. Secondary is NOT a fully independent holdout. Residuals of published predictions are NOT accuracy evidence for a new PBE model."
   )}</p>
+  <p id="lovastatin-import-help" className="dataset-muted">{t(
+   "読み込めるのは CrystalTwinAI_Lovastatin_Import.json などの .json ファイルです。ZIPは先に「ファイル」アプリで解凍してください。iPhoneでファイルが灰色表示・選べない事態を避けるため、選択欄では形式制限を設けず、選択後に内容を厳密に検証します。Excelはここでは読み込めません。",
+   "Select a converted .json file (such as CrystalTwinAI_Lovastatin_Import.json). Unzip archives in Files first. The picker has no MIME filter for better iOS compatibility; the file format and full data schema are strictly checked after selection. Excel cannot be opened directly here."
+  )}</p>
   <label className="dataset-muted" htmlFor="lovastatin-file">{t(
-   "オフライン変換したLovastatin JSONを選択","Choose privately converted Lovastatin JSON")}</label>
-  <input id="lovastatin-file" type="file" accept=".json,application/json"
+   "JSONをこの端末で読み込む（サーバー送信なし）","Open JSON locally on this device (no server upload)")}</label>
+  <input id="lovastatin-file" type="file" aria-describedby="lovastatin-import-help"
    onChange={e=>{void readLocal(e.currentTarget.files?.[0]??null)}} />
+  {fileName&&data&&<p role="status" className="dataset-muted">{t(
+   "読み込み成功：","Loaded successfully: ")}{fileName} · 150 {t("測定点","observations")}</p>}
   {error&&<p role="alert" className="dataset-error">{error}</p>}
   <p className="dataset-muted">{t("原本の監査済み件数","Audited source inventory")}:{" "}
    {LOVASTATIN_PHASES.map(p=>p+" "+LOVASTATIN_BOOKS[p].n).join(" / ")}
