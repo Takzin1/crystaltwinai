@@ -68,3 +68,27 @@ test("import refuses malformed, nonfinite and oversized reports", () => {
   corrupted.analytics.meanI = "Infinity";
   assert.throws(() => parseQFabricBridgeReport(JSON.stringify(corrupted)), /finite/);
 });
+
+
+test("snapshot export refuses out-of-range educational inputs", () => {
+  const simulation = runSimulation({ ...DEFAULT_INPUT });
+  const tampered = structuredClone(simulation);
+  tampered.input.temperature = 1000;
+  assert.throws(() => buildQFabricSnapshot(tampered), /temperature/);
+});
+
+test("snapshot export refuses unphysical trajectory and contradictory summary", () => {
+  const valid = runSimulation({ ...DEFAULT_INPUT });
+  for (const mutate of [
+    (r: typeof valid) => { r.series[1].step = 3; },
+    (r: typeof valid) => { r.series[1].crystalYield = -1; },
+    (r: typeof valid) => { r.series[1].temperature = r.series[0].temperature + 1; },
+    (r: typeof valid) => { r.series[1].concentration = r.series[0].concentration + 0.1; },
+    (r: typeof valid) => { r.summary.finalYield = 50; },
+    (r: typeof valid) => { r.summary.avgGrowthRate = 50; },
+  ]) {
+    const copy = structuredClone(valid);
+    mutate(copy);
+    assert.throws(() => buildQFabricSnapshot(copy));
+  }
+});
