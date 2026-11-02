@@ -380,3 +380,22 @@ kinetics, PBE physical calibration or equipment-control integration.
 Lovastatin (Strathclyde, CC BY-NC-ND) and zeolite Raman/XRD (Zenodo,
 rights review pending) remain external reference candidates only.
 See [full data sources, restrictions and design evidence](docs/research-studio-source-gallery-2026-11.md).
+
+
+## Exact-solution PBE verification and source-protocol validation
+
+A separate **analytical numeric accuracy test** in the Verification
+workspace compares first-order upwind with a MUSCL-minmod/SSP RK2
+finite-volume discretization against a true constant-growth
+advection solution, on 64 / 128 / 256 size cells. It reports
+normalized L1 errors **per grid** and conservative number moments.
+This verifies a synthetic algorithm, **not real crystal growth**.
+
+BigSolDB v2.2 companion protocol metadata are inspected using
+explicit DOI/CAS/SMILES/solid-form joins; a blank form label is
+never silently pooled. The derived v2.2 `Solubility(mol/L)`
+refers to **a litre of pure solvent**, not a litre of solution:
+it is **not** automatically converted or treated as a physical
+solute concentration of the educational simulator.
+
+See [numeric derivation and protocol limitations](docs/pbe-analytic-accuracy-and-source-protocol.md).
