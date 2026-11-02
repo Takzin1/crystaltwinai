@@ -1,0 +1,74 @@
+name: Scientific original-source byte audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audit-bigsoldb-raw.ts'
+      - 'scripts/import-bigsoldb21.ts'
+      - 'scripts/import-bigsoldb22.ts'
+      - 'src/lib/bigsoldb22-protocol.ts'
+      - '.github/workflows/scientific-source-audit.yml'
+      - 'tests/original-source-audit.test.ts'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/audit-bigsoldb-raw.ts'
+      - 'scripts/import-bigsoldb21.ts'
+      - 'scripts/import-bigsoldb22.ts'
+      - 'src/lib/bigsoldb22-protocol.ts'
+      - '.github/workflows/scientific-source-audit.yml'
+      - 'tests/original-source-audit.test.ts'
+
+permissions:
+  contents: read
+
+jobs:
+  original-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Fetch upstream pinned ORIGINAL CSVs and separate Zenodo companion tables
+        env:
+          SOURCE_DIR: ${{ runner.temp }}/bigsoldb-verified-raw
+        run: |
+          set -euo pipefail
+          mkdir -p "$SOURCE_DIR"
+          curl --proto '=https' --tlsv1.2 --fail --location --retry 3 --max-time 240 \
+            --output "$SOURCE_DIR/BigSolDBv2_1.csv" \
+            'https://raw.githubusercontent.com/levakrasnovs/mcp-bigsoldb/a29e91061dc2d3d543343c5cd2cdd5e539165915/BigSolDBv2_1.csv'
+          curl --proto '=https' --tlsv1.2 --fail --location --retry 3 --max-time 240 \
+            --output "$SOURCE_DIR/BigSolDBv2.2.csv" \
+            'https://raw.githubusercontent.com/levakrasnovs/BigSolDBv2.0/6a6072d6825112c7d55e79c03ceb724739d956ab/BigSolDBv2.2.csv'
+          curl --proto '=https' --tlsv1.2 --fail --location --retry 3 --max-time 240 \
+            --output "$SOURCE_DIR/BigSolDBv2.2_methods.csv" \
+            'https://zenodo.org/records/22648301/files/BigSolDBv2.2_methods.csv?download=1'
+          curl --proto '=https' --tlsv1.2 --fail --location --retry 3 --max-time 240 \
+            --output "$SOURCE_DIR/BigSolDBv2.2_solid_forms.csv" \
+            'https://zenodo.org/records/22648301/files/BigSolDBv2.2_solid_forms.csv?download=1'
+          printf 'Source files obtained into the isolated runner temporary directory.\n'
+      - name: Audit exact source bytes and convert selected genuine source groups
+        env:
+          SOURCE_DIR: ${{ runner.temp }}/bigsoldb-verified-raw
+        run: |
+          set -euo pipefail
+          npx tsx scripts/audit-bigsoldb-raw.ts \
+            --v21 "$SOURCE_DIR/BigSolDBv2_1.csv" \
+            --v22 "$SOURCE_DIR/BigSolDBv2.2.csv" \
+            --methods "$SOURCE_DIR/BigSolDBv2.2_methods.csv" \
+            --forms "$SOURCE_DIR/BigSolDBv2.2_solid_forms.csv" \
+            --out artifacts/research-provenance/bigsoldb-original-bytes-audit.json
+      - name: Publish metadata ONLY (no raw CSV, no derived measurement rows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: bigsoldb-original-source-audit
+          path: artifacts/research-provenance/bigsoldb-original-bytes-audit.json
+          retention-days: 30
+          if-no-files-found: error
