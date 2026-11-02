@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -55,4 +56,23 @@ test("no claim of actual raw audit can be made using a synthetic CSV or arbitrar
   assert.throws(()=>auditOriginalBigSolDBFiles({
     v21:fake,v22:fake,methods:fake,solidForms:fake,
   }),/byte length mismatch/);
+});
+
+test("published provenance attestation pins the actual original-byte CI result without claiming lab authenticity",()=>{
+  const report=JSON.parse(readFileSync(
+    "public/provenance/bigsoldb-original-source-attestation-2026-11.json","utf8"));
+  assert.equal(report.schema,"crystaltwin-source-attestation-snapshot/1");
+  assert.equal(report.sourceIdentityVerified,true);
+  assert.equal(report.originalLabRecordsAuthenticated,false);
+  assert.equal(report.physicalKineticsValidated,false);
+  assert.equal(report.v22RawRedistributionAuthorized,false);
+  assert.equal(report.rawSourceRowsIncluded,false);
+  assert.equal(report.inputs.length,4);
+  assert.equal(report.inputs[0].sha256,SOURCE_DIGESTS.v21.huggingFaceSha256);
+  assert.equal(report.inputs[1].gitBlobSha1,SOURCE_DIGESTS.v22.gitBlobSha1);
+  assert.equal(report.inputs[1].sha256,"6b63f86601369f92530bedf6b93c3fb92a2731390b28a0aabf55ad005acba401");
+  assert.equal(report.inputs[2].rows,SOURCE_TABLE_SHAPES.methods.expectedRows);
+  assert.equal(report.inputs[3].rows,SOURCE_TABLE_SHAPES.solidForms.expectedRows);
+  assert.equal(report.convertedOriginalSourceGroups.v22ExplicitSolidFormDOIGroup.points,13);
+  assert.match(report.auditRun,/github.com\\/Takzin1\\/crystaltwinai\\/actions\\/runs\\/\\d+/);
 });
