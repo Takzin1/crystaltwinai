@@ -46,7 +46,7 @@ const keysEqual=(a:readonly string[],b:readonly string[])=>
 const sorted=(v:readonly string[])=>[...v].sort();
 const get=(raw:unknown,key:string):Record<string,unknown>=>{
  if(!object(raw)||!object(raw[key]))fail("Missing "+key);
- return raw[key] as Record<string,unknown>;
+ return (raw as Record<string,unknown>)[key] as Record<string,unknown>;
 };
 export function lovastatinMetrics(rows:readonly LovastatinRow[]):Metrics{
  if(!rows.length)fail("Cannot measure an empty experiment");
@@ -62,8 +62,10 @@ export function lovastatinMetrics(rows:readonly LovastatinRow[]):Metrics{
 }
 function compareMetrics(actual:Metrics,record:unknown,name:string){
  if(!object(record))fail("Missing original "+name+" metrics");
+ const values=record as Record<string,unknown>;
  for(const key of Object.keys(actual) as (keyof Metrics)[]){
-  if(!numeric(record[key])||Math.abs(actual[key]-record[key])>1e-10*Math.max(1,Math.abs(actual[key])))
+  const observed=values[key];
+  if(!numeric(observed)||Math.abs(actual[key]-observed)>1e-10*Math.max(1,Math.abs(actual[key])))
    fail(name+" published metric differs from recomputed source comparison: "+key);
  }
 }
@@ -101,7 +103,7 @@ export function validateLovastatinEvidence(input:unknown):LovastatinEvidence{
       !numeric(r.reportedStdDevSource)||r.reportedStdDevSource<=0||
       r.timeSource<=(latest.get(r.experimentId)??-Infinity))
      fail(phase+" malformed row/time/provenance at "+i);
-   latest.set(r.experimentId,r.timeSource);
+   latest.set(r.experimentId as string,r.timeSource as number);
    observedRows.push(r as LovastatinRow);
   }
   const fromRows=sorted([...latest.keys()]);
