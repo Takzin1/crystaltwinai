@@ -56,6 +56,11 @@ test("primary software audit rejects corrupted data without claiming physical va
     (r: typeof valid) => {r.summary.avgGrowthRate = 999;},
     (r: typeof valid) => {r.summary.finalYield = 999;},
     (r: typeof valid) => {r.summary.qualityScore = NaN;},
+    (r: typeof valid) => {r.summary.qualityScore = 42;},
+    (r: typeof valid) => {r.summary.stabilityScore = 42;},
+    (r: typeof valid) => {r.summary.maxSupersaturation = 900;},
+    (r: typeof valid) => {r.summary.nucleationEvents = 999;},
+    (r: typeof valid) => {r.series[2].supersaturation = -1;},
   ]) {
     const modified = structuredClone(valid);
     mutate(modified);
