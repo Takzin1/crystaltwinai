@@ -125,5 +125,6 @@ Tests include:
 
 Until then, no source-authenticated hardware or physical-validation
 claims are justified. BigSolDB source verification remains in #32;
-#30, #31 and #33 are still pending review. This PBE bench depends on
-their branch history but does not itself consume their measurements.
+#30, #31 and #33 are still pending review. This PBE code is integrated
+independently of those unmerged drafts and does not consume their
+measurements, physical units or model parameters.
