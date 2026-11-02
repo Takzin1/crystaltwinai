@@ -109,8 +109,11 @@ function advectionCase(
   };
   for(let step=0;step<steps;step++){
     const next=advance(values);
-    values=scheme==="upwind"?next:
-      values.map((n,i)=>(n+advance(next)[i])/2);
+    if(scheme==="upwind"){values=next;}
+    else{
+      const second=advance(next);
+      values=values.map((n,i)=>(n+second[i])/2);
+    }
     if(values.some(v=>!Number.isFinite(v)||v< -1e-8))
       throw new Error("Numerical positivity failed at step "+step+".");
     for(let i=0;i<values.length;i++)if(values[i]<0)values[i]=0;
