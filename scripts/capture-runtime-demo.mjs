@@ -12,7 +12,7 @@ const out=resolve("artifacts/runtime-demo");
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
 const page=await browser.newPage({
-  viewport:{width:1440,height:900},deviceScaleFactor:1,
+  viewport:{width:1440,height:810},deviceScaleFactor:1,
   reducedMotion:"reduce",colorScheme:"dark",
 });
 async function screenshot(n,label){
