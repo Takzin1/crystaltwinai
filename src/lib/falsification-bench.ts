@@ -35,6 +35,10 @@ export function auditPrimaryTrajectory(simulation: SimulationResult): string[] {
   let priorConcentration = input.concentration;
   let priorYield = 0;
   let sumGrowth = 0;
+  let maximumSupersaturation = 0;
+  let qualityWeighted = 0;
+  let stabilityWeighted = 0;
+  let weightTotal = 0;
   for (let index = 0; index < series.length; index++) {
     const point = series[index];
     const step = index + 1;
@@ -56,6 +60,9 @@ export function auditPrimaryTrajectory(simulation: SimulationResult): string[] {
         point.concentration > priorConcentration + EPS) {
       issues.push("primary concentration monotonicity violation at step " + step);
     }
+    if (point.supersaturation < 0) {
+      issues.push("primary supersaturation must be nonnegative at step " + step);
+    }
     if (point.growthRate < 0 || point.crystalYield < priorYield - EPS ||
         point.crystalYield > 100 + EPS || point.crystalYield < -EPS) {
       issues.push("primary growth/yield bounds violation at step " + step);
@@ -68,6 +75,12 @@ export function auditPrimaryTrajectory(simulation: SimulationResult): string[] {
     priorConcentration = point.concentration;
     priorYield = point.crystalYield;
     sumGrowth += point.growthRate;
+    maximumSupersaturation = Math.max(maximumSupersaturation,point.supersaturation);
+    const weight = 1 + (C.lateStepWeight - 1) * index /
+      Math.max(1,series.length - 1);
+    qualityWeighted += point.quality * weight;
+    stabilityWeighted += point.stability * weight;
+    weightTotal += weight;
   }
   if (typeof summary?.finalYield !== "number" ||
       !approximate(summary.finalYield, priorYield, 1e-7)) {
@@ -80,6 +93,17 @@ export function auditPrimaryTrajectory(simulation: SimulationResult): string[] {
   if (![summary?.qualityScore,summary?.stabilityScore].every(v =>
       typeof v === "number" && Number.isFinite(v) && v >= 0 && v <= 100)) {
     issues.push("primary summary score out of bounds");
+  } else if (!approximate(summary.qualityScore,qualityWeighted/weightTotal,1e-7) ||
+      !approximate(summary.stabilityScore,stabilityWeighted/weightTotal,1e-7)) {
+    issues.push("primary weighted score summary mismatch");
+  }
+  if (!approximate(summary?.maxSupersaturation, maximumSupersaturation,1e-7)) {
+    issues.push("primary max supersaturation summary mismatch");
+  }
+  if (typeof summary?.nucleationEvents !== "number" ||
+      !Number.isInteger(summary.nucleationEvents) ||
+      summary.nucleationEvents < 0 || summary.nucleationEvents > series.length) {
+    issues.push("primary nucleation event summary invalid");
   }
   return issues;
 }
