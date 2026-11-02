@@ -55,5 +55,5 @@ test("companion table selection refuses malformed joins, schema and metadata",()
  assert.throws(()=>auditBigSolDB22SourceProtocol(method(),solid().replace("solid_phase_control","checked"),select),/exact official header/);
  assert.throws(()=>auditBigSolDB22SourceProtocol(method("equilibrium","hplc_static","3.5"),solid(),select),/Replicates must be an integer/);
  assert.throws(()=>auditBigSolDB22SourceProtocol(method(),solid().replace("0.999","1.2"),select),/Purity must be/);
- assert.throws(()=>auditBigSolDB22SourceProtocol(method(),solid(),{...select,solidFormLabel:""}),/explicit CAS/);
+ assert.throws(()=>auditBigSolDB22SourceProtocol(method(),solid(),{...select,solidFormLabel:""}),/Explicit CAS/);
 });
