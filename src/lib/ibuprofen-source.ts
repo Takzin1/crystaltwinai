@@ -59,7 +59,8 @@ export function expandIbuprofenCurve(
   return out;
 }
 export function validateIbuprofenSource(raw:unknown):IbuprofenSourceBundle{
-  if(!obj(raw)||raw.schema!==IBUPROFEN_SCHEMA||
+  if(!obj(raw))throw new Error("Ibuprofen source is not an object.");
+  if(raw.schema!==IBUPROFEN_SCHEMA||
     raw.sourceUrl!==IBUPROFEN_SOURCE.url||
     raw.sourceZipSha256!==IBUPROFEN_SOURCE.zipSha256||
     raw.sourceXlsxSha256!==IBUPROFEN_SOURCE.xlsxSha256||
@@ -69,18 +70,23 @@ export function validateIbuprofenSource(raw:unknown):IbuprofenSourceBundle{
   if(!Array.isArray(raw.sourceSheetNames)||
      JSON.stringify(raw.sourceSheetNames)!==JSON.stringify(IBUPROFEN_SOURCE.sourceSheets))
     fail("Original sheet identity was changed");
-  if(!Array.isArray(raw.sizeNm)||raw.sizeNm.length!==IBUPROFEN_SOURCE.bins||
-     raw.sizeNm.some((v,i)=>!finite(v)||v<=0||
-       (i>0&&v<=raw.sizeNm[i-1]))||
-     Math.abs(raw.sizeNm[0]-.20947417959189)>1e-12||
-     Math.abs(raw.sizeNm.at(-1)-19095.4322284161)>1e-7)
+  const sizeNm=raw.sizeNm;
+  if(!Array.isArray(sizeNm))throw new Error("Missing ibuprofen numeric diameter grid.");
+  if(sizeNm.length!==IBUPROFEN_SOURCE.bins||
+     sizeNm.some((v:unknown,i:number)=>!finite(v)||v<=0||
+       (i>0&&v<=sizeNm[i-1]))||
+     Math.abs(sizeNm[0]-.20947417959189)>1e-12||
+     Math.abs(sizeNm.at(-1)-19095.4322284161)>1e-7)
     fail("Particle diameters are not source-native, finite or increasing");
-  if(!Array.isArray(raw.curves)||raw.curves.length!==IBUPROFEN_SOURCE.uniqueCurves)
+  const curves=raw.curves;
+  if(!Array.isArray(curves))throw new Error("Missing source PSD curves.");
+  if(curves.length!==IBUPROFEN_SOURCE.uniqueCurves)
     fail("Unique source curve count changed");
   const signatures=new Set<string>();
-  const restored=(raw.curves as unknown[]).map((item,i)=>{
-    if(!obj(item)||!Array.isArray(item.nonzero)||!Array.isArray(item.missing))
-      fail("Invalid sparse curve "+i);
+  const restored=(curves as unknown[]).map((item,i)=>{
+    if(!obj(item))throw new Error("Invalid source curve object "+i);
+    if(!Array.isArray(item.nonzero)||!Array.isArray(item.missing))
+      throw new Error("Invalid source curve entries "+i);
     const c=item as IbuprofenCurve;
     const v=expandIbuprofenCurve(IBUPROFEN_SOURCE.bins,c);
     const total=v.reduce<number>((sum,x)=>sum+(x??0),0);
@@ -91,7 +97,9 @@ export function validateIbuprofenSource(raw:unknown):IbuprofenSourceBundle{
     signatures.add(signature);
     return v;
   });
-  if(!Array.isArray(raw.conditions)||raw.conditions.length!==IBUPROFEN_SOURCE.conditions)
+  const conditions=raw.conditions;
+  if(!Array.isArray(conditions))throw new Error("Missing experimental conditions.");
+  if(conditions.length!==IBUPROFEN_SOURCE.conditions)
     fail("Expected 23 distinct recorded experimental-condition series");
   const sourceSheetByStudy:Record<IbuprofenStudy,string>={
     solvent_composition:"solvent composition",
@@ -111,11 +119,14 @@ export function validateIbuprofenSource(raw:unknown):IbuprofenSourceBundle{
     liquid_film_thickness:0,liquid_film_diameter:0,
   };
   const curveRefs=new Set<number>();
-  for(const c of raw.conditions as unknown[]){
-    if(!obj(c)||typeof c.id!=="string"||!(/^[a-z0-9_.-]+$/).test(c.id)||
+  for(const item of conditions as unknown[]){
+    if(!obj(item))throw new Error("Invalid source condition object.");
+    const c=item;
+    if(typeof c.id!=="string"||!(/^[a-z0-9_.-]+$/).test(c.id)||
        usedId.has(c.id)||
        typeof c.study!=="string"||!(c.study in count)||
-       !Number.isInteger(c.curve)||c.curve<0||c.curve>=restored.length||
+       !Number.isInteger(c.curve)||typeof c.curve!=="number"||
+       c.curve<0||c.curve>=restored.length||
        !Number.isInteger(c.sourceColumn)||!obj(c.settings))
       fail("Invalid condition identity, model or raw spreadsheet column");
     const study=c.study as IbuprofenStudy;
@@ -155,7 +166,7 @@ export function validateIbuprofenSource(raw:unknown):IbuprofenSourceBundle{
     fail("Incomplete source observation coverage");
   const missing=restored.flatMap((v,curve)=>v.map((n,index)=>n===null?{curve,index}:null)
       .filter((x):x is {curve:number;index:number}=>x!==null));
-  const oneMissing=raw.conditions.find(c=>obj(c)&&c.id==="thickness-707_2");
+  const oneMissing=(conditions as unknown[]).find(c=>obj(c)&&c.id==="thickness-707_2");
   if(missing.length!==1||missing[0].index!==141||!obj(oneMissing)||
      oneMissing.curve!==missing[0].curve)
     fail("One missing original final spreadsheet cell must remain null");
@@ -166,7 +177,7 @@ export function ibuprofenCurveForCondition(
 ):{condition:IbuprofenCondition;distribution:(number|null)[];totalPercent:number;
   d50ReportedBinNm:number|null}{
   const condition=source.conditions.find(c=>c.id===id);
-  if(!condition)fail("Unknown source condition");
+  if(!condition)throw new Error("Unknown ibuprofen source condition");
   const distribution=expandIbuprofenCurve(source.sizeNm.length,source.curves[condition.curve]);
   let total=0,at50:null|number=null;
   for(let i=0;i<distribution.length;i++){
