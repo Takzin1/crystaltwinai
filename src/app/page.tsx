@@ -30,6 +30,7 @@ import PbeAccuracyPanel from "@/components/PbeAccuracyPanel";
 import SourceEvidenceGallery from "@/components/SourceEvidenceGallery";
 import StruviteEvidencePanel from "@/components/StruviteEvidencePanel";
 import LovastatinEvidencePanel from "@/components/LovastatinEvidencePanel";
+import IbuprofenEvidencePanel from "@/components/IbuprofenEvidencePanel";
 import EquilibriumReferencePanel from "@/components/EquilibriumReferencePanel";
 
 export default function Home() {
@@ -172,6 +173,7 @@ export default function Home() {
             <SourceEvidenceGallery lang={lang} />
             <StruviteEvidencePanel lang={lang} />
             <LovastatinEvidencePanel lang={lang} />
+            <IbuprofenEvidencePanel lang={lang} />
             <EquilibriumReferencePanel lang={lang} />
           </div>
 

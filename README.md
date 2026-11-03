@@ -455,3 +455,20 @@ so the secondary workbook is not an independent held-out set. Source
 `Predicted values` are externally reported simulations, **not** a
 CrystalTwinAI-generated physical PBE prediction. Units remain unverified.
 See [import instructions, original SHA digests and scientific boundaries](docs/lovastatin-local-original-evidence.md).
+
+## Ibuprofen experimental final PSD (actual ZIP/XLSX source)
+
+A user-uploaded **Ibuprofen micronanoparticle size-distribution ZIP** was
+expanded and the original workbook's **four worksheets** ingested:
+**142 size bins × 23 experimental condition entries** (17 distinct numeric
+curves). Conditions span solvent/ethanol fraction, cooling endpoint,
+liquid-film thickness and film diameter. The full source-native values are
+losslessly compressed in `public/examples/ibuprofen-psd-sparse-v1.json.gz.base64`
+with pinned ZIP, XLSX and normalized JSON SHA-256. A dedicated bilingual
+Research Studio panel compares source end-state curves on a logarithmic **nm**
+axis and shows exact-reuse warnings. The source percentage weighting is
+**not declared** (not necessarily number/volume/intensity). A single blank
+source cell is explicitly preserved as null; numerical duplication is not
+misrepresented as independent replicates. This is original measurement
+intake, **not** new physically fitted PBE predictions.
+[Reproduction and provenance](docs/ibuprofen-source-native-psd-intake.md).
