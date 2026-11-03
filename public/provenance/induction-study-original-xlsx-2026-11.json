@@ -1,0 +1,36 @@
+{
+  "schema": "crystaltwin-induction-provenance-attestation/1",
+  "source": "https://pureportal.strath.ac.uk/en/datasets/data-for-machine-learning-derived-correlations-for-scale-up-and-t/",
+  "sourceXlsxFilename": "cg_2022_001925_data_for_article.xlsx",
+  "sourceXlsxSha256": "0405f592a8cbb9f6d85b41db663c11d99699d795cd58aff3c194c01e2639b075",
+  "normalizedJsonSha256": "ddd39bb04189bd85e1e15c9752aeb4cc366712f90838742f3338e689102af708",
+  "sheetCount": 9,
+  "modeledSheets": [
+    "induction times and parameters",
+    "hydrodynamic features",
+    "prediction - induction times"
+  ],
+  "sourcePartition": {
+    "train": 14,
+    "heldout": 3,
+    "caseCount": 17,
+    "measuredReplicates": 131,
+    "heldoutReplicates": 21
+  },
+  "paperPredictionVariants": [
+    "J7+T8",
+    "J7+T9",
+    "J9+T8",
+    "J9+T9",
+    "J2+T2"
+  ],
+  "limitation": {
+    "sourceUnitsAuthenticated": false,
+    "physicalKineticPredictionsRecomputed": false,
+    "sourceAuthorModelCurvesOnly": true,
+    "externalLabIndependentVerification": false,
+    "publishingRightsRecheckedThisSession": false,
+    "originalWorkbookBinaryRedistributed": false
+  },
+  "authorAttribution": "Data for machine learning-derived correlations for scale-up and tuning of primary nucleation (source university page); see primary publication for precise title and author list."
+}
