@@ -135,7 +135,7 @@ export function validateIbuprofenSource(raw:unknown):IbuprofenSourceBundle{
       fail("Source worksheet-column mapping altered");
     const slot=c.sourceSheet+":"+c.sourceColumn;
     if(usedCells.has(slot))fail("Duplicate source spreadsheet column");
-    usedId.add(c.id);usedCells.add(slot);
+    usedId.add(c.id as string);usedCells.add(slot);
     curveRefs.add(c.curve as number);count[study]++;
     const settings=c.settings as Record<string,unknown>;
     const keys=Object.keys(settings);
