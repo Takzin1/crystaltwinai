@@ -11,3 +11,7 @@ artifacts/lovastatin-private/
 private-research-data/
 lovastatin_gFP_MV_*.xlsx
 lovastatin-local-*.json
+
+# NaCl primary ZIP and private audit / extraction data
+artifacts/nacl-private/
+NaCl_Paper_Data*.zip
