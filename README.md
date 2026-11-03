@@ -472,3 +472,16 @@ source cell is explicitly preserved as null; numerical duplication is not
 misrepresented as independent replicates. This is original measurement
 intake, **not** new physically fitted PBE predictions.
 [Reproduction and provenance](docs/ibuprofen-source-native-psd-intake.md).
+
+## Induction-time source-native experiments: source-reported nucleation evidence
+
+The user-supplied Strathclyde `cg_2022_001925_data_for_article.xlsx` source
+has been parsed: **17 conditions / 131 induction-time observations**,
+**14 training + 3 source-labeled nontraining**, 5 source-author CDF
+parameter pairings and joined hydrodynamic descriptors. In the Research
+Studio, view an original experiment's observed ECDF against the *already
+published* author-model CDF, with the source XLSX and normalized JSON
+SHA-256s verified. This is neither new CrystalTwinAI PBE parameter fitting
+nor a laboratory-independent prediction. Original spreadsheet time/volume
+unit headers are not fully specified: the UI does **not invent units**.
+[Original workbook mapping and research limitations](docs/induction-source-original-xlsx-intake.md).
