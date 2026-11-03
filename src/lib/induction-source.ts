@@ -102,11 +102,12 @@ export function validateInductionSource(raw:unknown):InductionSourceBundle{
   if(curves.length!==3)fail("expected three original heldout source curves");
   const seen=new Set<string>();
   for(const v of curves){
-    if(!obj(v)||typeof v.caseId!=="string"||seen.has(v.caseId)||!obj(v.paperModelCdf))
-      fail("bad published source CDF record");
-    const matched=known.get(v.caseId);
+    if(!obj(v))throw new Error("Bad published source CDF object");
+    if(typeof v.caseId!=="string"||seen.has(v.caseId)||!obj(v.paperModelCdf))
+      throw new Error("Bad published source CDF record identity/curves");
+    const matched=known.get(v.caseId as string);
     if(!matched||matched.record.partition!=="holdout_source_label")
-      fail("published CDF assigned to a training experiment");
+      throw new Error("Published CDF assigned to a training experiment");
     seen.add(v.caseId);
     const n=matched.count;
     const ts=numArray(v.timeSource,n,"heldout times");
