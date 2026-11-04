@@ -66,7 +66,7 @@ jobs:
             --forms "$SOURCE_DIR/BigSolDBv2.2_solid_forms.csv" \
             --out artifacts/research-provenance/bigsoldb-original-bytes-audit.json
       - name: Publish metadata ONLY (no raw CSV, no derived measurement rows)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bigsoldb-original-source-audit
           path: artifacts/research-provenance/bigsoldb-original-bytes-audit.json

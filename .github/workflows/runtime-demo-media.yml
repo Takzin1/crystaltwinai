@@ -49,7 +49,7 @@ jobs:
           ffmpeg -hide_banner -y -loglevel error -i crystaltwin-runtime-demo.mp4 \
             -vf "fps=8,scale=960:540:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" \
             -loop 0 crystaltwin-runtime-demo.gif
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: crystaltwin-real-runtime-demo
           path: artifacts/runtime-demo/
