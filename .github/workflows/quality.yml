@@ -43,7 +43,7 @@ jobs:
       - name: Generate analytic PBE convergence artifact
         run: npx tsx scripts/report-pbe-convergence.ts
       - name: Upload deterministic PBE numerical verification
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pbe-convergence-node-${{ matrix.node }}
           path: artifacts/pbe-verification/smooth-convergence.json
