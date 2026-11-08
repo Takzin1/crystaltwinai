@@ -188,7 +188,7 @@ export function runZhangNonuniformPbeBenchmark(options?: {
         (i > 0 && v <= meshes[i - 1]))) {
     throw new RangeError("Use three ascending integer grids within 32..256 cells.");
   }
-  const support = options?.initialSupportUm ?? [10, 20];
+  const support: [number, number] = options?.initialSupportUm ?? [10, 20];
   if (!Array.isArray(support) || support.length !== 2) {
     throw new RangeError("Support must contain two bounds.");
   }
