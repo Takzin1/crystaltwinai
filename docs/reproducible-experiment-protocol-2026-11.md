@@ -17,7 +17,7 @@ npm run dev
 
 QFabric is a separate Python 3.11+ repository. Clone it alongside
 CrystalTwinAI and follow
-[the QFabric bundle procedure](https://github.com/Takzin1/QFabric/blob/research/reproducible-bundle-v1-20261108/docs/integrations/research-bundle-v1.md)
+[the QFabric bundle procedure](https://github.com/Takzin1/QFabric/blob/main/docs/integrations/research-bundle-v1.md)
 to export a CPU synthetic report and a SHA-256-bound manifest.
 
 The new function
